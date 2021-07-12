@@ -1,22 +1,23 @@
 package ita.softserve.course_evaluation.service;
 
+import ita.softserve.course_evaluation.dto.PermissionDto;
 import ita.softserve.course_evaluation.entity.Permission;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface PermissionService {
-    Permission create(Permission permission);
+    Permission create(PermissionDto dto);
 
-    Permission readById(long id);
+    PermissionDto readById(long id);
 
-    Permission update(Permission permission);
+    PermissionDto update(PermissionDto dto);
 
     void delete(long id);
 
-    List<Permission> getAll();
+    List<PermissionDto> getAll();
 
-    List<Permission> getByRoleId(long id);
+    List<PermissionDto> getByRoleId(long id);
 
     Optional<Permission> findByName(String name);
 

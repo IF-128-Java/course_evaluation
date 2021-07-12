@@ -1,7 +1,8 @@
 package ita.softserve.course_evaluation.service.impl;
 
+import ita.softserve.course_evaluation.dto.PermissionDto;
+import ita.softserve.course_evaluation.dto.PermissionDtoMapper;
 import ita.softserve.course_evaluation.entity.Permission;
-import ita.softserve.course_evaluation.exception.NullEntityReferenceException;
 import ita.softserve.course_evaluation.repository.PermissionRepository;
 import ita.softserve.course_evaluation.service.PermissionService;
 import org.springframework.stereotype.Service;
@@ -21,46 +22,42 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public Permission create(Permission permission) {
-        if (permission == null) {
-            throw new NullEntityReferenceException("Permission cannot be 'null'");
-        }
-        String name = permission.getPermissionName();
+    public Permission create(PermissionDto dto) {
+        String name = dto.getPermissionName();
         if (findByName(name).isPresent()) {
             throw new RuntimeException("Permission with name <" + name + "> already exist in database");
         }
-        return permissionRepository.save(permission);
+        return permissionRepository.save(PermissionDtoMapper.fromDto(dto));
     }
 
     @Override
-    public Permission readById(long id) {
-        return permissionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Permission with id " + id + " not found."));
+    public PermissionDto readById(long id) {
+        return PermissionDtoMapper.toDto(permissionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Permission with id " + id + " not found.")));
     }
 
     @Override
-    public Permission update(Permission permission) {
-        if (permission == null) {
-            throw new NullEntityReferenceException("Permission cannot be 'null'");
-        }
-        readById(permission.getId());
-        return permissionRepository.save(permission);
+    public PermissionDto update(PermissionDto dto) {
+        readById(dto.getId());
+        return PermissionDtoMapper
+                .toDto(permissionRepository.save(PermissionDtoMapper.fromDto(dto)));
     }
 
     @Override
     public void delete(long id) {
-        permissionRepository.delete(readById(id));
+        permissionRepository.delete(PermissionDtoMapper.fromDto(readById(id)));
     }
 
     @Override
-    public List<Permission> getAll() {
-        List<Permission> permissions = permissionRepository.findAll();
+    public List<PermissionDto> getAll() {
+        permissionRepository.findAllByRoleId(29).forEach(e->e.getPermissionName());
+        List<PermissionDto> permissions = PermissionDtoMapper.toDto(permissionRepository.findAll());
         return permissions.isEmpty() ? new ArrayList<>() : permissions;
     }
 
     @Override
-    public List<Permission> getByRoleId(long id) {
-        List<Permission> permissions = permissionRepository.findAllByRoleId(id);
+    public List<PermissionDto> getByRoleId(long id) {
+        List<PermissionDto> permissions = PermissionDtoMapper.toDto(permissionRepository.findAllByRoleId(id));
         return permissions.isEmpty() ? new ArrayList<>() : permissions;
     }
 
@@ -68,4 +65,5 @@ public class PermissionServiceImpl implements PermissionService {
     public Optional<Permission> findByName(String name) {
         return permissionRepository.findByPermissionName(name);
     }
+
 }

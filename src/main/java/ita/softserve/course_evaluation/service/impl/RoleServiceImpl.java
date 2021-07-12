@@ -1,8 +1,9 @@
 package ita.softserve.course_evaluation.service.impl;
 
+import ita.softserve.course_evaluation.dto.RoleDto;
+import ita.softserve.course_evaluation.dto.RoleDtoMapper;
 import ita.softserve.course_evaluation.entity.ERole;
 import ita.softserve.course_evaluation.entity.Role;
-import ita.softserve.course_evaluation.exception.NullEntityReferenceException;
 import ita.softserve.course_evaluation.repository.RoleRepository;
 import ita.softserve.course_evaluation.service.RoleService;
 import org.springframework.stereotype.Service;
@@ -22,47 +23,39 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role create(Role role) {
-        if (role == null) {
-            throw new NullEntityReferenceException("Role cannot be 'null'");
-        }
-       ERole name = role.getRoleName();
+    public Role create(RoleDto dto) {
+       String name = dto.getRoleName();
         if (findByName(name).isPresent()) {
-            throw new RuntimeException("Role with name <" + name.name() + "> already exist in database");
+            throw new RuntimeException("Role with name <" + name + "> already exist in database");
         }
-        return roleRepository.save(role);
+        return roleRepository.save(RoleDtoMapper.fromDto(dto));
     }
 
     @Override
-    public Role readById(long id) {
-        return roleRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Role with id " + id + " not found."));
+    public RoleDto readById(long id) {
+        return RoleDtoMapper.toDto(roleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Role with id " + id + " not found.")));
     }
 
     @Override
-    public Role update(Role role) {
-        if (role == null) {
-            throw new NullEntityReferenceException("Role cannot be 'null'");
-        }
-        readById(role.getId());
-        return roleRepository.save(role);
+    public RoleDto update(RoleDto dto) {
+        readById(dto.getId());
+        return RoleDtoMapper.toDto(roleRepository.save(RoleDtoMapper.fromDto(dto)));
     }
 
     @Override
     public void delete(long id) {
-        roleRepository.delete(readById(id));
+        roleRepository.delete(RoleDtoMapper.fromDto(readById(id)));
     }
 
     @Override
-    public List<Role> getAll() {
-        List<Role> roles = roleRepository.findAll();
+    public List<RoleDto> getAll() {
+        List<RoleDto> roles = RoleDtoMapper.toDto(roleRepository.findAll());
         return roles.isEmpty() ? new ArrayList<>() : roles;
     }
 
     @Override
-    public Optional<Role> findByName(ERole name) {
-        System.out.println(name);
-        System.out.println(roleRepository.findByRoleName(name));
-        return roleRepository.findByRoleName(name);
+    public Optional<Role> findByName(String name) {
+        return roleRepository.findByRoleName(ERole.valueOf(name));
     }
 }
