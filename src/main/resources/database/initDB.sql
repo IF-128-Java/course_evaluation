@@ -123,14 +123,8 @@ CREATE TABLE IF NOT EXISTS permission
     id  bigserial NOT NULL,
     permission_name char(255) NOT NULL UNIQUE ,
     description char(255) NOT NULL,
+    role_id bigint,
+    CONSTRAINT permission_role_fkey FOREIGN KEY(role_id) REFERENCES role(id),
     CONSTRAINT permission_pkey PRIMARY KEY(id)
 );
 
-create table IF NOT EXISTS role_permission
-(
-    role_id bigint  NOT NULL,
-    permission_id integer NOT NULL ,
-    CONSTRAINT role_permission_role_fkey FOREIGN KEY(role_id) REFERENCES role(id),
-    CONSTRAINT role_permission_permision_fkey FOREIGN KEY(permission_id) REFERENCES permission(id),
-    CONSTRAINT role_permission_pkey PRIMARY KEY(role_id, permission_id)
-);
