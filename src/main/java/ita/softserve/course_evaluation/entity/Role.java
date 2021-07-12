@@ -1,8 +1,8 @@
 package ita.softserve.course_evaluation.entity;
 
+
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "role")
@@ -15,22 +15,26 @@ public class Role {
     @Column(name = "role_name", length = 20, unique = true)
     private ERole roleName;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "role_permission",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id"))
-    private Set<Permission> permissions = new HashSet<>();
+    @OneToMany(mappedBy = "role",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Permission> permissions = new ArrayList<>();
 
     public Role() {
     }
 
-    public Role(ERole roleName, Set<Permission> permissions) {
+    public Role(Long id, ERole roleName, List<Permission> permissions) {
+        this.id = id;
         this.roleName = roleName;
         this.permissions = permissions;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public ERole getRoleName() {
@@ -41,11 +45,24 @@ public class Role {
         this.roleName = roleName;
     }
 
-    public Set<Permission> getPermissions() {
+    public List<Permission> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(Set<Permission> permissions) {
+    public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return Objects.equals(id, role.id) && roleName == role.roleName;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, roleName);
     }
 }
