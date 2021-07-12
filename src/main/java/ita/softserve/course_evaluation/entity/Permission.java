@@ -18,6 +18,11 @@ public class Permission {
     @Column(name = "description")
     private String description;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Role role;
+
     public Permission() {
     }
 
@@ -28,6 +33,10 @@ public class Permission {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getPermissionName() {
@@ -44,6 +53,14 @@ public class Permission {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override
