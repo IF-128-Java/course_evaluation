@@ -30,7 +30,11 @@ private final PermissionService permissionService;
         return ResponseEntity.status(HttpStatus.OK)
                 .body(permissionService.readById(id));
     }
-
+    @GetMapping("role/{id}")
+    public ResponseEntity<List<PermissionDto>> getPermissionByRoleId(@PathVariable long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(permissionService.getByRoleId(id));
+    }
     @PostMapping
     public ResponseEntity<Permission> addPermission(@RequestBody PermissionDto dto) {
         return ResponseEntity.status(HttpStatus.OK).body(permissionService.create(dto));
