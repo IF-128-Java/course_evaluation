@@ -50,7 +50,6 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public List<PermissionDto> getAll() {
-        permissionRepository.findAll().forEach(Permission::getPermissionName);
         List<PermissionDto> permissions = PermissionDtoMapper.toDto(permissionRepository.findAll());
         return permissions.isEmpty() ? new ArrayList<>() : permissions;
     }
