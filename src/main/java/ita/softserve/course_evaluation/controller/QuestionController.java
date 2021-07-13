@@ -1,5 +1,6 @@
 package ita.softserve.course_evaluation.controller;
 
+import ita.softserve.course_evaluation.dto.QuestionDto;
 import ita.softserve.course_evaluation.entity.Question;
 import ita.softserve.course_evaluation.service.QuestionService;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,9 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @GetMapping(value = "/")
-    public ResponseEntity<List<Question>> getAllQuestions(){
-        final List<Question> questions = questionService.getAllQuestion();
+    @GetMapping("")
+    public ResponseEntity<List<QuestionDto>> getAllQuestions(){
+        final List<QuestionDto> questions = questionService.getAllQuestion();
 
         return questions != null && !questions.isEmpty()
                 ? new ResponseEntity<>(questions, HttpStatus.OK)
@@ -29,14 +30,14 @@ public class QuestionController {
 
 
     @PostMapping("/addQuestion")
-    public ResponseEntity<Question> addQuestion(@RequestBody Question question){
-        return new ResponseEntity<>(questionService.addQuestion(question),
+    public ResponseEntity<Question> addQuestion(@RequestBody QuestionDto question){
+        return new ResponseEntity<>(questionService.saveQuestion(question),
                 HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Question> getQuestionById(@PathVariable("id") long questionId){
-        return new ResponseEntity<>(questionService.getQuestionById(questionId), HttpStatus.OK);
+    public ResponseEntity<QuestionDto> getQuestionById(@PathVariable("id") long questionId){
+        return new ResponseEntity<>(questionService.findQuestionById(questionId), HttpStatus.OK);
 //        Question question = questionService.getQuestionById(questionId);
 //        return question != null
 //                ? new ResponseEntity<>(question, HttpStatus.OK)
@@ -44,8 +45,8 @@ public class QuestionController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Question> updateEmployee(@PathVariable("id") long id
-            ,@RequestBody Question question){
+    public ResponseEntity<QuestionDto> updateEmployee(@PathVariable("id") long id
+            ,@RequestBody QuestionDto question){
         return new ResponseEntity<>(questionService.updateEmployee(question, id), HttpStatus.OK);
     }
 
