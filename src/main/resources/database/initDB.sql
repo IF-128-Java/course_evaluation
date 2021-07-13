@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS question
     id bigserial NOT NULL,
     question_text varchar(255),
     is_pattern boolean,
-    feeback_request_id int NOT NULL,
+    feedback_request_id int NOT NULL,
     CONSTRAINT question_pkey PRIMARY KEY(id)
 );
 
