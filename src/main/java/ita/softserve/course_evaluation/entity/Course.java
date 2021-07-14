@@ -1,31 +1,35 @@
 package ita.softserve.course_evaluation.entity;
 
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-
 @Entity
-@Table
+@Table(name = "course")
 public class Course implements Serializable {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 
+    @Column(name = "course_Name")
     private String courseName;
 
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "start_Date")
+    @Temporal(TemporalType.DATE)
     private Date startDate;
 
+    @Column(name = "end_Date")
+    @Temporal(TemporalType.DATE)
     private Date endDate;
 
-    public Course() {
+    public Course() {    }
 
+    public Course(String courseName, String description) {
+        this.courseName = courseName;
+        this.description = description;
     }
 
     public Course(String courseName, String description, Date startDate, Date endDate) {
@@ -35,12 +39,11 @@ public class Course implements Serializable {
         this.endDate = endDate;
     }
 
-
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -74,16 +77,5 @@ public class Course implements Serializable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-    
-    @Override
-    public String toString() {
-        return "Course{" +
-                       "id=" + id +
-                       ", courseName='" + courseName + '\'' +
-                       ", description='" + description + '\'' +
-                       ", startDate=" + startDate +
-                       ", endDate=" + endDate +
-                       '}';
     }
 }
