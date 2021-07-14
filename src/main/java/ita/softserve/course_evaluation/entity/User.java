@@ -1,6 +1,8 @@
 package ita.softserve.course_evaluation.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -21,6 +23,11 @@ public class User {
 	
 	@Column(name = "password")
 	private String password;
+	
+	@OneToMany(mappedBy = "studentId",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<Feedback> feedbacks = new ArrayList<>();
 	
 	public Integer getId() {
 		return id;
