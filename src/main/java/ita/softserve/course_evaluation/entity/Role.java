@@ -16,9 +16,11 @@ public class Role {
     private ERole roleName;
 
     @OneToMany(mappedBy = "role",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+               orphanRemoval = true)
     private List<Permission> permissions = new ArrayList<>();
+
+    @ManyToMany(mappedBy="roles")
+    private List<User> users = new ArrayList();
 
     public Role() {
     }
@@ -27,6 +29,13 @@ public class Role {
         this.id = id;
         this.roleName = roleName;
         this.permissions = permissions;
+    }
+
+    public Role(Long id, ERole roleName, List<Permission> permissions, List<User> users) {
+        this.id = id;
+        this.roleName = roleName;
+        this.permissions = permissions;
+        this.users = users;
     }
 
     public Long getId() {
@@ -51,6 +60,14 @@ public class Role {
 
     public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     @Override
