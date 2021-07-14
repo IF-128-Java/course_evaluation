@@ -4,23 +4,32 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 @Entity
-@Table
+@Table(name = "course")
 public class Course implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @Column(name = "course_Name")
     private String courseName;
 
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "start_Date")
+    @Temporal(TemporalType.DATE)
     private Date startDate;
 
+    @Column(name = "end_Date")
+    @Temporal(TemporalType.DATE)
     private Date endDate;
 
-    public Course() {
+    public Course() {    }
 
+    public Course(String courseName, String description) {
+        this.courseName = courseName;
+        this.description = description;
     }
 
     public Course(String courseName, String description, Date startDate, Date endDate) {
@@ -29,7 +38,6 @@ public class Course implements Serializable {
         this.startDate = startDate;
         this.endDate = endDate;
     }
-
 
     public int getId() {
         return id;
