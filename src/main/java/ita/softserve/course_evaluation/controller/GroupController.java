@@ -1,11 +1,10 @@
 package ita.softserve.course_evaluation.controller;
 
 import ita.softserve.course_evaluation.entity.Group;
-import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.service.GroupService;
-import ita.softserve.course_evaluation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,43 +16,65 @@ public class GroupController {
     @Autowired
     private GroupService groupService;
 
-    public GroupController(GroupService roleService) {
-        this.groupService = groupService;
+    public GroupController(GroupService theGroupService)
+    {
+        this.groupService = theGroupService;
+    }
+
+    @GetMapping(value = "/groups/{id}")
+    public ResponseEntity<Group> getGroupById(@PathVariable("id") long id) {
+
+        if (id == 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        final Group group = groupService.getById(id);
+
+        return group != null
+                ? new ResponseEntity<>(group, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
     @GetMapping(value = "/groups")
-    public ResponseEntity<List<Group>> read() {
-        final List<Group> groups = groupService.getAllGroup();
+    public ResponseEntity<List<Group>> getAllGroups() {
+
+        final List<Group> groups = groupService.getAll();
 
         return groups != null && !groups.isEmpty()
                 ? new ResponseEntity<>(groups, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/groups/{id}")
-    public ResponseEntity<Group> getGroupById(@PathVariable long id) {
-        System.out.println(id);
+    @DeleteMapping("/groups/{id}")
+    public ResponseEntity<Group> deleteGroup(@PathVariable long id) {
+        final Group group = groupService.getById(id);
 
-        final Group group = groupService.readById(id);
+        if(group == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
-        return group != null
-                ? new ResponseEntity<>(group, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        groupService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/groups/{id}")
-    void deletePermission(@PathVariable long id) {
-        groupService.deleteGroup(id);
+    @PostMapping("/groups")
+    public ResponseEntity<Group> addGroup(@RequestBody Group group) {
+        if (group == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(groupService.save(group));
     }
 
     @PutMapping("/groups")
     public ResponseEntity<Group> updateGroup(@RequestBody Group group) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(groupService.update(group));
+        if (group == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(groupService.save(group));
     }
 
-    @PostMapping("/groups")
-    public ResponseEntity<Group> createGroup(@RequestBody Group group) {
-        return ResponseEntity.status(HttpStatus.OK).body(groupService.addGroup(group));
-    }
 }

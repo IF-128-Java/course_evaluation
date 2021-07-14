@@ -1,6 +1,7 @@
 package ita.softserve.course_evaluation.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
@@ -19,12 +20,12 @@ public class Group {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getGroupName() {
         return groupName;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setGroupName(String groupName) {
@@ -34,7 +35,8 @@ public class Group {
     public Group() {
     }
 
-    public Group(String groupName) {
+    public Group(Long id, String groupName) {
+        this.id = id;
         this.groupName = groupName;
     }
 
