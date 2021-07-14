@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/permission")
+@RequestMapping("api/v1/permission")
 public class PermissionController {
 
 private final PermissionService permissionService;
@@ -19,7 +19,7 @@ private final PermissionService permissionService;
         this.permissionService = permissionService;
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<PermissionDto>> getPermissions() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(permissionService.getAll());

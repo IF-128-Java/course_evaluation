@@ -1,8 +1,6 @@
 package ita.softserve.course_evaluation.controller;
 
-import ita.softserve.course_evaluation.dto.PermissionDto;
 import ita.softserve.course_evaluation.dto.RoleDto;
-import ita.softserve.course_evaluation.entity.Permission;
 import ita.softserve.course_evaluation.entity.Role;
 import ita.softserve.course_evaluation.service.RoleService;
 import org.springframework.http.HttpStatus;
@@ -12,14 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/role")
+@RequestMapping("api/v1/role")
 public class RoleController {
     private final RoleService roleService;
 
     public RoleController(RoleService roleService) {
         this.roleService = roleService;
     }
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<RoleDto>> getPermissions() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(roleService.getAll());
