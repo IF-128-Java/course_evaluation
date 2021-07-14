@@ -25,6 +25,10 @@ public class Course implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date endDate;
 
+    @ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Course() {    }
 
     public Course(String courseName, String description) {
@@ -77,5 +81,13 @@ public class Course implements Serializable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
