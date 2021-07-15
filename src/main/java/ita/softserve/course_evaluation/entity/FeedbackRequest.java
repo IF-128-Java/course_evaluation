@@ -3,9 +3,12 @@ package ita.softserve.course_evaluation.entity;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
@@ -32,12 +35,9 @@ public class FeedbackRequest {
 	@Column(name = "duration", nullable = false)
 	private Long duration;
 	
-	//TODO
-	//@ManyToOne(fetch = FetchType.LAZY)
-	//@JoinColumn(name = "course_id")
-	//private Course courseId;
-	@Column(name = "course_id")
-	private Long courseId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "course_id")
+	private Course courseId;
 	
 	@OneToMany(mappedBy = "feedbackRequestId",
 			cascade = CascadeType.ALL,
@@ -89,11 +89,11 @@ public class FeedbackRequest {
 		this.duration = duration;
 	}
 	
-	public Long getCourseId() {
+	public Course getCourseId() {
 		return courseId;
 	}
 	
-	public void setCourseId(Long courseId) {
+	public void setCourseId(Course courseId) {
 		this.courseId = courseId;
 	}
 	
