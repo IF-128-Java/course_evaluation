@@ -9,7 +9,7 @@ import ita.softserve.course_evaluation.service.RoleService;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,10 +24,13 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role create(RoleDto dto) {
-       String name = dto.getRoleName();
-        if (findByName(name).isPresent()) {
-            throw new RuntimeException("Role with name <" + name + "> already exist in database");
-        }
+        String name = dto.getRoleName();
+        roleRepository.findByRoleName(ERole.valueOf(name))
+                .ifPresent(
+                        r -> {
+                            throw new RuntimeException("Role with name <" + name + "> already exist in database");
+                        });
+
         return roleRepository.save(RoleDtoMapper.fromDto(dto));
     }
 
@@ -51,7 +54,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<RoleDto> getAll() {
         List<RoleDto> roles = RoleDtoMapper.toDto(roleRepository.findAll());
-        return roles.isEmpty() ? new ArrayList<>() : roles;
+        return roles.isEmpty() ? Collections.emptyList() : roles;
     }
 
     @Override

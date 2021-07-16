@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,9 +25,11 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public Permission create(PermissionDto dto) {
         String name = dto.getPermissionName();
-        if (findByName(name).isPresent()) {
-            throw new RuntimeException("Permission with name <" + name + "> already exist in database");
-        }
+        permissionRepository.findByPermissionName(name)
+                .ifPresent(
+                        p -> {
+                            throw new RuntimeException("Permission with name <" + name + "> already exist in database");
+                        });
         return permissionRepository.save(PermissionDtoMapper.fromDto(dto));
     }
 
@@ -57,7 +60,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public List<PermissionDto> getByRoleId(long id) {
         List<PermissionDto> permissions = PermissionDtoMapper.toDto(permissionRepository.findPermissionsByRole_Id(id));
-        return permissions.isEmpty() ? new ArrayList<>() : permissions;
+        return permissions.isEmpty() ? Collections.emptyList() : permissions;
     }
 
     @Override
