@@ -1,6 +1,15 @@
 package ita.softserve.course_evaluation.entity;
 
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
@@ -15,10 +24,6 @@ public class Permission {
     @Column(name = "permission_name", nullable = false)
     private String permissionName;
 
-    @Column(name = "description")
-    private String description;
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private Role role;
@@ -26,9 +31,10 @@ public class Permission {
     public Permission() {
     }
 
-    public Permission(String permissionName, String description) {
+    public Permission(Long id, String permissionName, Role role) {
+        this.id = id;
         this.permissionName = permissionName;
-        this.description = description;
+        this.role = role;
     }
 
     public Long getId() {
@@ -47,14 +53,6 @@ public class Permission {
         this.permissionName = permissionName;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Role getRole() {
         return role;
     }
@@ -64,16 +62,23 @@ public class Permission {
     }
 
     @Override
+    public String toString() {
+        return "Permission{" +
+                "id=" + id +
+                ", permissionName='" + permissionName + "}";
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Permission that = (Permission) o;
-        return Objects.equals(id, that.id) && Objects.equals(permissionName, that.permissionName) && Objects.equals(description, that.description);
+        return Objects.equals(id, that.id) && Objects.equals(permissionName, that.permissionName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, permissionName, description);
+        return Objects.hash(id, permissionName);
     }
 }
 
