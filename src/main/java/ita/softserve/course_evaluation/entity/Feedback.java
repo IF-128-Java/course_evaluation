@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 @Table(name = "course_feedback")
@@ -32,6 +33,17 @@ public class Feedback {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "feedback_request_id")
 	private FeedbackRequest feedbackRequestId;
+	
+	public Feedback() {
+	}
+	
+	public Feedback(Long id, Timestamp date, String comment, User studentId, FeedbackRequest feedbackRequestId) {
+		this.id = id;
+		this.date = date;
+		this.comment = comment;
+		this.studentId = studentId;
+		this.feedbackRequestId = feedbackRequestId;
+	}
 	
 	public Long getId() {
 		return id;
@@ -71,5 +83,29 @@ public class Feedback {
 	
 	public void setFeedbackRequestId(FeedbackRequest feedbackRequestId) {
 		this.feedbackRequestId = feedbackRequestId;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Feedback feedback = (Feedback) o;
+		return Objects.equals(id, feedback.id) && Objects.equals(date, feedback.date) && Objects.equals(comment, feedback.comment) && Objects.equals(studentId, feedback.studentId) && Objects.equals(feedbackRequestId, feedback.feedbackRequestId);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, date, comment, studentId, feedbackRequestId);
+	}
+	
+	@Override
+	public String toString() {
+		return "Feedback{" +
+				       "id=" + id +
+				       ", date=" + date +
+				       ", comment='" + comment + '\'' +
+				       ", studentId=" + studentId +
+				       ", feedbackRequestId=" + feedbackRequestId +
+				       '}';
 	}
 }

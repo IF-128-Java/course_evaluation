@@ -17,7 +17,7 @@ public class User {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	
 	@Column(name = "first_name")
 	private String firstName;
@@ -36,11 +36,23 @@ public class User {
 			orphanRemoval = true)
 	private List<Feedback> feedbacks = new ArrayList<>();
 	
-	public Integer getId() {
+	public User() {
+	}
+	
+	public User(Long id, String firstName, String lastName, String email, String password, List<Feedback> feedbacks) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.feedbacks = feedbacks;
+	}
+	
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

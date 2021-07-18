@@ -3,7 +3,7 @@ package ita.softserve.course_evaluation.dto;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-public class FeedbackDto {
+public class FeedbackDto extends AbstractDto {
 	
 	private Long id;
 	private Timestamp date;

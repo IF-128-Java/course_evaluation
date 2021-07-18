@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "course_feedback_request")
@@ -48,6 +49,19 @@ public class FeedbackRequest {
 	//@ManyToMany
 	//question table
 	
+	
+	public FeedbackRequest() {
+	}
+	
+	public FeedbackRequest(Long id, String feedbackDescription, LocalDateTime startDate, LocalDateTime endDate, Long duration, Course courseId, List<Feedback> feedbacks) {
+		this.id = id;
+		this.feedbackDescription = feedbackDescription;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.duration = duration;
+		this.courseId = courseId;
+		this.feedbacks = feedbacks;
+	}
 	
 	public Long getId() {
 		return id;
@@ -103,5 +117,31 @@ public class FeedbackRequest {
 	
 	public void setFeedbacks(List<Feedback> feedbacks) {
 		this.feedbacks = feedbacks;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		FeedbackRequest that = (FeedbackRequest) o;
+		return Objects.equals(id, that.id) && Objects.equals(feedbackDescription, that.feedbackDescription) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(duration, that.duration) && Objects.equals(courseId, that.courseId) && Objects.equals(feedbacks, that.feedbacks);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, feedbackDescription, startDate, endDate, duration, courseId, feedbacks);
+	}
+	
+	@Override
+	public String toString() {
+		return "FeedbackRequest{" +
+				       "id=" + id +
+				       ", feedbackDescription='" + feedbackDescription + '\'' +
+				       ", startDate=" + startDate +
+				       ", endDate=" + endDate +
+				       ", duration=" + duration +
+				       ", courseId=" + courseId +
+				       ", feedbacks=" + feedbacks +
+				       '}';
 	}
 }
