@@ -1,10 +1,11 @@
 package ita.softserve.course_evaluation.controller;
 
+import ita.softserve.course_evaluation.dto.GroupDto;
+import ita.softserve.course_evaluation.dto.GroupDtoMapper;
 import ita.softserve.course_evaluation.entity.Group;
 import ita.softserve.course_evaluation.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,13 +17,27 @@ public class GroupController {
     @Autowired
     private GroupService groupService;
 
-    public GroupController(GroupService theGroupService)
-    {
-        this.groupService = theGroupService;
+    @Autowired
+    private GroupDtoMapper groupDtoMapper;
+
+    public GroupController(GroupService groupService, GroupDtoMapper groupDtoMapper) {
+        this.groupService = groupService;
+        this.groupDtoMapper = groupDtoMapper;
     }
 
+    @GetMapping(value = "/groups")
+    public ResponseEntity<List<GroupDto>> getAllGroups() {
+
+        final List<Group> groups = groupService.getAll();
+
+        return groups != null && !groups.isEmpty()
+                ? new ResponseEntity<>(groupDtoMapper.entityToDto(groups), HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+
     @GetMapping(value = "/groups/{id}")
-    public ResponseEntity<Group> getGroupById(@PathVariable("id") long id) {
+    public ResponseEntity<GroupDto> getGroupById(@PathVariable("id") long id) {
 
         if (id == 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -31,19 +46,9 @@ public class GroupController {
         final Group group = groupService.getById(id);
 
         return group != null
-                ? new ResponseEntity<>(group, HttpStatus.OK)
+                ? new ResponseEntity<>(groupDtoMapper.entityToDto(group), HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-    }
-
-    @GetMapping(value = "/groups")
-    public ResponseEntity<List<Group>> getAllGroups() {
-
-        final List<Group> groups = groupService.getAll();
-
-        return groups != null && !groups.isEmpty()
-                ? new ResponseEntity<>(groups, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/groups/{id}")
@@ -59,22 +64,27 @@ public class GroupController {
     }
 
     @PostMapping("/groups")
-    public ResponseEntity<Group> addGroup(@RequestBody Group group) {
-        if (group == null) {
+    public ResponseEntity<GroupDto> addGroup(@RequestBody GroupDto groupdto) {
+
+        if (groupdto == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(groupService.save(group));
+        Group group = groupService.save(groupDtoMapper.dtoToEntity(groupdto));
+
+        return ResponseEntity.status(HttpStatus.OK).body(groupDtoMapper.entityToDto(group));
     }
 
     @PutMapping("/groups")
-    public ResponseEntity<Group> updateGroup(@RequestBody Group group) {
+    public ResponseEntity<GroupDto> updateGroup(@RequestBody GroupDto groupdto) {
 
-        if (group == null) {
+        if (groupdto == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(groupService.save(group));
+        Group group = groupService.save(groupDtoMapper.dtoToEntity(groupdto));
+
+        return ResponseEntity.status(HttpStatus.OK).body(groupDtoMapper.entityToDto(group));
     }
 
 }
