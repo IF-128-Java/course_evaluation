@@ -12,6 +12,14 @@ public class CourseDtoMapper {
 
     private ModelMapper mapper;
 
+    public CourseDtoMapper(ModelMapper mapper) {
+        this.mapper = mapper;
+    }
+
+    public CourseDtoMapper() {
+
+    }
+
     public Course toEntity(CourseDto courseDto) {
         return Objects.isNull(courseDto) ? null : mapper.map(courseDto, Course.class);
     }
