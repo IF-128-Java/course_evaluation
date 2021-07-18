@@ -1,8 +1,13 @@
 package ita.softserve.course_evaluation.entity;
 
+import com.sun.istack.NotNull;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+
+//@NoArgsConstructor
 @Entity
 @Table(name = "course")
 public class Course implements Serializable {
@@ -11,36 +16,34 @@ public class Course implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name = "course_Name")
+    @NotNull
+    @Column(name = "course_Name", nullable = false)
     private String courseName;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "start_Date")
+    @Column(name = "start_Date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date startDate;
 
-    @Column(name = "end_Date")
+    @Column(name = "end_Date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date endDate;
 
     @ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Course() {    }
 
-    public Course(String courseName, String description) {
-        this.courseName = courseName;
-        this.description = description;
-    }
-
-    public Course(String courseName, String description, Date startDate, Date endDate) {
+    public Course(int id, String courseName, String description, Date startDate, Date endDate, User user) {
+        this.id = id;
         this.courseName = courseName;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.user = user;
     }
 
     public int getId() {
