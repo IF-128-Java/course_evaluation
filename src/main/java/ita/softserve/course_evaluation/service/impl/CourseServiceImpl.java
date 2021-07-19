@@ -4,10 +4,12 @@ package ita.softserve.course_evaluation.service.impl;
 import ita.softserve.course_evaluation.dto.CourseDto;
 import ita.softserve.course_evaluation.dto.dtoMapper.CourseDtoMapper;
 import ita.softserve.course_evaluation.entity.Course;
+import ita.softserve.course_evaluation.exception.CourseNotFoundException;
 import ita.softserve.course_evaluation.repository.CourseRepository;
 import ita.softserve.course_evaluation.service.CourseService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +17,7 @@ import java.util.Optional;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
-    private CourseDtoMapper courseDtoMapper = new CourseDtoMapper();
+    private final CourseDtoMapper courseDtoMapper = new CourseDtoMapper();
 
 
     public CourseServiceImpl(CourseRepository courseRepository) {
@@ -38,30 +40,24 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseDto getById(int id) {
-        return courseDtoMapper.toDto(courseRepository.findById(id));
+        return CourseDtoMapper.toDto(courseRepository.findById(id).orElseThrow(CourseNotFoundException::new));
     }
 
     @Override
     public Optional<Course> getByName(String name) {
-        return Optional.empty();
+        return courseRepository.findByCourseName(name);
     }
 
     @Override
-    public Course editCourse(Course course) {
-        return null;
+    public CourseDto editCourse(CourseDto courseDto) {
+        getById(courseDto.getId());
+        return CourseDtoMapper.toDto(courseRepository.save(courseDtoMapper.toEntity(courseDto)));
     }
 
     @Override
-    public List<Course> getAll() {
-        return null;
+    public List<CourseDto> getAll() {
+        List<CourseDto> courses = courseDtoMapper.toDto((List<Course>) courseRepository.findAll());
+        return courses.isEmpty() ? new ArrayList<>() : courses;
     }
 
-//    @Autowired
-//    CourseRepository courseRepository;
-//
-//    @Transactional
-//    @Override
-//    public void addCourse() {
-//        Course courseJava = new Course();
-//    }
 }
