@@ -15,6 +15,8 @@ import java.util.Optional;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
+    private CourseDtoMapper courseDtoMapper = new CourseDtoMapper();
+
 
     public CourseServiceImpl(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
@@ -22,7 +24,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course addCourse(CourseDto course) {
-        CourseDtoMapper courseDtoMapper = new CourseDtoMapper();
         String name = course.getCourseName();
         courseRepository.findByCourseName(name).ifPresent(n -> {
             throw new RuntimeException(name + ": this course already created");
@@ -32,12 +33,12 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void delete(int id) {
-
+        courseRepository.delete(courseDtoMapper.toEntity(getById(id)));
     }
 
     @Override
-    public Course getById(int id) {
-        return null;
+    public CourseDto getById(int id) {
+        return courseDtoMapper.toDto(courseRepository.findById(id));
     }
 
     @Override

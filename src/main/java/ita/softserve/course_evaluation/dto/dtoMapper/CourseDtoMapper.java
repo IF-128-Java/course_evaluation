@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class CourseDtoMapper {
@@ -24,7 +25,7 @@ public class CourseDtoMapper {
         return Objects.isNull(courseDto) ? null : mapper.map(courseDto, Course.class);
     }
 
-    public CourseDto toDto(Course course) {
+    public CourseDto toDto(Optional<Course> course) {
         return Objects.isNull(course) ? null : mapper.map(course, CourseDto.class);
     }
 }
