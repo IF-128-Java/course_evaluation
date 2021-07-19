@@ -12,7 +12,7 @@ public interface CourseService {
 
     void delete(int id);
 
-    Course getById(int id);
+    CourseDto getById(int id);
 
     Optional<Course> getByName(String name);
 
