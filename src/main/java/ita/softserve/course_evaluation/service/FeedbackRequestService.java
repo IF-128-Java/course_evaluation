@@ -9,5 +9,5 @@ public interface FeedbackRequestService {
 	
 	void delete(Long id);
 	
-	FeedbackRequestDto getFeedbackById(Long id);
+	FeedbackRequestDto getFeedbackRequestById(Long id);
 }

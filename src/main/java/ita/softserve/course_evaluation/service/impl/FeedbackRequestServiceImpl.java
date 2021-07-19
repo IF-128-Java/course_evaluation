@@ -31,11 +31,11 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	
 	@Override
 	public void delete(Long id) {
-		feedbackRequestRepository.delete(feedbackRequestMapper.toEntity(getFeedbackById(id)));
+		feedbackRequestRepository.delete(feedbackRequestMapper.toEntity(getFeedbackRequestById(id)));
 	}
 	
 	@Override
-	public FeedbackRequestDto getFeedbackById(Long id) {
+	public FeedbackRequestDto getFeedbackRequestById(Long id) {
 		return feedbackRequestMapper.toDto(feedbackRequestRepository.findById(id)
 				       .orElseThrow(()-> new EntityNotFoundException("Feedback request with id " + id + " not found")));
 	}

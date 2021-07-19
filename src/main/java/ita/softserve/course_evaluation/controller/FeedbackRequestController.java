@@ -26,26 +26,26 @@ public class FeedbackRequestController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.OK)
-	public void createFeedback(@RequestBody FeedbackRequestDto dto) {
+	public void createFeedbackRequest(@RequestBody FeedbackRequestDto dto) {
 		feedbackRequestService.create(dto);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<FeedbackRequestDto> getFeedback(@PathVariable Long id) {
+	public ResponseEntity<FeedbackRequestDto> getFeedbackRequest(@PathVariable Long id) {
 		return ResponseEntity.status(HttpStatus.OK)
-				       .body(feedbackRequestService.getFeedbackById(id));
+				       .body(feedbackRequestService.getFeedbackRequestById(id));
 	}
 	
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public void editFeedback(@RequestBody FeedbackRequestDto dto, @PathVariable Long id) {
+	public void editFeedbackRequest(@RequestBody FeedbackRequestDto dto, @PathVariable Long id) {
 		dto.setId(id);
 		feedbackRequestService.update(dto);
 	}
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public void deleteFeedback(@PathVariable Long id) {
+	public void deleteFeedbackRequest(@PathVariable Long id) {
 		feedbackRequestService.delete(id);
 	}
 }
