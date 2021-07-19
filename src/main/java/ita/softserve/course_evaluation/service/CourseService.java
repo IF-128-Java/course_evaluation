@@ -16,7 +16,7 @@ public interface CourseService {
 
     Optional<Course> getByName(String name);
 
-    Course editCourse(Course course);
+    CourseDto editCourse(CourseDto courseDto);
 
-    List<Course> getAll();
+    List<CourseDto> getAll();
 }
