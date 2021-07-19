@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @RestController
@@ -60,7 +61,7 @@ public class GroupController {
         }
 
         groupService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/groups")
@@ -70,9 +71,11 @@ public class GroupController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Group group = groupService.save(groupDtoMapper.dtoToEntity(groupdto));
+        Group group = groupService.create(groupDtoMapper.dtoToEntity(groupdto));
 
-        return ResponseEntity.status(HttpStatus.OK).body(groupDtoMapper.entityToDto(group));
+        return group != null
+                ? new ResponseEntity<>(groupDtoMapper.entityToDto(group), HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/groups")
@@ -82,9 +85,12 @@ public class GroupController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Group group = groupService.save(groupDtoMapper.dtoToEntity(groupdto));
+        Group group = groupService.update(groupDtoMapper.dtoToEntity(groupdto));
 
-        return ResponseEntity.status(HttpStatus.OK).body(groupDtoMapper.entityToDto(group));
+        return group != null
+                ? new ResponseEntity<>(groupDtoMapper.entityToDto(group), HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
     }
 
 }

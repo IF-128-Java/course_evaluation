@@ -1,8 +1,7 @@
 package ita.softserve.course_evaluation.entity;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "groups")
@@ -16,27 +15,36 @@ public class Group {
     @Column(name = "group_name")
     private String groupName;
 
-    public Long getId() {
-        return id;
+    //@OneToMany(mappedBy = "group", orphanRemoval = true)
+    //private List<User> users = new ArrayList<>();
+
+    //@ManyToMany
+    //@JoinTable(
+    //        name = "course_group",
+    //        joinColumns = @JoinColumn(name = "group_id"),
+    //        inverseJoinColumns = @JoinColumn(name = "course_id"))
+    //private Set<Course> courses = new HashSet<>();
+
+    public Group() {
     }
 
-    public String getGroupName() {
-        return groupName;
+    public Group(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
+    public String getGroupName() {
+        return groupName;
+    }
+
     public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-    public Group() {
-    }
-
-    public Group(Long id, String groupName) {
-        this.id = id;
         this.groupName = groupName;
     }
 

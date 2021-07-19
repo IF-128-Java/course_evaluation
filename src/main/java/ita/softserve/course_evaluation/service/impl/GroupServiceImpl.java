@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -16,12 +17,19 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<Group> getAll() {
+
         return groupRepository.findAll();
     }
 
     @Override
     public Group getById(long id) {
-        return groupRepository.findById(id).get();
+
+        Group group = null;
+
+        if (groupRepository.existsById(id)) {
+            group = groupRepository.getById(id);
+        }
+        return group;
     }
 
     @Override
@@ -30,8 +38,29 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group save(Group group) {
-        return groupRepository.save(group);
+    public Group create(Group group) {
+
+        Optional<Group> oGroup = groupRepository.findGroupByGroupName(group.getGroupName());
+
+        if(oGroup.isEmpty()) {
+            group.setId(0l);
+            return groupRepository.saveAndFlush(group);
+        }
+
+        return null;
     }
 
+    @Override
+    public Group update(Group group) {
+
+        Optional<Group> oGroup = groupRepository.findGroupByGroupName(group.getGroupName());
+
+        if(oGroup.isEmpty() && groupRepository.existsById(group.getId())) {
+            return groupRepository.saveAndFlush(group);
+        }
+
+        return null;
+
+
+    }
 }
