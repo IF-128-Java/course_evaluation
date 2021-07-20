@@ -8,9 +8,13 @@ import java.util.Optional;
 public interface GroupService {
 
     List<Group> getAll();
+
     Group getById(long id);
+
     void delete(long id);
+
     Group create(Group group);
+
     Group update(Group group);
 
 

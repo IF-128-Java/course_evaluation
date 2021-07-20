@@ -7,12 +7,20 @@ import ita.softserve.course_evaluation.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/groups")
 public class GroupController {
 
     @Autowired
@@ -26,7 +34,7 @@ public class GroupController {
         this.groupDtoMapper = groupDtoMapper;
     }
 
-    @GetMapping(value = "/groups")
+    @GetMapping(value = "")
     public ResponseEntity<List<GroupDto>> getAllGroups() {
 
         final List<Group> groups = groupService.getAll();
@@ -37,7 +45,7 @@ public class GroupController {
     }
 
 
-    @GetMapping(value = "/groups/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<GroupDto> getGroupById(@PathVariable("id") long id) {
 
         if (id == 0) {
@@ -52,7 +60,7 @@ public class GroupController {
 
     }
 
-    @DeleteMapping("/groups/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Group> deleteGroup(@PathVariable long id) {
         final Group group = groupService.getById(id);
 
@@ -64,7 +72,7 @@ public class GroupController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/groups")
+    @PostMapping("")
     public ResponseEntity<GroupDto> addGroup(@RequestBody GroupDto groupdto) {
 
         if (groupdto == null) {
@@ -78,7 +86,7 @@ public class GroupController {
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("/groups")
+    @PutMapping("")
     public ResponseEntity<GroupDto> updateGroup(@RequestBody GroupDto groupdto) {
 
         if (groupdto == null) {
