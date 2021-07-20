@@ -1,21 +1,20 @@
 package ita.softserve.course_evaluation.service;
 
-import ita.softserve.course_evaluation.entity.Group;
+import ita.softserve.course_evaluation.dto.GroupDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface GroupService {
 
-    List<Group> getAll();
+    List<GroupDto> getAll();
 
-    Group getById(long id);
+    GroupDto getById(long id);
 
     void delete(long id);
 
-    Group create(Group group);
+    GroupDto create(GroupDto group);
 
-    Group update(Group group);
+    GroupDto update(GroupDto group);
 
 
 }

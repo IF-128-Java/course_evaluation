@@ -1,9 +1,10 @@
 package ita.softserve.course_evaluation.service.impl;
 
+import ita.softserve.course_evaluation.dto.GroupDto;
+import ita.softserve.course_evaluation.dto.GroupDtoMapper;
 import ita.softserve.course_evaluation.entity.Group;
 import ita.softserve.course_evaluation.repository.GroupRepository;
 import ita.softserve.course_evaluation.service.GroupService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,21 +14,23 @@ import java.util.Optional;
 public class GroupServiceImpl implements GroupService {
 
     private GroupRepository groupRepository;
+    private GroupDtoMapper groupDtoMapper;
 
-    public GroupServiceImpl(GroupRepository groupRepository) {
+    public GroupServiceImpl(GroupRepository groupRepository, GroupDtoMapper groupDtoMapper) {
         this.groupRepository = groupRepository;
+        this.groupDtoMapper = groupDtoMapper;
     }
 
     @Override
-    public List<Group> getAll() {
+    public List<GroupDto> getAll() {
 
-        return groupRepository.findAll();
+        return groupDtoMapper.entityToDto(groupRepository.findAll());
     }
 
     @Override
-    public Group getById(long id) {
+    public GroupDto getById(long id) {
 
-        return groupRepository.getById(id);
+        return groupDtoMapper.entityToDto(groupRepository.getById(id));
     }
 
     @Override
@@ -36,25 +39,25 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group create(Group group) {
+    public GroupDto create(GroupDto group) {
 
         Optional<Group> oGroup = groupRepository.findGroupByGroupName(group.getGroupName());
 
         if(oGroup.isEmpty()) {
             group.setId(0l);
-            return groupRepository.save(group);
+            return groupDtoMapper.entityToDto(groupRepository.save(groupDtoMapper.dtoToEntity(group)));
         }
 
         return null;
     }
 
     @Override
-    public Group update(Group group) {
+    public GroupDto update(GroupDto group) {
 
         Optional<Group> oGroup = groupRepository.findGroupByGroupName(group.getGroupName());
 
         if(oGroup.isEmpty() && groupRepository.existsById(group.getId())) {
-            return groupRepository.saveAndFlush(group);
+            return groupDtoMapper.entityToDto(groupRepository.save(groupDtoMapper.dtoToEntity(group)));
         }
 
         return null;
