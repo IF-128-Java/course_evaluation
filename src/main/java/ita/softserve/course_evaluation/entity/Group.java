@@ -15,16 +15,6 @@ public class Group {
     @Column(name = "group_name")
     private String groupName;
 
-    //@OneToMany(mappedBy = "group", orphanRemoval = true)
-    //private List<User> users = new ArrayList<>();
-
-    //@ManyToMany
-    //@JoinTable(
-    //        name = "course_group",
-    //        joinColumns = @JoinColumn(name = "group_id"),
-    //        inverseJoinColumns = @JoinColumn(name = "course_id"))
-    //private Set<Course> courses = new HashSet<>();
-
     public Group() {
     }
 

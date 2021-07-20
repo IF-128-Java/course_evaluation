@@ -12,8 +12,11 @@ import java.util.Optional;
 @Service
 public class GroupServiceImpl implements GroupService {
 
-    @Autowired
     private GroupRepository groupRepository;
+
+    public GroupServiceImpl(GroupRepository groupRepository) {
+        this.groupRepository = groupRepository;
+    }
 
     @Override
     public List<Group> getAll() {
@@ -24,12 +27,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public Group getById(long id) {
 
-        Group group = null;
-
-        if (groupRepository.existsById(id)) {
-            group = groupRepository.getById(id);
-        }
-        return group;
+        return groupRepository.getById(id);
     }
 
     @Override
@@ -44,7 +42,7 @@ public class GroupServiceImpl implements GroupService {
 
         if(oGroup.isEmpty()) {
             group.setId(0l);
-            return groupRepository.saveAndFlush(group);
+            return groupRepository.save(group);
         }
 
         return null;

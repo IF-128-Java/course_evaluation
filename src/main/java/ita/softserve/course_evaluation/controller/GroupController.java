@@ -23,10 +23,8 @@ import java.util.List;
 @RequestMapping("/groups")
 public class GroupController {
 
-    @Autowired
-    private GroupService groupService;
 
-    @Autowired
+    private GroupService groupService;
     private GroupDtoMapper groupDtoMapper;
 
     public GroupController(GroupService groupService, GroupDtoMapper groupDtoMapper) {
