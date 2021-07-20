@@ -1,6 +1,8 @@
 package ita.softserve.course_evaluation.entity;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -29,6 +31,19 @@ public class User {
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
     Set <Role> roles;
+
+    @ManyToOne
+    @JoinColumn(name="groupe_id")
+    private Group group;
+
+	@ManyToOne
+	@JoinColumn(name="course_id", nullable=false)
+	private Course course;
+
+	@OneToMany(mappedBy = "users")
+	private List<FeedBack> feedBackList;
+
+
 	
 	public Integer getId() {
 		return id;
@@ -78,5 +93,50 @@ public class User {
         this.roles = roles;
     }
 
+	public Group getGroup() {
+		return group;
+	}
 
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(email, user.email) && Objects.equals(password, user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, email, password);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", group=" + group +
+                '}';
+    }
+
+    public User() {
+    }
+
+    public User(Integer id, String firstName, String lastName, String email, String password, Set<Role> roles, Group group) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.group = group;
+    }
 }
