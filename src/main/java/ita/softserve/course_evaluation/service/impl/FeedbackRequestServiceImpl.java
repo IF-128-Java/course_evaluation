@@ -37,6 +37,6 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	@Override
 	public FeedbackRequestDto getFeedbackRequestById(Long id) {
 		return feedbackRequestMapper.toDto(feedbackRequestRepository.findById(id)
-				       .orElseThrow(()-> new EntityNotFoundException("Feedback request with id " + id + " not found")));
+				                                   .orElseThrow(() -> new EntityNotFoundException("Feedback request with id " + id + " not found")));
 	}
 }

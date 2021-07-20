@@ -1,8 +1,6 @@
 package ita.softserve.course_evaluation.dto;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class FeedbackRequestDto extends AbstractDto {
@@ -12,20 +10,18 @@ public class FeedbackRequestDto extends AbstractDto {
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
 	private Long duration;
-	private Long courseId;
-	private List<FeedbackDto> feedbacks = new ArrayList<>();
+	private Long course;
 	
 	public FeedbackRequestDto() {
 	}
 	
-	public FeedbackRequestDto(Long id, String feedbackDescription, LocalDateTime startDate, LocalDateTime endDate, Long duration, Long courseId, List<FeedbackDto> feedbacks) {
+	public FeedbackRequestDto(Long id, String feedbackDescription, LocalDateTime startDate, LocalDateTime endDate, Long duration, Long course) {
 		this.id = id;
 		this.feedbackDescription = feedbackDescription;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.duration = duration;
-		this.courseId = courseId;
-		this.feedbacks = feedbacks;
+		this.course = course;
 	}
 	
 	public Long getId() {
@@ -68,20 +64,12 @@ public class FeedbackRequestDto extends AbstractDto {
 		this.duration = duration;
 	}
 	
-	public Long getCourse_id() {
-		return courseId;
+	public Long getCourse() {
+		return course;
 	}
 	
-	public void setCourse_id(Long courseId) {
-		this.courseId = courseId;
-	}
-	
-	public List<FeedbackDto> getFeedbacks() {
-		return feedbacks;
-	}
-	
-	public void setFeedbacks(List<FeedbackDto> feedbacks) {
-		this.feedbacks = feedbacks;
+	public void setCourse(Long courseId) {
+		this.course = courseId;
 	}
 	
 	@Override
@@ -89,12 +77,12 @@ public class FeedbackRequestDto extends AbstractDto {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		FeedbackRequestDto that = (FeedbackRequestDto) o;
-		return Objects.equals(id, that.id) && Objects.equals(feedbackDescription, that.feedbackDescription) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(duration, that.duration) && Objects.equals(courseId, that.courseId) && Objects.equals(feedbacks, that.feedbacks);
+		return Objects.equals(id, that.id) && Objects.equals(feedbackDescription, that.feedbackDescription) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(duration, that.duration) && Objects.equals(course, that.course);
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, feedbackDescription, startDate, endDate, duration, courseId, feedbacks);
+		return Objects.hash(id, feedbackDescription, startDate, endDate, duration, course);
 	}
 	
 	@Override
@@ -105,8 +93,7 @@ public class FeedbackRequestDto extends AbstractDto {
 				       ", startDate=" + startDate +
 				       ", endDate=" + endDate +
 				       ", duration=" + duration +
-				       ", courseId=" + courseId +
-				       ", feedbacks=" + feedbacks +
+				       ", course=" + course +
 				       '}';
 	}
 }

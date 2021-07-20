@@ -75,4 +75,15 @@ public class Course implements Serializable {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+    
+    @Override
+    public String toString() {
+        return "Course{" +
+                       "id=" + id +
+                       ", courseName='" + courseName + '\'' +
+                       ", description='" + description + '\'' +
+                       ", startDate=" + startDate +
+                       ", endDate=" + endDate +
+                       '}';
+    }
 }

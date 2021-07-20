@@ -2,30 +2,62 @@ package ita.softserve.course_evaluation.mapper.impl;
 
 import ita.softserve.course_evaluation.dto.FeedbackDto;
 import ita.softserve.course_evaluation.entity.Feedback;
+import ita.softserve.course_evaluation.entity.FeedbackRequest;
+import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.mapper.AbstractMapper;
 import ita.softserve.course_evaluation.repository.FeedbackRepository;
+import ita.softserve.course_evaluation.repository.FeedbackRequestRepository;
+import ita.softserve.course_evaluation.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 @Component
 public class FeedbackMapper extends AbstractMapper<Feedback, FeedbackDto> {
 	
 	private final ModelMapper mapper;
-	private final FeedbackRepository feedbackRepository;
+	private final FeedbackRequestRepository feedbackRequestRepository;
+	private final UserRepository userRepository;
 	
 	@Autowired
-	public FeedbackMapper(ModelMapper mapper, FeedbackRepository feedbackRepository) {
+	public FeedbackMapper(ModelMapper mapper, FeedbackRepository feedbackRepository, FeedbackRequestRepository feedbackRequestRepository, UserRepository userRepository) {
 		super(Feedback.class, FeedbackDto.class);
 		this.mapper = mapper;
-		this.feedbackRepository = feedbackRepository;
+		this.feedbackRequestRepository = feedbackRequestRepository;
+		this.userRepository = userRepository;
+	}
+	
+	@PostConstruct
+	public void setupMapper() {
+		mapper.createTypeMap(Feedback.class, FeedbackDto.class)
+				.addMappings(mapping -> mapping.skip(FeedbackDto::setFeedbackRequestId))
+				.addMappings(mapping -> mapping.skip(FeedbackDto::setStudentId))
+				.setPostConverter(toDtoConverter());
+		mapper.createTypeMap(FeedbackDto.class, Feedback.class)
+				.addMappings(mapping -> mapping.skip(Feedback::setFeedbackRequest))
+				.addMappings(mapping -> mapping.skip(Feedback::setStudent))
+				.setPostConverter(toEntityConverter());
 	}
 	
 	@Override
 	protected void mapSpecificFieldsInEntity(Feedback source, FeedbackDto destination) {
+		destination.setFeedbackRequestId(source.getFeedbackRequest().getId());
+		destination.setStudentId(source.getStudent().getId());
 	}
 	
 	@Override
 	protected void mapSpecificFieldsInDto(FeedbackDto source, Feedback destination) {
+		destination.setFeedbackRequest(getFeedbackRequest(source));
+		destination.setStudent(getStudent(source));
+	}
+	
+	private User getStudent(FeedbackDto source) {
+		return userRepository.findById(source.getId()).get();
+	}
+	
+	private FeedbackRequest getFeedbackRequest(FeedbackDto source) {
+		return feedbackRequestRepository.findById(source.getId()).get();
 	}
 }

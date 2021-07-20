@@ -38,9 +38,9 @@ public class FeedbackRequest {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "course_id")
-	private Course courseId;
+	private Course course;
 	
-	@OneToMany(mappedBy = "feedbackRequestId",
+	@OneToMany(mappedBy = "feedbackRequest",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
 	private List<Feedback> feedbacks = new ArrayList<>();
@@ -53,13 +53,13 @@ public class FeedbackRequest {
 	public FeedbackRequest() {
 	}
 	
-	public FeedbackRequest(Long id, String feedbackDescription, LocalDateTime startDate, LocalDateTime endDate, Long duration, Course courseId, List<Feedback> feedbacks) {
+	public FeedbackRequest(Long id, String feedbackDescription, LocalDateTime startDate, LocalDateTime endDate, Long duration, Course course, List<Feedback> feedbacks) {
 		this.id = id;
 		this.feedbackDescription = feedbackDescription;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.duration = duration;
-		this.courseId = courseId;
+		this.course = course;
 		this.feedbacks = feedbacks;
 	}
 	
@@ -103,12 +103,12 @@ public class FeedbackRequest {
 		this.duration = duration;
 	}
 	
-	public Course getCourseId() {
-		return courseId;
+	public Course getCourse() {
+		return course;
 	}
 	
-	public void setCourseId(Course courseId) {
-		this.courseId = courseId;
+	public void setCourse(Course courseId) {
+		this.course = courseId;
 	}
 	
 	public List<Feedback> getFeedbacks() {
@@ -124,12 +124,12 @@ public class FeedbackRequest {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		FeedbackRequest that = (FeedbackRequest) o;
-		return Objects.equals(id, that.id) && Objects.equals(feedbackDescription, that.feedbackDescription) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(duration, that.duration) && Objects.equals(courseId, that.courseId) && Objects.equals(feedbacks, that.feedbacks);
+		return Objects.equals(id, that.id) && Objects.equals(feedbackDescription, that.feedbackDescription) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(duration, that.duration) && Objects.equals(course, that.course) && Objects.equals(feedbacks, that.feedbacks);
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, feedbackDescription, startDate, endDate, duration, courseId, feedbacks);
+		return Objects.hash(id, feedbackDescription, startDate, endDate, duration, course, feedbacks);
 	}
 	
 	@Override
@@ -140,8 +140,7 @@ public class FeedbackRequest {
 				       ", startDate=" + startDate +
 				       ", endDate=" + endDate +
 				       ", duration=" + duration +
-				       ", courseId=" + courseId +
-				       ", feedbacks=" + feedbacks +
+				       ", course=" + course +
 				       '}';
 	}
 }

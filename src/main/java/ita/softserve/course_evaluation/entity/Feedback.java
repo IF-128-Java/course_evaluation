@@ -28,21 +28,20 @@ public class Feedback {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "student_id")
-	private User studentId;
+	private User student;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "feedback_request_id")
-	private FeedbackRequest feedbackRequestId;
+	private FeedbackRequest feedbackRequest;
 	
 	public Feedback() {
 	}
 	
-	public Feedback(Long id, Timestamp date, String comment, User studentId, FeedbackRequest feedbackRequestId) {
+	public Feedback(Long id, Timestamp date, String comment, User student) {
 		this.id = id;
 		this.date = date;
 		this.comment = comment;
-		this.studentId = studentId;
-		this.feedbackRequestId = feedbackRequestId;
+		this.student = student;
 	}
 	
 	public Long getId() {
@@ -69,20 +68,20 @@ public class Feedback {
 		this.comment = comment;
 	}
 	
-	public User getStudentId() {
-		return studentId;
+	public User getStudent() {
+		return student;
 	}
 	
-	public void setStudentId(User studentId) {
-		this.studentId = studentId;
+	public void setStudent(User student) {
+		this.student = student;
 	}
 	
-	public FeedbackRequest getFeedbackRequestId() {
-		return feedbackRequestId;
+	public FeedbackRequest getFeedbackRequest() {
+		return feedbackRequest;
 	}
 	
-	public void setFeedbackRequestId(FeedbackRequest feedbackRequestId) {
-		this.feedbackRequestId = feedbackRequestId;
+	public void setFeedbackRequest(FeedbackRequest feedbackRequest) {
+		this.feedbackRequest = feedbackRequest;
 	}
 	
 	@Override
@@ -90,12 +89,12 @@ public class Feedback {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Feedback feedback = (Feedback) o;
-		return Objects.equals(id, feedback.id) && Objects.equals(date, feedback.date) && Objects.equals(comment, feedback.comment) && Objects.equals(studentId, feedback.studentId) && Objects.equals(feedbackRequestId, feedback.feedbackRequestId);
+		return Objects.equals(id, feedback.id) && Objects.equals(date, feedback.date) && Objects.equals(comment, feedback.comment) && Objects.equals(student, feedback.student) && Objects.equals(feedbackRequest, feedback.feedbackRequest);
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, date, comment, studentId, feedbackRequestId);
+		return Objects.hash(id, date, comment, student, feedbackRequest);
 	}
 	
 	@Override
@@ -104,8 +103,8 @@ public class Feedback {
 				       "id=" + id +
 				       ", date=" + date +
 				       ", comment='" + comment + '\'' +
-				       ", studentId=" + studentId +
-				       ", feedbackRequestId=" + feedbackRequestId +
+				       ", student=" + student +
+				       ", feedbackRequest=" + feedbackRequest +
 				       '}';
 	}
 }
