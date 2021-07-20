@@ -25,9 +25,9 @@ public class FeedbackRequestController {
 	}
 	
 	@PostMapping
-	@ResponseStatus(HttpStatus.OK)
-	public void createFeedbackRequest(@RequestBody FeedbackRequestDto dto) {
-		feedbackRequestService.create(dto);
+	public ResponseEntity<FeedbackRequestDto>  createFeedbackRequest(@RequestBody FeedbackRequestDto dto) {
+		return ResponseEntity.status(HttpStatus.OK)
+				       .body(feedbackRequestService.create(dto));
 	}
 	
 	@GetMapping("/{id}")
@@ -37,10 +37,10 @@ public class FeedbackRequestController {
 	}
 	
 	@PutMapping("/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public void editFeedbackRequest(@RequestBody FeedbackRequestDto dto, @PathVariable Long id) {
+	public ResponseEntity<FeedbackRequestDto> editFeedbackRequest(@RequestBody FeedbackRequestDto dto, @PathVariable Long id) {
 		dto.setId(id);
-		feedbackRequestService.update(dto);
+		return ResponseEntity.status(HttpStatus.OK)
+				       .body(feedbackRequestService.update(dto));
 	}
 	
 	@DeleteMapping("/{id}")

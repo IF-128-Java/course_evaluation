@@ -20,13 +20,13 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	}
 	
 	@Override
-	public void create(FeedbackRequestDto dto) {
-		feedbackRequestRepository.save(feedbackRequestMapper.toEntity(dto));
+	public FeedbackRequestDto create(FeedbackRequestDto dto) {
+		return feedbackRequestMapper.toDto(feedbackRequestRepository.save(feedbackRequestMapper.toEntity(dto)));
 	}
 	
 	@Override
-	public void update(FeedbackRequestDto dto) {
-		feedbackRequestRepository.save(feedbackRequestMapper.toEntity(dto));
+	public FeedbackRequestDto update(FeedbackRequestDto dto) {
+		return feedbackRequestMapper.toDto(feedbackRequestRepository.save(feedbackRequestMapper.toEntity(dto)));
 	}
 	
 	@Override

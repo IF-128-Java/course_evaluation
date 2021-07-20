@@ -15,26 +15,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.EntityNotFoundException;
 
 @Component
 public class FeedbackRequestMapper extends AbstractMapper<FeedbackRequest, FeedbackRequestDto> {
 	
 	private final ModelMapper mapper;
-	private final FeedbackRequestRepository feedbackRequestRepository;
-	private final FeedbackRepository feedbackRepository;
 	private final CourseRepository courseRepository;
-	private final Mapper<Feedback, FeedbackDto> feedbackMapper;
 	
 	@Autowired
 	public FeedbackRequestMapper(ModelMapper mapper, FeedbackRequestRepository feedbackRequestRepository, FeedbackRepository feedbackRepository, CourseRepository courseRepository, Mapper<Feedback, FeedbackDto> feedbackMapper) {
 		super(FeedbackRequest.class, FeedbackRequestDto.class);
 		this.mapper = mapper;
-		this.feedbackRequestRepository = feedbackRequestRepository;
-		this.feedbackRepository = feedbackRepository;
 		this.courseRepository = courseRepository;
-		this.feedbackMapper = feedbackMapper;
 	}
 	
 	@PostConstruct
@@ -60,14 +53,8 @@ public class FeedbackRequestMapper extends AbstractMapper<FeedbackRequest, Feedb
 	
 	
 	private Course getCourse(FeedbackRequestDto source) {
-		return courseRepository.findById(source.getCourse()).get();
+		return courseRepository.findById(source.getCourse())
+				       .orElseThrow(() -> new EntityNotFoundException("Course not found."));
 	}
 	
-	private List<FeedbackDto> getFeedbacks(FeedbackRequest source) {
-		List<FeedbackDto> feedbackDtos = new ArrayList<>();
-		for(Feedback feedback : source.getFeedbacks()){
-			feedbackDtos.add(feedbackMapper.toDto(feedback));
-		}
-		return feedbackDtos;
-	}
 }

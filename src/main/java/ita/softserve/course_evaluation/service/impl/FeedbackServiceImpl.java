@@ -20,8 +20,8 @@ public class FeedbackServiceImpl implements FeedbackService {
 	}
 	
 	@Override
-	public void create(FeedbackDto dto) {
-		feedbackRepository.save(feedbackMapper.toEntity(dto));
+	public FeedbackDto create(FeedbackDto dto) {
+		return feedbackMapper.toDto(feedbackRepository.save(feedbackMapper.toEntity(dto)));
 	}
 	
 	@Override
@@ -30,8 +30,8 @@ public class FeedbackServiceImpl implements FeedbackService {
 	}
 	
 	@Override
-	public void update(FeedbackDto dto) {
-		feedbackRepository.save(feedbackMapper.toEntity(dto));
+	public FeedbackDto update(FeedbackDto dto) {
+		return feedbackMapper.toDto(feedbackRepository.save(feedbackMapper.toEntity(dto)));
 	}
 	
 	@Override

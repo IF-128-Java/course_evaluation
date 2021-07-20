@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -21,7 +21,7 @@ public class Feedback {
 	private Long id;
 	
 	@Column(name = "date", nullable = false)
-	private Timestamp date;
+	private LocalDateTime date;
 	
 	@Column(name = "comment")
 	private String comment;
@@ -37,7 +37,7 @@ public class Feedback {
 	public Feedback() {
 	}
 	
-	public Feedback(Long id, Timestamp date, String comment, User student) {
+	public Feedback(Long id, LocalDateTime date, String comment, User student) {
 		this.id = id;
 		this.date = date;
 		this.comment = comment;
@@ -52,11 +52,11 @@ public class Feedback {
 		this.id = id;
 	}
 	
-	public Timestamp getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 	
-	public void setDate(Timestamp date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 	

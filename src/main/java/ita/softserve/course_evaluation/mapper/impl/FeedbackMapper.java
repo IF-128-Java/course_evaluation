@@ -5,7 +5,6 @@ import ita.softserve.course_evaluation.entity.Feedback;
 import ita.softserve.course_evaluation.entity.FeedbackRequest;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.mapper.AbstractMapper;
-import ita.softserve.course_evaluation.repository.FeedbackRepository;
 import ita.softserve.course_evaluation.repository.FeedbackRequestRepository;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityNotFoundException;
 
 @Component
 public class FeedbackMapper extends AbstractMapper<Feedback, FeedbackDto> {
@@ -22,7 +22,7 @@ public class FeedbackMapper extends AbstractMapper<Feedback, FeedbackDto> {
 	private final UserRepository userRepository;
 	
 	@Autowired
-	public FeedbackMapper(ModelMapper mapper, FeedbackRepository feedbackRepository, FeedbackRequestRepository feedbackRequestRepository, UserRepository userRepository) {
+	public FeedbackMapper(ModelMapper mapper, FeedbackRequestRepository feedbackRequestRepository, UserRepository userRepository) {
 		super(Feedback.class, FeedbackDto.class);
 		this.mapper = mapper;
 		this.feedbackRequestRepository = feedbackRequestRepository;
@@ -54,10 +54,12 @@ public class FeedbackMapper extends AbstractMapper<Feedback, FeedbackDto> {
 	}
 	
 	private User getStudent(FeedbackDto source) {
-		return userRepository.findById(source.getId()).get();
+		return userRepository.findById(source.getId())
+				       .orElseThrow(() -> new EntityNotFoundException("User not found."));
 	}
 	
 	private FeedbackRequest getFeedbackRequest(FeedbackDto source) {
-		return feedbackRequestRepository.findById(source.getId()).get();
+		return feedbackRequestRepository.findById(source.getId())
+				       .orElseThrow(() -> new EntityNotFoundException("FeedbackRequest not found."));
 	}
 }

@@ -3,9 +3,9 @@ package ita.softserve.course_evaluation.service;
 import ita.softserve.course_evaluation.dto.FeedbackRequestDto;
 
 public interface FeedbackRequestService {
-	void create(FeedbackRequestDto dto);
+	FeedbackRequestDto create(FeedbackRequestDto dto);
 	
-	void update(FeedbackRequestDto dto);
+	FeedbackRequestDto update(FeedbackRequestDto dto);
 	
 	void delete(Long id);
 	

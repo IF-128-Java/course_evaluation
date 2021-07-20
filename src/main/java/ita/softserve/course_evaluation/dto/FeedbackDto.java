@@ -1,12 +1,13 @@
 package ita.softserve.course_evaluation.dto;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class FeedbackDto extends AbstractDto {
 	
 	private Long id;
-	private Timestamp date;
+	private LocalDateTime date;
 	private String comment;
 	private Long studentId;
 	private Long feedbackRequestId;
@@ -14,7 +15,7 @@ public class FeedbackDto extends AbstractDto {
 	public FeedbackDto() {
 	}
 	
-	public FeedbackDto(Long id, Timestamp date, String comment, Long studentId, Long feedbackRequestId) {
+	public FeedbackDto(Long id, LocalDateTime date, String comment, Long studentId, Long feedbackRequestId) {
 		this.id = id;
 		this.date = date;
 		this.comment = comment;
@@ -30,11 +31,11 @@ public class FeedbackDto extends AbstractDto {
 		this.id = id;
 	}
 	
-	public Timestamp getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 	
-	public void setDate(Timestamp date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 	
