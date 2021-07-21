@@ -1,7 +1,6 @@
 package ita.softserve.course_evaluation.controller;
 
 import ita.softserve.course_evaluation.dto.GroupDto;
-import ita.softserve.course_evaluation.dto.GroupDtoMapper;
 import ita.softserve.course_evaluation.service.GroupService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
