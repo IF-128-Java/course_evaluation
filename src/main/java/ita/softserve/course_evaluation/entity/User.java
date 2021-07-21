@@ -1,6 +1,7 @@
 package ita.softserve.course_evaluation.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -21,7 +22,12 @@ public class User {
 	
 	@Column(name = "password")
 	private String password;
-	
+	@ManyToMany
+	@JoinTable(
+			name = "user_roles",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles;
 	public Integer getId() {
 		return id;
 	}
