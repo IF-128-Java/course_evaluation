@@ -15,27 +15,32 @@ public class GroupDto {
         this.groupName = groupName;
     }
 
-    public Long getId() {
+    public Long getId()
+    {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Long id)
+    {
         this.id = id;
     }
 
-    public String getGroupName() {
+    public String getGroupName()
+    {
         return groupName;
     }
 
-    public void setGroupName(String groupName) {
+    public void setGroupName(String groupName)
+    {
         this.groupName = groupName;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GroupDto groupDto = (GroupDto) o;
+    public boolean equals(Object oDto)
+    {
+        if (this == oDto) return true;
+        if (oDto == null || getClass() != oDto.getClass()) return false;
+        GroupDto groupDto = (GroupDto) oDto;
         return Objects.equals(id, groupDto.id) && Objects.equals(groupName, groupDto.groupName);
     }
 
