@@ -17,14 +17,11 @@ public class Question {
     @Column(name="is_pattern")
     private boolean isPattern;
 
-    @Column(name = "feedback_request_id")
-    private long feedbackRequestId;
 
 
     public Question(String questionText, boolean isPattern, long feedbackRequestId) {
         this.questionText = questionText;
         this.isPattern = isPattern;
-        this.feedbackRequestId = feedbackRequestId;
     }
 
     public Question() {
@@ -54,11 +51,4 @@ public class Question {
         isPattern = pattern;
     }
 
-    public long getFeedbackRequestId() {
-        return feedbackRequestId;
-    }
-
-    public void setFeedbackRequestId(long feedbackRequestId) {
-        this.feedbackRequestId = feedbackRequestId;
-    }
 }

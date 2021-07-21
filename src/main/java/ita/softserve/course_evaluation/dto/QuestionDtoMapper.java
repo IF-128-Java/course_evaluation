@@ -12,7 +12,6 @@ public class QuestionDtoMapper {
         question.setId(questionDto.getId());
         question.setQuestionText(questionDto.getQuestionText());
         question.setPattern(questionDto.getPattern());
-        question.setFeedbackRequestId(questionDto.getFeedbackRequestId());
         return question;
     }
 
@@ -27,7 +26,6 @@ public class QuestionDtoMapper {
         dto.setId(question.getId());
         dto.setQuestionText(question.getQuestionText());
         dto.setPattern(question.getPattern());
-        dto.setFeedbackRequestId(question.getFeedbackRequestId());
         return dto;
 
     }

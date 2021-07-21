@@ -45,7 +45,6 @@ public class QuestionServiceImpl implements QuestionService {
         QuestionDto existingQuestionDto = findQuestionById(id);
         existingQuestionDto.setQuestionText(questionDto.getQuestionText());
         existingQuestionDto.setPattern(questionDto.getPattern());
-        existingQuestionDto.setFeedbackRequestId(questionDto.getFeedbackRequestId());
         questionRepository.save(QuestionDtoMapper.fromDto(existingQuestionDto));
         return existingQuestionDto;
     }

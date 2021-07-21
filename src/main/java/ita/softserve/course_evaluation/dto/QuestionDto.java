@@ -5,13 +5,11 @@ public class QuestionDto {
     private long id;
     private String questionText;
     private boolean isPattern;
-    private long feedbackRequestId;
 
-    public QuestionDto(long id, String questionText, boolean isPattern, long feedbackRequestId) {
+    public QuestionDto(long id, String questionText, boolean isPattern) {
         this.id = id;
         this.questionText = questionText;
         this.isPattern = isPattern;
-        this.feedbackRequestId = feedbackRequestId;
     }
 
     public QuestionDto() {
@@ -41,11 +39,4 @@ public class QuestionDto {
         isPattern = pattern;
     }
 
-    public long getFeedbackRequestId() {
-        return feedbackRequestId;
-    }
-
-    public void setFeedbackRequestId(long feedbackRequestId) {
-        this.feedbackRequestId = feedbackRequestId;
-    }
 }
