@@ -14,23 +14,21 @@ import java.util.Optional;
 public class GroupServiceImpl implements GroupService {
 
     private GroupRepository groupRepository;
-    private GroupDtoMapper groupDtoMapper;
 
     public GroupServiceImpl(GroupRepository groupRepository, GroupDtoMapper groupDtoMapper) {
         this.groupRepository = groupRepository;
-        this.groupDtoMapper = groupDtoMapper;
     }
 
     @Override
     public List<GroupDto> getAll() {
 
-        return groupDtoMapper.entityToDto(groupRepository.findAll());
+        return GroupDtoMapper.entityToDto(groupRepository.findAll());
     }
 
     @Override
     public GroupDto getById(long id) {
 
-        return groupDtoMapper.entityToDto(groupRepository.getById(id));
+        return GroupDtoMapper.entityToDto(groupRepository.getById(id));
     }
 
     @Override
@@ -45,7 +43,7 @@ public class GroupServiceImpl implements GroupService {
 
         if(oGroup.isEmpty()) {
             group.setId(0l);
-            return groupRepository.save(groupDtoMapper.dtoToEntity(group));
+            return groupRepository.save(GroupDtoMapper.dtoToEntity(group));
         }
 
         return null;
@@ -57,7 +55,7 @@ public class GroupServiceImpl implements GroupService {
         Optional<Group> oGroup = groupRepository.findGroupByGroupName(group.getGroupName());
 
         if(oGroup.isEmpty() && groupRepository.existsById(group.getId())) {
-            return groupDtoMapper.entityToDto(groupRepository.save(groupDtoMapper.dtoToEntity(group)));
+            return GroupDtoMapper.entityToDto(groupRepository.save(GroupDtoMapper.dtoToEntity(group)));
         }
 
         return null;
