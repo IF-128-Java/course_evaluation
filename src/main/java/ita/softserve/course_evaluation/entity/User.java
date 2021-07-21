@@ -10,6 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -17,7 +18,7 @@ public class User {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 	
 	@Column(name = "first_name")
 	private String firstName;
@@ -30,15 +31,22 @@ public class User {
 	
 	@Column(name = "password")
 	private String password;
-	
+	@ManyToMany
+	@JoinTable(
+			name = "user_roles",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles;
+	public Integer getId() {
+
 	@OneToMany(mappedBy = "student",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
 	private List<Feedback> feedbacks = new ArrayList<>();
-	
+
 	public User() {
 	}
-	
+
 	public User(Long id, String firstName, String lastName, String email, String password) {
 		this.id = id;
 		this.firstName = firstName;
@@ -46,12 +54,12 @@ public class User {
 		this.email = email;
 		this.password = password;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
 	
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	
