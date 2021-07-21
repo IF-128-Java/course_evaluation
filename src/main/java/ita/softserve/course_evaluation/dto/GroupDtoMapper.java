@@ -9,6 +9,10 @@ import java.util.stream.Collectors;
 @Component
 public class GroupDtoMapper {
 
+    private GroupDtoMapper() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static GroupDto entityToDto(Group group) {
 
         if (group == null) return null;

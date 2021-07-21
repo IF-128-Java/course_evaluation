@@ -15,7 +15,7 @@ public class GroupServiceImpl implements GroupService {
 
     private GroupRepository groupRepository;
 
-    public GroupServiceImpl(GroupRepository groupRepository, GroupDtoMapper groupDtoMapper) {
+    public GroupServiceImpl(GroupRepository groupRepository) {
         this.groupRepository = groupRepository;
     }
 
