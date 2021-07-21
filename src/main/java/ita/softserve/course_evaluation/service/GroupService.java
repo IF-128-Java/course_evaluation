@@ -1,6 +1,7 @@
 package ita.softserve.course_evaluation.service;
 
 import ita.softserve.course_evaluation.dto.GroupDto;
+import ita.softserve.course_evaluation.entity.Group;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface GroupService {
 
     void delete(long id);
 
-    GroupDto create(GroupDto group);
+    Group create(GroupDto group);
 
     GroupDto update(GroupDto group);
 

@@ -39,13 +39,13 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public GroupDto create(GroupDto group) {
+    public Group create(GroupDto group) {
 
         Optional<Group> oGroup = groupRepository.findGroupByGroupName(group.getGroupName());
 
         if(oGroup.isEmpty()) {
             group.setId(0l);
-            return groupDtoMapper.entityToDto(groupRepository.save(groupDtoMapper.dtoToEntity(group)));
+            return groupRepository.save(groupDtoMapper.dtoToEntity(group));
         }
 
         return null;

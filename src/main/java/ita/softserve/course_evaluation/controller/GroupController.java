@@ -1,6 +1,8 @@
 package ita.softserve.course_evaluation.controller;
 
 import ita.softserve.course_evaluation.dto.GroupDto;
+import ita.softserve.course_evaluation.dto.GroupDtoMapper;
+import ita.softserve.course_evaluation.entity.Group;
 import ita.softserve.course_evaluation.service.GroupService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,10 +73,10 @@ public class GroupController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        GroupDto group = groupService.create(groupdto);
+        Group group = groupService.create(groupdto);
 
         return group != null
-                ? new ResponseEntity<>(group, HttpStatus.OK)
+                ? new ResponseEntity<>(GroupDtoMapper.entityToDto(group), HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
