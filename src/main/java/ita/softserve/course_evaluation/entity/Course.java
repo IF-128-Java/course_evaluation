@@ -32,7 +32,7 @@ public class Course implements Serializable {
     private Date endDate;
 
     @ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "teacher_id", nullable = false)
     private User user;
 
     public Course() {    }

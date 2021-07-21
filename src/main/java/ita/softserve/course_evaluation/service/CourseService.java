@@ -10,7 +10,7 @@ public interface CourseService {
 
     Course addCourse(CourseDto course);
 
-    void delete(int id);
+    void deleteById(int id);
 
     CourseDto getById(int id);
 
