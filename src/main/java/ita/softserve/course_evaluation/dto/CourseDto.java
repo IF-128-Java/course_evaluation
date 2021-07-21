@@ -1,15 +1,10 @@
 package ita.softserve.course_evaluation.dto;
 
-import ita.softserve.course_evaluation.entity.Course;
 import ita.softserve.course_evaluation.entity.User;
-import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Objects;
 
-//@Data
-//@AllArgsConstructor
-//@NoArgsConstructor
 public class CourseDto {
 
     private int id;

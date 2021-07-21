@@ -10,6 +10,7 @@ import ita.softserve.course_evaluation.service.CourseService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +35,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void delete(int id) {
+    public void deleteById(int id) {
         courseRepository.delete(courseDtoMapper.toEntity(getById(id)));
     }
 
@@ -57,7 +58,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<CourseDto> getAll() {
         List<CourseDto> courses = courseDtoMapper.toDto((List<Course>) courseRepository.findAll());
-        return courses.isEmpty() ? new ArrayList<>() : courses;
+        return courses.isEmpty() ? Collections.emptyList() : courses;
     }
 
 }

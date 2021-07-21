@@ -4,7 +4,6 @@ import ita.softserve.course_evaluation.dto.CourseDto;
 import ita.softserve.course_evaluation.entity.Course;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
