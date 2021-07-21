@@ -11,5 +11,5 @@ public interface QuestionService {
     Question saveQuestion(QuestionDto question);
     QuestionDto findQuestionById(long id);
     void deleteQuestionById(long id);
-    QuestionDto updateEmployee(QuestionDto question, long id);
+    QuestionDto updateQuestion(QuestionDto question, long id);
 }

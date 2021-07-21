@@ -41,7 +41,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionDto updateEmployee(QuestionDto questionDto, long id) {
+    public QuestionDto updateQuestion(QuestionDto questionDto, long id) {
         QuestionDto existingQuestionDto = findQuestionById(id);
         existingQuestionDto.setQuestionText(questionDto.getQuestionText());
         existingQuestionDto.setPattern(questionDto.getPattern());

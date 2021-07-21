@@ -47,11 +47,11 @@ public class QuestionController {
     @PutMapping("{id}")
     public ResponseEntity<QuestionDto> updateEmployee(@PathVariable("id") long id
             ,@RequestBody QuestionDto question){
-        return new ResponseEntity<>(questionService.updateEmployee(question, id), HttpStatus.OK);
+        return new ResponseEntity<>(questionService.updateQuestion(question, id), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteEmployee(@PathVariable("id") long id){
+    public ResponseEntity<String> deleteQuestion(@PathVariable("id") long id){
         // delete question from DB
         questionService.deleteQuestionById(id);
         return new ResponseEntity<>("Question deleted successfully!.", HttpStatus.OK);
