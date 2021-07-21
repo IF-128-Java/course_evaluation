@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 @Component
 public class GroupDtoMapper {
 
-    public GroupDto entityToDto(Group group) {
+    public static GroupDto entityToDto(Group group) {
 
         if (group == null) return null;
 
@@ -20,12 +20,12 @@ public class GroupDtoMapper {
         return groupdto;
     }
 
-    public List<GroupDto> entityToDto(List<Group> group) {
+    public static List<GroupDto> entityToDto(List<Group> group) {
 
-        return group == null ? null : group.stream().map(x ->entityToDto(x)).collect(Collectors.toList());
+        return group == null ? null : group.stream().map(GroupDtoMapper::entityToDto).collect(Collectors.toList());
     }
 
-    public Group dtoToEntity(GroupDto groupdto) {
+    public static Group dtoToEntity(GroupDto groupdto) {
 
         if (groupdto == null) return null;
 
@@ -36,10 +36,8 @@ public class GroupDtoMapper {
         return group;
     }
 
-    public List<Group> dtoToEntity(List<GroupDto> groupdto) {
+    public static List<Group> dtoToEntity(List<GroupDto> groupdto) {
 
-        return groupdto == null ? null :  groupdto.stream().map(x -> dtoToEntity(x)).collect(Collectors.toList());
+        return groupdto == null ? null : groupdto.stream().map(GroupDtoMapper::dtoToEntity).collect(Collectors.toList());
     }
-
-
 }
