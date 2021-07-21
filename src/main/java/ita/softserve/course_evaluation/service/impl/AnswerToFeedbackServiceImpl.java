@@ -7,9 +7,7 @@ import ita.softserve.course_evaluation.service.AnswerToFeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AnswerToFeedbackServiceImpl implements AnswerToFeedbackService {
@@ -22,8 +20,6 @@ public class AnswerToFeedbackServiceImpl implements AnswerToFeedbackService {
 
     @Override
     public List<AnswerDto> getAllAnswer() {
-//        Optional<List<AnswerDto>> answerDtoList = Optional.ofNullable(AnswerDtoMapper.toDto(answerRepository.findAll()));
-//        return answerDtoList.isEmpty() ? new ArrayList<>() : answerDtoList.get();
         return AnswerDtoMapper.toDto(answerRepository.findAll());
     }
 

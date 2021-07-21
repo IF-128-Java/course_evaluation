@@ -1,8 +1,5 @@
 package ita.softserve.course_evaluation.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import ita.softserve.course_evaluation.entity.Feedback;
-import ita.softserve.course_evaluation.entity.Question;
 
 import java.util.Objects;
 

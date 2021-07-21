@@ -1,14 +1,19 @@
 package ita.softserve.course_evaluation.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Column;
+import javax.persistence.ManyToOne;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import java.util.Objects;
 
 @Entity
 @Table(name = "answer_to_feedbacks")
-@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler"})
 public class AnswerToFeedback {
 
     @Id

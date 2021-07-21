@@ -14,8 +14,13 @@ import java.util.List;
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
-    @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    public QuestionServiceImpl(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
+
 
     @Override
     public List<QuestionDto> getAllQuestion() {
