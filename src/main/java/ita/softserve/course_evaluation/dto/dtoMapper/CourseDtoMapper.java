@@ -2,7 +2,6 @@ package ita.softserve.course_evaluation.dto.dtoMapper;
 
 import ita.softserve.course_evaluation.dto.CourseDto;
 import ita.softserve.course_evaluation.entity.Course;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
@@ -11,22 +10,41 @@ import java.util.stream.Collectors;
 @Component
 public class CourseDtoMapper {
 
-    private static ModelMapper mapper;
+    public CourseDtoMapper() {  }
 
-    public CourseDtoMapper() {
+    public static Course toEntity(CourseDto courseDto) {
 
-    }
+        if(courseDto == null) return null;
 
-    public Course toEntity(CourseDto courseDto) {
-        return Objects.isNull(courseDto) ? null : mapper.map(courseDto, Course.class);
+        Course course = new Course();
+        course.setId(courseDto.getId());
+        course.setCourseName(courseDto.getCourseName());
+        course.setDescription(courseDto.getDescription());
+        course.setStartDate(courseDto.getStartDate());
+        course.setEndDate(courseDto.getEndDate());
+
+        return course;
     }
 
     public static CourseDto toDto(Course course) {
-        return Objects.isNull(course) ? null : mapper.map(course, CourseDto.class);
+
+        if(course == null) return null;
+
+        CourseDto courseDto = new CourseDto();
+        courseDto.setId(course.getId());
+        courseDto.setCourseName(course.getCourseName());
+        courseDto.setDescription(course.getDescription());
+        courseDto.setStartDate(course.getStartDate());
+        courseDto.setEndDate(course.getEndDate());
+
+        return courseDto;
     }
 
-    public List<CourseDto> toDto(List<Course> courses) {
-        CourseDtoMapper courseDtoMapper = new CourseDtoMapper();
+    public static List<Course> toEntity(List<CourseDto> coursesDto) {
+        return Objects.isNull(coursesDto) ? null : coursesDto.stream().map(CourseDtoMapper::toEntity).collect(Collectors.toList());
+    }
+
+    public static List<CourseDto> toDto(List<Course> courses) {
         return Objects.isNull(courses) ? null : courses.stream().map(CourseDtoMapper::toDto).collect(Collectors.toList());
     }
 }

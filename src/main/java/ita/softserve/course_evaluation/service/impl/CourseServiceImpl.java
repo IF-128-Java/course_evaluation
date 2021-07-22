@@ -9,17 +9,15 @@ import ita.softserve.course_evaluation.repository.CourseRepository;
 import ita.softserve.course_evaluation.service.CourseService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
-    private final CourseDtoMapper courseDtoMapper = new CourseDtoMapper();
-
 
     public CourseServiceImpl(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
@@ -31,12 +29,12 @@ public class CourseServiceImpl implements CourseService {
         courseRepository.findByCourseName(name).ifPresent(n -> {
             throw new RuntimeException(name + ": this course already created");
         });
-        return courseRepository.save(courseDtoMapper.toEntity(course));
+        return courseRepository.save(CourseDtoMapper.toEntity(course));
     }
 
     @Override
     public void deleteById(int id) {
-        courseRepository.delete(courseDtoMapper.toEntity(getById(id)));
+        courseRepository.delete(CourseDtoMapper.toEntity(getById(id)));
     }
 
     @Override
@@ -52,13 +50,14 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public CourseDto editCourse(CourseDto courseDto) {
         getById(courseDto.getId());
-        return CourseDtoMapper.toDto(courseRepository.save(courseDtoMapper.toEntity(courseDto)));
+        
+        return CourseDtoMapper.toDto(courseRepository.save(CourseDtoMapper.toEntity(courseDto)));
     }
 
     @Override
     public List<CourseDto> getAll() {
-        List<CourseDto> courses = courseDtoMapper.toDto((List<Course>) courseRepository.findAll());
-        return courses.isEmpty() ? Collections.emptyList() : courses;
+        List<CourseDto> courses = CourseDtoMapper.toDto((List<Course>) courseRepository.findAll());
+        return Objects.requireNonNull(courses).isEmpty() ? Collections.emptyList() : courses;
     }
 
 }
