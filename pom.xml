@@ -15,6 +15,9 @@
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
+            <sonar.projectKey>IF-128-Java_course_evaluation</sonar.projectKey>
+            <sonar.organization>if-128-java</sonar.organization>
+            <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
     <dependencies>
         <dependency>
@@ -38,6 +41,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
     </dependencies>
 
