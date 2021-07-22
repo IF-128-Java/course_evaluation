@@ -1,13 +1,15 @@
 package ita.softserve.course_evaluation.dto;
 
 import ita.softserve.course_evaluation.entity.Group;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
 public class GroupDtoMapper {
+
+    private GroupDtoMapper(){
+        new IllegalAccessException("Utility class");
+    }
 
     public static GroupDto entityToDto(Group group) {
 
