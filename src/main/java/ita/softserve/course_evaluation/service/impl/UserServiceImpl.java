@@ -29,12 +29,12 @@ public class UserServiceImpl implements UserService {
 	public UserDto   readByFirstName(String firstName) {return UserDtoMapper.toDto(userRepository.findUserByFirstName(firstName).get());}
 
 	@Override
-	public void createUser(UserDto dto) {
-		userRepository.save(UserDtoMapper.fromDto(dto));
+	public  UserDto createUser(UserDto dto) {
+		return UserDtoMapper.toDto(userRepository.save(UserDtoMapper.fromDto(dto)));
 	}
 
 	@Override
-	public void updateUser(UserDto dto) {
+	public UserDto updateUser(UserDto dto) {
 		User daoUser = UserDtoMapper.fromDto(readById(dto.getId()));
 		daoUser.setFirstName(dto.getFirstName());
 		daoUser.setLastName(dto.getLastName());
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 		daoUser.setRoles(dto.getRoles());
 		daoUser.setGroup(dto.getGroup());
 
-		userRepository.save(daoUser);
+		return UserDtoMapper.toDto(userRepository.save(daoUser));
 	}
 	@Override
 	public void deleteUser(long id){

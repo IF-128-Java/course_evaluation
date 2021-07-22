@@ -44,10 +44,6 @@ public class FeedbackRequest {
             orphanRemoval = true)
     private List<FeedBack> feedbacks = new ArrayList<>();
 
-    //TODO
-    //@ManyToMany
-    //question table
-
 
     public Long getId() {
         return id;

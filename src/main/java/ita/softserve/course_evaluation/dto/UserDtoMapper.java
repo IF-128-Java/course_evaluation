@@ -15,11 +15,27 @@ public class UserDtoMapper {
         private static ModelMapper mapper;
 
     public static UserDto toDto(User user) {
-        return Objects.isNull(user) ? null : mapper.map(user, UserDto.class);
+        UserDto dto = new UserDto();
+        dto.setId(user.getId());
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+        dto.setEmail(user.getEmail());
+        dto.setPassword(user.getPassword());
+        dto.setGroup(user.getGroup());
+        dto.setRoles(user.getRoles());
+        return dto;
         }
 
     public static User fromDto (UserDto dto) {
-        return Objects.isNull(dto) ? null : mapper.map(dto, User.class);
+        User user = new User();
+        user.setId(dto.getId());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
+        user.setGroup(dto.getGroup());
+        user.setRoles(dto.getRoles());
+        return user;
         }
 
     public static List<UserDto> toDto(List<User> users) {

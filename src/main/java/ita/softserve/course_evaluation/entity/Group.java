@@ -1,6 +1,12 @@
 package ita.softserve.course_evaluation.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,12 +28,6 @@ public class Group {
         @OneToMany(mappedBy = "group")
         private List<User> users = new ArrayList<>();
 
-        //@ManyToMany
-        //@JoinTable(
-        //        name = "course_group",
-        //        joinColumns = @JoinColumn(name = "group_id"),
-        //        inverseJoinColumns = @JoinColumn(name = "course_id"))
-        //private Set<Course> courses = new HashSet<>();
 
         public Group() {
         }

@@ -1,7 +1,17 @@
 package ita.softserve.course_evaluation.entity;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import org.apache.tomcat.jni.Local;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "course_feedback")
@@ -12,7 +22,7 @@ public class FeedBack {
     private Long id;
 
     @Column(name = "date", nullable = false)
-    private Timestamp date;
+    private LocalDateTime date;
 
     @Column(name = "comment")
     private String comment;
@@ -33,11 +43,11 @@ public class FeedBack {
         this.id = id;
     }
 
-    public Timestamp getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

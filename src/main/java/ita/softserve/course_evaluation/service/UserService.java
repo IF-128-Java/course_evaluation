@@ -9,10 +9,15 @@ import java.util.Optional;
 public interface UserService {
 
 	List<UserDto> readAll();
+
 	UserDto readById(long id);
+
 	UserDto readByFirstName(String firstName);
-	void createUser(UserDto dto);
-	void updateUser(UserDto dto);
+
+	 UserDto createUser(UserDto dto);
+
+	UserDto updateUser(UserDto dto);
+
 	void deleteUser(long id);
 
 }
