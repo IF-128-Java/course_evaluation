@@ -1,15 +1,20 @@
 package ita.softserve.course_evaluation.entity;
 
-import javax.persistence.*;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
+
 @Entity
 @Table
 public class Course implements Serializable {
 
     @Id
     @GeneratedValue
-    private int id;
+    private Long id;
 
     private String courseName;
 
@@ -31,11 +36,11 @@ public class Course implements Serializable {
     }
 
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -69,5 +74,16 @@ public class Course implements Serializable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+    
+    @Override
+    public String toString() {
+        return "Course{" +
+                       "id=" + id +
+                       ", courseName='" + courseName + '\'' +
+                       ", description='" + description + '\'' +
+                       ", startDate=" + startDate +
+                       ", endDate=" + endDate +
+                       '}';
     }
 }
