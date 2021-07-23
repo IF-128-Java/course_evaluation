@@ -1,7 +1,7 @@
 package ita.softserve.course_evaluation.dto;
 
 import ita.softserve.course_evaluation.entity.User;
-import org.modelmapper.ModelMapper;
+
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -9,10 +9,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 
-@Component
 public class UserDtoMapper {
 
-        private static ModelMapper mapper;
+
 
     public static UserDto toDto(User user) {
         UserDto dto = new UserDto();
