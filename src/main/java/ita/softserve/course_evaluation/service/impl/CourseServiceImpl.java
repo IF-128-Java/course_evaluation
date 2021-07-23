@@ -24,17 +24,17 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course addCourse(CourseDto course) {
-        String name = course.getCourseName();
-        courseRepository.findByCourseName(name).ifPresent(n -> {
-            throw new RuntimeException(name + ": this course already created");
+    public Course addCourse(CourseDto courseDto) {
+        Optional<Course> course = courseRepository.findByCourseName(courseDto.getCourseName());
+        course.ifPresent(n -> {
+            throw new RuntimeException("this course already created");
         });
-        return courseRepository.save(CourseDtoMapper.toEntity(course));
+        return courseRepository.save(CourseDtoMapper.toEntity(courseDto));
     }
 
     @Override
     public void deleteById(int id) {
-        courseRepository.delete(CourseDtoMapper.toEntity(getById(id)));
+        courseRepository.deleteById((id));
     }
 
     @Override
@@ -49,15 +49,16 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseDto editCourse(CourseDto courseDto) {
-        getById(courseDto.getId());
-        
-        return CourseDtoMapper.toDto(courseRepository.save(CourseDtoMapper.toEntity(courseDto)));
+        if(courseRepository.existsById(courseDto.getId())) {
+            return CourseDtoMapper.toDto(courseRepository.save(CourseDtoMapper.toEntity(courseDto)));
+        }
+        return null;
     }
 
     @Override
     public List<CourseDto> getAll() {
-        List<CourseDto> courses = CourseDtoMapper.toDto((List<Course>) courseRepository.findAll());
-        return Objects.requireNonNull(courses).isEmpty() ? Collections.emptyList() : courses;
+        List<CourseDto> courses = CourseDtoMapper.toDto(courseRepository.findAll());
+        return Objects.isNull(courses) ? Collections.emptyList() : courses;
     }
 
 }
