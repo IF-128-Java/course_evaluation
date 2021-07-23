@@ -2,6 +2,7 @@ package ita.softserve.course_evaluation.entity;
 
 import com.sun.istack.NotNull;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -40,7 +41,7 @@ public class Course implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date endDate;
 
-    @ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade= CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id", nullable = false)
     private User user;
 
