@@ -1,13 +1,11 @@
 package ita.softserve.course_evaluation.entity;
 
 import com.sun.istack.NotNull;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-//@NoArgsConstructor
 @Entity
 @Table(name = "course")
 public class Course implements Serializable {
