@@ -26,40 +26,33 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<QuestionDto>> getAllQuestions(){
+    @GetMapping()
+    public ResponseEntity<List<QuestionDto>> getAllQuestions() {
         final List<QuestionDto> questions = questionService.getAllQuestion();
-
         return questions != null && !questions.isEmpty()
                 ? new ResponseEntity<>(questions, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-
-    @PostMapping("/addQuestion")
-    public ResponseEntity<Question> addQuestion(@RequestBody QuestionDto question){
+    @PostMapping()
+    public ResponseEntity<Question> addQuestion(@RequestBody QuestionDto question) {
         return new ResponseEntity<>(questionService.saveQuestion(question),
                 HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<QuestionDto> getQuestionById(@PathVariable("id") long questionId){
+    public ResponseEntity<QuestionDto> getQuestionById(@PathVariable("id") long questionId) {
         return new ResponseEntity<>(questionService.findQuestionById(questionId), HttpStatus.OK);
-//        Question question = questionService.getQuestionById(questionId);
-//        return question != null
-//                ? new ResponseEntity<>(question, HttpStatus.OK)
-//                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<QuestionDto> updateEmployee(@PathVariable("id") long id
-            ,@RequestBody QuestionDto question){
+    public ResponseEntity<QuestionDto> updateQuestion(@PathVariable("id") long id
+            , @RequestBody QuestionDto question) {
         return new ResponseEntity<>(questionService.updateQuestion(question, id), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteQuestion(@PathVariable("id") long id){
-        // delete question from DB
+    public ResponseEntity<String> deleteQuestion(@PathVariable("id") long id) {
         questionService.deleteQuestionById(id);
         return new ResponseEntity<>("Question deleted successfully!.", HttpStatus.OK);
     }

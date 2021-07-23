@@ -17,7 +17,7 @@ import java.util.Collections;
 public class SpringFoxConfig {
 
     @Bean
-    public Docket api(){
+    public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("ita.softserve.course_evaluation.controller"))

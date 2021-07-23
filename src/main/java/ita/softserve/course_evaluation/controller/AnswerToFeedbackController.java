@@ -28,31 +28,31 @@ public class AnswerToFeedbackController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<AnswerDto>> getAllAnswers(){
+    public ResponseEntity<List<AnswerDto>> getAllAnswers() {
         final List<AnswerDto> answerList = answerService.getAllAnswer();
         return answerList != null && !answerList.isEmpty()
                 ? new ResponseEntity<>(answerList, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/addAnswer")
+    @PostMapping()
     public ResponseEntity<AnswerDto> addAnswer(AnswerDto answerDto) {
         return new ResponseEntity<>(answerService.saveAnswer(answerDto), HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<AnswerDto> getAnswerById(@PathVariable("id") long id){
-        return new ResponseEntity<>(answerService.findAnswerById(id),HttpStatus.OK);
+    public ResponseEntity<AnswerDto> getAnswerById(@PathVariable("id") long id) {
+        return new ResponseEntity<>(answerService.findAnswerById(id), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteAnswer (@PathVariable("id") long id){
+    public ResponseEntity<String> deleteAnswer(@PathVariable("id") long id) {
         answerService.deleteAnswerById(id);
-        return new ResponseEntity<>("Answer deleted successfully.",HttpStatus.OK);
+        return new ResponseEntity<>("Answer deleted successfully.", HttpStatus.OK);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<AnswerDto> updateAnswer(@RequestBody AnswerDto dto, @PathVariable("id") long id){
-        return new ResponseEntity<>(answerService.updateAnswer(dto, id),HttpStatus.OK);
+    public ResponseEntity<AnswerDto> updateAnswer(@RequestBody AnswerDto dto, @PathVariable("id") long id) {
+        return new ResponseEntity<>(answerService.updateAnswer(dto, id), HttpStatus.OK);
     }
 }

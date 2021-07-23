@@ -22,8 +22,6 @@ public class Question {
     @Column(name="is_pattern")
     private boolean isPattern;
 
-
-
     public Question(String questionText, boolean isPattern, long feedbackRequestId) {
         this.questionText = questionText;
         this.isPattern = isPattern;

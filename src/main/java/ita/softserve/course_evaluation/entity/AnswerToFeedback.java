@@ -23,7 +23,7 @@ public class AnswerToFeedback {
     @Column(name = "rate")
     private Integer rate;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
     private Question question;
 

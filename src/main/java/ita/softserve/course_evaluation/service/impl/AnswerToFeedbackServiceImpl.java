@@ -7,6 +7,7 @@ import ita.softserve.course_evaluation.service.AnswerToFeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -31,10 +32,8 @@ public class AnswerToFeedbackServiceImpl implements AnswerToFeedbackService {
 
     @Override
     public AnswerDto findAnswerById(long id) {
-        return AnswerDtoMapper
-                .toDto(answerRepository
-                        .findById(id)
-                        .orElseThrow(() -> new RuntimeException("Answer was not found for id: " + id)));
+        return AnswerDtoMapper.toDto(answerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Answer was not found for id: " + id)));
     }
 
     @Override

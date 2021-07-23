@@ -27,7 +27,6 @@ public class QuestionDtoMapper {
         dto.setQuestionText(question.getQuestionText());
         dto.setPattern(question.getPattern());
         return dto;
-
     }
 
     public static List<QuestionDto> toDto(List<Question> question) {
