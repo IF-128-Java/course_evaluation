@@ -46,9 +46,8 @@ public class User {
     @JoinColumn(name="group_id")
     private Group group;
 
-	@ManyToOne
-	@JoinColumn(name="course_id", nullable=false)
-	private Course course;
+	@OneToMany(mappedBy = "users")
+	private List<Course> courses;
 
 	@OneToMany(mappedBy = "users")
 	private List<FeedBack> feedBackList;

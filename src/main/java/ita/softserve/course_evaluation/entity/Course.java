@@ -31,7 +31,9 @@ public class Course implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date endDate;
 
-    @OneToMany(mappedBy="course")
-    private List<User> users;
+    @ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private User user;
+
 
 }
