@@ -4,6 +4,7 @@ package ita.softserve.course_evaluation.service.impl;
 import ita.softserve.course_evaluation.dto.CourseDto;
 import ita.softserve.course_evaluation.dto.dtoMapper.CourseDtoMapper;
 import ita.softserve.course_evaluation.entity.Course;
+import ita.softserve.course_evaluation.exception.CourseAlreadyExistException;
 import ita.softserve.course_evaluation.exception.CourseNotFoundException;
 import ita.softserve.course_evaluation.repository.CourseRepository;
 import ita.softserve.course_evaluation.service.CourseService;
@@ -27,7 +28,7 @@ public class CourseServiceImpl implements CourseService {
     public Course addCourse(CourseDto courseDto) {
         Optional<Course> course = courseRepository.findByCourseName(courseDto.getCourseName());
         course.ifPresent(n -> {
-            throw new RuntimeException("this course already created");
+            throw new CourseAlreadyExistException("this course already created");
         });
         return courseRepository.save(CourseDtoMapper.toEntity(courseDto));
     }
