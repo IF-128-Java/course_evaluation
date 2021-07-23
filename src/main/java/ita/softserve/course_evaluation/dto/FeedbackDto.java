@@ -1,26 +1,28 @@
 package ita.softserve.course_evaluation.dto;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
-public class FeedbackDto extends AbstractDto {
+public class FeedbackDto {
 	
 	private Long id;
 	private LocalDateTime date;
 	private String comment;
 	private Long studentId;
 	private Long feedbackRequestId;
+	private List<Long> answers;
 	
 	public FeedbackDto() {
 	}
 	
-	public FeedbackDto(Long id, LocalDateTime date, String comment, Long studentId, Long feedbackRequestId) {
+	public FeedbackDto(Long id, LocalDateTime date, String comment, Long studentId, Long feedbackRequestId, List<Long> answers) {
 		this.id = id;
 		this.date = date;
 		this.comment = comment;
 		this.studentId = studentId;
 		this.feedbackRequestId = feedbackRequestId;
+		this.answers = answers;
 	}
 	
 	public Long getId() {
@@ -63,6 +65,14 @@ public class FeedbackDto extends AbstractDto {
 		this.feedbackRequestId = feedbackRequestId;
 	}
 	
+	public List<Long> getAnswers() {
+		return answers;
+	}
+	
+	public void setAnswers(List<Long> answers) {
+		this.answers = answers;
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -84,6 +94,7 @@ public class FeedbackDto extends AbstractDto {
 				       ", comment='" + comment + '\'' +
 				       ", studentId=" + studentId +
 				       ", feedbackRequestId=" + feedbackRequestId +
+				       ", answers=" + answers +
 				       '}';
 	}
 }

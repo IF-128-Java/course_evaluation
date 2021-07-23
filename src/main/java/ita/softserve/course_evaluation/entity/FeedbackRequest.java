@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -37,7 +39,7 @@ public class FeedbackRequest {
 	private Long duration;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "course_id")
+	@JoinColumn(name = "course_id", nullable = false)
 	private Course course;
 	
 	@OneToMany(mappedBy = "feedbackRequest",
@@ -45,22 +47,26 @@ public class FeedbackRequest {
 			orphanRemoval = true)
 	private List<Feedback> feedbacks = new ArrayList<>();
 	
-	//TODO
-	//@ManyToMany
-	//question table
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "course_feedback_request_question",
+			joinColumns = @JoinColumn(name = "feedback_request_id"),
+			inverseJoinColumns = @JoinColumn(name = "question_id"))
+	private List<Question> questions = new ArrayList<>();
 	
 	
 	public FeedbackRequest() {
 	}
 	
-	public FeedbackRequest(Long id, String feedbackDescription, LocalDateTime startDate, LocalDateTime endDate, Long duration, Course course, List<Feedback> feedbacks) {
+	public FeedbackRequest(Long id, String feedbackDescription, LocalDateTime startDate, LocalDateTime endDate, Long duration, Course course, List<Question> questions) {
 		this.id = id;
 		this.feedbackDescription = feedbackDescription;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.duration = duration;
 		this.course = course;
-		this.feedbacks = feedbacks;
+		this.questions = questions;
 	}
 	
 	public Long getId() {
@@ -117,6 +123,14 @@ public class FeedbackRequest {
 	
 	public void setFeedbacks(List<Feedback> feedbacks) {
 		this.feedbacks = feedbacks;
+	}
+	
+	public List<Question> getQuestions() {
+		return questions;
+	}
+	
+	public void setQuestions(List<Question> questions) {
+		this.questions = questions;
 	}
 	
 	@Override

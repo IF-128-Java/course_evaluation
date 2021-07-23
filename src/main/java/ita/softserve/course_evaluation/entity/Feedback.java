@@ -37,11 +37,12 @@ public class Feedback {
 	public Feedback() {
 	}
 	
-	public Feedback(Long id, LocalDateTime date, String comment, User student) {
+	public Feedback(Long id, LocalDateTime date, String comment, User student, FeedbackRequest feedbackRequest) {
 		this.id = id;
 		this.date = date;
 		this.comment = comment;
 		this.student = student;
+		this.feedbackRequest = feedbackRequest;
 	}
 	
 	public Long getId() {

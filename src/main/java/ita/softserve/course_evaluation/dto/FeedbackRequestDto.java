@@ -1,9 +1,10 @@
 package ita.softserve.course_evaluation.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
-public class FeedbackRequestDto extends AbstractDto {
+public class FeedbackRequestDto {
 	
 	private Long id;
 	private String feedbackDescription;
@@ -11,17 +12,19 @@ public class FeedbackRequestDto extends AbstractDto {
 	private LocalDateTime endDate;
 	private Long duration;
 	private Long course;
+	private List<Long> questionIds;
 	
 	public FeedbackRequestDto() {
 	}
 	
-	public FeedbackRequestDto(Long id, String feedbackDescription, LocalDateTime startDate, LocalDateTime endDate, Long duration, Long course) {
+	public FeedbackRequestDto(Long id, String feedbackDescription, LocalDateTime startDate, LocalDateTime endDate, Long duration, Long course, List<Long> questionIds) {
 		this.id = id;
 		this.feedbackDescription = feedbackDescription;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.duration = duration;
 		this.course = course;
+		this.questionIds = questionIds;
 	}
 	
 	public Long getId() {
@@ -72,6 +75,14 @@ public class FeedbackRequestDto extends AbstractDto {
 		this.course = courseId;
 	}
 	
+	public List<Long> getQuestionIds() {
+		return questionIds;
+	}
+	
+	public void setQuestionIds(List<Long> questionIds) {
+		this.questionIds = questionIds;
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -94,6 +105,7 @@ public class FeedbackRequestDto extends AbstractDto {
 				       ", endDate=" + endDate +
 				       ", duration=" + duration +
 				       ", course=" + course +
+				       ", questionIds=" + questionIds +
 				       '}';
 	}
 }

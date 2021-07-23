@@ -1,8 +1,10 @@
 package ita.softserve.course_evaluation.service.impl;
 
 import ita.softserve.course_evaluation.dto.FeedbackRequestDto;
-import ita.softserve.course_evaluation.mapper.impl.FeedbackRequestMapper;
+import ita.softserve.course_evaluation.dto.FeedbackRequestDtoMapper;
+import ita.softserve.course_evaluation.entity.FeedbackRequest;
 import ita.softserve.course_evaluation.repository.FeedbackRequestRepository;
+import ita.softserve.course_evaluation.repository.QuestionRepository;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
 import org.springframework.stereotype.Service;
 
@@ -12,31 +14,37 @@ import javax.persistence.EntityNotFoundException;
 public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	
 	private final FeedbackRequestRepository feedbackRequestRepository;
-	private final FeedbackRequestMapper feedbackRequestMapper;
+	private final QuestionRepository questionRepository;
+	private final FeedbackRequestDtoMapper feedbackRequestDtoMapper;
 	
-	public FeedbackRequestServiceImpl(FeedbackRequestRepository feedbackRequestRepository, FeedbackRequestMapper feedbackRequestMapper) {
+	public FeedbackRequestServiceImpl(FeedbackRequestRepository feedbackRequestRepository, QuestionRepository questionRepository, FeedbackRequestDtoMapper feedbackRequestDtoMapper) {
 		this.feedbackRequestRepository = feedbackRequestRepository;
-		this.feedbackRequestMapper = feedbackRequestMapper;
+		this.questionRepository = questionRepository;
+		this.feedbackRequestDtoMapper = feedbackRequestDtoMapper;
 	}
 	
 	@Override
 	public FeedbackRequestDto create(FeedbackRequestDto dto) {
-		return feedbackRequestMapper.toDto(feedbackRequestRepository.save(feedbackRequestMapper.toEntity(dto)));
+		
+		FeedbackRequest feedbackRequest = feedbackRequestDtoMapper.fromDto(dto);
+		FeedbackRequest feedbackRequestNew = feedbackRequestRepository.save(feedbackRequest);
+		FeedbackRequestDto feedbackRequestDto = feedbackRequestDtoMapper.toDto(feedbackRequestNew);
+		return feedbackRequestDto;
 	}
 	
 	@Override
 	public FeedbackRequestDto update(FeedbackRequestDto dto) {
-		return feedbackRequestMapper.toDto(feedbackRequestRepository.save(feedbackRequestMapper.toEntity(dto)));
+		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.save(feedbackRequestDtoMapper.fromDto(dto)));
 	}
 	
 	@Override
 	public void delete(Long id) {
-		feedbackRequestRepository.delete(feedbackRequestMapper.toEntity(getFeedbackRequestById(id)));
+		feedbackRequestRepository.delete(feedbackRequestDtoMapper.fromDto(getFeedbackRequestById(id)));
 	}
 	
 	@Override
 	public FeedbackRequestDto getFeedbackRequestById(Long id) {
-		return feedbackRequestMapper.toDto(feedbackRequestRepository.findById(id)
+		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.findById(id)
 				                                   .orElseThrow(() -> new EntityNotFoundException("Feedback request with id " + id + " not found")));
 	}
 }
