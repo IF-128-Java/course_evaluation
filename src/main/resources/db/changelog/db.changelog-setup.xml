@@ -43,7 +43,8 @@
                 <constraints nullable="false"/>
             </column>
             <column name="group_id" type="BIGINT ">
-                <constraints nullable="true"/>
+                <constraints foreignKeyName="users_group_fkey" referencedColumnNames="id" referencedTableName="groups"
+                             nullable="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -71,7 +72,8 @@
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="role_id" type="BIGINT ">
-                <constraints nullable="false"/>
+                <constraints foreignKeyName="permission_role_fkey" referencedColumnNames="id" referencedTableName="role"
+                             nullable="false"/>
             </column>
         </createTable>
     </changeSet>
@@ -94,7 +96,8 @@
                 <constraints nullable="false"/>
             </column>
             <column name="teacher_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints foreignKeyName="course_teacher_fkey" referencedColumnNames="id" referencedTableName="users"
+                             nullable="false"/>
             </column>
         </createTable>
     </changeSet>
@@ -117,7 +120,8 @@
                 <constraints nullable="false"/>
             </column>
             <column name="course_id" type="BIGINT ">
-                <constraints nullable="false"/>
+                <constraints foreignKeyName="course_feedback_request_course_fkey" referencedColumnNames="id"
+                             referencedTableName="course" nullable="false"/>
             </column>
         </createTable>
     </changeSet>
@@ -134,10 +138,12 @@
                 <constraints nullable="false"/>
             </column>
             <column name="student_id" type="BIGINT ">
-                <constraints nullable="false"/>
+                <constraints foreignKeyName="course_feedback_student_fkey" referencedColumnNames="id"
+                             referencedTableName="users" nullable="false"/>
             </column>
             <column name="feedback_request_id" type="BIGINT ">
-                <constraints nullable="false"/>
+                <constraints foreignKeyName="course_feedback_feedback_fkey" referencedColumnNames="id"
+                             referencedTableName="course_feedback_request" nullable="false"/>
             </column>
         </createTable>
     </changeSet>
@@ -148,10 +154,12 @@
                 <constraints primaryKey="true" primaryKeyName="answer_to_feedbacks_pkey" nullable="false"/>
             </column>
             <column name="question_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints foreignKeyName="answer_to_feedback_question_fkey" referencedColumnNames="id"
+                             referencedTableName="question" nullable="false"/>
             </column>
             <column name="feedback_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints foreignKeyName="answer_to_feedback_feedback_fkey" referencedColumnNames="id"
+                             referencedTableName="course_feedback" nullable="false"/>
             </column>
             <column name="rate" type="INT">
                 <constraints nullable="false"/>
@@ -162,106 +170,45 @@
     <changeSet id="1.0.9" author="volodymyr.protsiv">
         <createTable tableName="user_roles">
             <column name="role_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints primaryKey="true" primaryKeyName="ser_roles_pkey" foreignKeyName="user_roles_roles_fkey"
+                             referencedColumnNames="id"
+                             referencedTableName="role" nullable="false"/>
             </column>
             <column name="user_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints primaryKey="true" primaryKeyName="ser_roles_pkey" foreignKeyName="user_roles_user_fkey"
+                             referencedColumnNames="id"
+                             referencedTableName="users" nullable="false"/>
             </column>
         </createTable>
     </changeSet>
+
     <changeSet id="1.0.10" author="volodymyr.protsiv">
         <createTable tableName="course_group">
             <column name="group_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints primaryKey="true" primaryKeyName="course_group_pkey"
+                             foreignKeyName="course_group_group_fkey" referencedColumnNames="id"
+                             referencedTableName="groups" nullable="false"/>
             </column>
             <column name="course_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints primaryKey="true" primaryKeyName="course_group_pkey"
+                             foreignKeyName="course_group_course_fkey" referencedColumnNames="id"
+                             referencedTableName="course" nullable="false"/>
             </column>
         </createTable>
     </changeSet>
+
     <changeSet id="1.0.11" author="volodymyr.protsiv">
         <createTable tableName="course_feedback_request_question">
             <column name="feedback_request_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints primaryKey="true" primaryKeyName="course_feedback_request_question_pkey"
+                             foreignKeyName="feedback_request_question_feedback_request_fkey" referencedColumnNames="id"
+                             referencedTableName="course_feedback_request" nullable="false"/>
             </column>
             <column name="question_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints primaryKey="true" primaryKeyName="course_feedback_request_question_pkey"
+                             foreignKeyName="eedback_request_question_question_fkey" referencedColumnNames="id"
+                             referencedTableName="question" nullable="false"/>
             </column>
         </createTable>
-    </changeSet>
-
-    <changeSet id="1.0.12" author="volodymyr.protsiv">
-        <addPrimaryKey
-                columnNames="user_id, role_id"
-                constraintName="user_roles_pkey"
-                schemaName="public"
-                tableName="user_roles"
-        />
-    </changeSet>
-
-    <changeSet id="1.0.13" author="volodymyr.protsiv">
-        <addPrimaryKey
-                columnNames="group_id, course_id"
-                constraintName="course_group_pkey"
-                schemaName="public"
-                tableName="course_group"
-        />
-    </changeSet>
-
-    <changeSet id="1.0.14" author="volodymyr.protsiv">
-        <addPrimaryKey
-                columnNames="feedback_request_id, question_id"
-                constraintName="course_feedback_request_questions_pkey"
-                schemaName="public"
-                tableName="course_feedback_request_question"
-        />
-    </changeSet>
-
-    <changeSet id="1.0.15" author="volodymyr.protsiv">
-        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_roles" constraintName="user_roles_roles_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="role"/>
-    </changeSet>
-
-    <changeSet id="1.0.16" author="volodymyr.protsiv">
-        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_roles" constraintName="user_roles_user_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
-    </changeSet>
-
-    <changeSet id="1.0.17" author="volodymyr.protsiv">
-        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="permission" constraintName="permission_role_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="role"/>
-    </changeSet>
-
-    <changeSet id="1.0.18" author="volodymyr.protsiv">
-        <addForeignKeyConstraint baseColumnNames="group_id" baseTableName="course_group" constraintName="course_group_group_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="groups" />
-    </changeSet>
-
-    <changeSet id="1.0.19" author="volodymyr.protsiv">
-        <addForeignKeyConstraint baseColumnNames="course_id" baseTableName="course_group" constraintName="course_group_course_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="course"/>
-    </changeSet>
-
-    <changeSet id="1.0.20" author="volodymyr.protsiv">
-        <addForeignKeyConstraint baseColumnNames="question_id" baseTableName="answer_to_feedbacks" constraintName="answer_to_feedback_question_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="question" />
-    </changeSet>
-
-    <changeSet id="1.0.21" author="volodymyr.protsiv">
-        <addForeignKeyConstraint baseColumnNames="feedback_id" baseTableName="answer_to_feedbacks" constraintName="answer_to_feedback_feedback_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="course_feedback"/>
-    </changeSet>
-
-    <changeSet id="1.0.22" author="volodymyr.protsiv">
-        <addForeignKeyConstraint baseColumnNames="student_id" baseTableName="course_feedback" constraintName="course_feedback_student_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
-    </changeSet>
-
-    <changeSet id="1.0.23" author="volodymyr.protsiv">
-        <addForeignKeyConstraint baseColumnNames="feedback_request_id" baseTableName="course_feedback" constraintName="course_feedback_feedback_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="course_feedback_request"/>
-    </changeSet>
-
-    <changeSet id="1.0.24" author="volodymyr.protsiv">
-        <addForeignKeyConstraint baseColumnNames="course_id" baseTableName="course_feedback_request" constraintName="course_feedback_request_course_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="course"/>
-    </changeSet>
-
-    <changeSet id="1.0.25" author="volodymyr.protsiv">
-        <addForeignKeyConstraint baseColumnNames="teacher_id" baseTableName="course" constraintName="course_teacher_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
-    </changeSet>
-
-        <changeSet id="1.0.26" author="volodymyr.protsiv">
-        <addForeignKeyConstraint baseColumnNames="group_id" baseTableName="users" constraintName="users_group_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="groups"/>
     </changeSet>
 </databaseChangeLog>
