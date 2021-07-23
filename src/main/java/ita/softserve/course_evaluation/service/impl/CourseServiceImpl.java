@@ -26,10 +26,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course addCourse(CourseDto courseDto) {
-        Optional<Course> course = courseRepository.findByCourseName(courseDto.getCourseName());
-        course.ifPresent(n -> {
-            throw new CourseAlreadyExistException("this course already created");
-        });
         return courseRepository.save(CourseDtoMapper.toEntity(courseDto));
     }
 
