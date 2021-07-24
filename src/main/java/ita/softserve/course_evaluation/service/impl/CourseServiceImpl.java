@@ -29,12 +29,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(long id) {
         courseRepository.deleteById((id));
     }
 
     @Override
-    public CourseDto getById(int id) {
+    public CourseDto getById(long id) {
         return CourseDtoMapper.toDto(courseRepository.findById(id).orElseThrow(CourseNotFoundException::new));
     }
 

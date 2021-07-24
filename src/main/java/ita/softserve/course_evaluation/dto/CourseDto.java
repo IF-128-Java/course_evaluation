@@ -14,7 +14,7 @@ import java.util.Objects;
 public class CourseDto {
 
     @Getter @Setter
-    private int id;
+    private long id;
 
     @Getter @Setter
     private String courseName;
