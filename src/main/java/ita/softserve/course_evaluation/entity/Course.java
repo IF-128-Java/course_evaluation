@@ -79,11 +79,12 @@ public class Course implements Serializable {
     @Override
     public String toString() {
         return "Course{" +
-                "id=" + id +
-                ", courseName='" + courseName + '\'' +
-                ", description='" + description + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                '}';
+                       "id=" + id +
+                       ", courseName='" + courseName + '\'' +
+                       ", description='" + description + '\'' +
+                       ", startDate=" + startDate +
+                       ", endDate=" + endDate +
+                       '}';
     }
 }
+
