@@ -32,6 +32,7 @@ public class User {
     @Column(name = "email")
     private String email;
 
+
     @Column(name = "password")
     private String password;
 
@@ -97,6 +98,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
 
