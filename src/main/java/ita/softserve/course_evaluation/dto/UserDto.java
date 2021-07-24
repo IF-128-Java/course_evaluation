@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class UserDto {
 
-    private Integer id;
+    private Long id;
 
     private String firstName;
 
@@ -22,11 +22,11 @@ public class UserDto {
 
     private Group group;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -107,7 +107,7 @@ public class UserDto {
     public UserDto() {
     }
 
-    public UserDto(Integer id, String firstName, String lastName, String email, String password, Set<Role> roles, Group group) {
+    public UserDto(Long id, String firstName, String lastName, String email, String password, Set<Role> roles, Group group) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

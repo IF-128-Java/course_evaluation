@@ -20,7 +20,6 @@ public class UserDtoMapper {
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
         dto.setPassword(user.getPassword());
-        dto.setGroup(user.getGroup());
         dto.setRoles(user.getRoles());
         return dto;
         }
@@ -32,7 +31,6 @@ public class UserDtoMapper {
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
-        user.setGroup(dto.getGroup());
         user.setRoles(dto.getRoles());
         return user;
         }

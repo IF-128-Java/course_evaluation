@@ -42,7 +42,7 @@ public class FeedbackRequest {
     @OneToMany(mappedBy = "feedbackRequestId",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<FeedBack> feedbacks = new ArrayList<>();
+    private List<Feedback> feedbacks = new ArrayList<>();
 
 
     public Long getId() {
@@ -93,11 +93,11 @@ public class FeedbackRequest {
         this.courseId = courseId;
     }
 
-    public List<FeedBack> getFeedbacks() {
+    public List<Feedback> getFeedbacks() {
         return feedbacks;
     }
 
-    public void setFeedbacks(List<FeedBack> feedbacks) {
+    public void setFeedbacks(List<Feedback> feedbacks) {
         this.feedbacks = feedbacks;
     }
 }

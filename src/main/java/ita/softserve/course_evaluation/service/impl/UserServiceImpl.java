@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 		daoUser.setEmail(dto.getEmail());
 		daoUser.setPassword(dto.getPassword());
 		daoUser.setRoles(dto.getRoles());
-		daoUser.setGroup(dto.getGroup());
+
 
 		return UserDtoMapper.toDto(userRepository.save(daoUser));
 	}
