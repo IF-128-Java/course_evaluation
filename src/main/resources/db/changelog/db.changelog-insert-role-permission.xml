@@ -4,42 +4,9 @@
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <changeSet id="1.1.0" author="volodymyr.protsiv">
-        <insert tableName="role">
-            <column name="id" valueNumeric="0"/>
-            <column name="role_name" value="ROLE_STUDENT"/>
-        </insert>
-    </changeSet>
-    <changeSet id="1.1.1" author="volodymyr.protsiv">
-        <insert tableName="role">
-            <column name="id" valueNumeric="1"/>
-            <column name="role_name" value="ROLE_TEACHER"/>
-        </insert>
-    </changeSet>
-    <changeSet id="1.1.2" author="volodymyr.protsiv">
-        <insert tableName="role">
-            <column name="id" valueNumeric="2"/>
-            <column name="role_name" value="ROLE_ADMIN"/>
-        </insert>
-    </changeSet>
-    <changeSet id="1.1.3" author="volodymyr.protsiv">
-        <insert tableName="permission">
-            <column name="id" valueNumeric="0"/>
-            <column name="permission_name" value="READ"/>
-            <column name="role_id" valueNumeric="0"/>
-        </insert>
-    </changeSet>
-    <changeSet id="1.1.4" author="volodymyr.protsiv">
-        <insert tableName="permission">
-            <column name="id" valueNumeric="1"/>
-            <column name="permission_name" value="WRITE"/>
-            <column name="role_id" valueNumeric="1"/>
-        </insert>
-    </changeSet>
-    <changeSet id="1.1.5" author="volodymyr.protsiv">
-        <insert tableName="permission">
-            <column name="id" valueNumeric="2"/>
-            <column name="permission_name" value="UPDATE"/>
-            <column name="role_id" valueNumeric="2"/>
-        </insert>
-    </changeSet>
+            <sqlFile dbms="postgresql"
+                     encoding="UTF-8"
+                     path="classpath:db/roles_and_permission.sql"
+                     />
+        </changeSet>
 </databaseChangeLog>
