@@ -1,53 +1,24 @@
-package ita.softserve.course_evaluation.entity;
+package ita.softserve.course_evaluation.dto;
 
-import com.sun.istack.NotNull;
+import ita.softserve.course_evaluation.entity.User;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
-@Entity
-@Table(name = "course")
-public class Course implements Serializable {
+public class CourseDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-
-    @NotNull
-    @Column(name = "course_Name", nullable = false)
     private String courseName;
-
-    @Column(name = "description", nullable = false)
     private String description;
-
-    @Column(name = "start_Date", nullable = false)
-    @Temporal(TemporalType.DATE)
     private Date startDate;
-
-    @Column(name = "end_Date", nullable = false)
-    @Temporal(TemporalType.DATE)
     private Date endDate;
-
-    @ManyToOne(cascade= CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacher_id", nullable = false)
     private User user;
 
-    public Course() {    }
+    public CourseDto() {
 
-    public Course(int id, String courseName, String description, Date startDate, Date endDate, User user) {
+    }
+
+    public CourseDto(int id, String courseName, String description, Date startDate, Date endDate, User user) {
         this.id = id;
         this.courseName = courseName;
         this.description = description;
@@ -103,4 +74,30 @@ public class Course implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+
+    @Override
+    public String toString() {
+        return "CourseDto{" +
+                "id=" + id +
+                ", courseName='" + courseName + '\'' +
+                ", description='" + description + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", user=" + user +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CourseDto)) return false;
+        CourseDto courseDto = (CourseDto) o;
+        return id == courseDto.id && courseName.equals(courseDto.courseName) && description.equals(courseDto.description) && startDate.equals(courseDto.startDate) && endDate.equals(courseDto.endDate) && user.equals(courseDto.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, courseName, description, startDate, endDate, user);
+    }
+
 }
