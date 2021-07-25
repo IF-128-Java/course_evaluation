@@ -9,6 +9,7 @@ import javax.persistence.Column;
 
 @Entity
 @Table(name = "question")
+
 public class Question {
 
     @Id
