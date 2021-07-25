@@ -1,19 +1,27 @@
 package ita.softserve.course_evaluation.entity;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class User {
+
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 
 	@Column(name = "first_name")
 	private String firstName;
@@ -24,14 +32,39 @@ public class User {
 	@Column(name = "email")
 	private String email;
 
+
 	@Column(name = "password")
 	private String password;
 
-	public Integer getId() {
+	@ElementCollection(targetClass = Role.class)
+	@Column(name = "role_id")
+	private Set<Role> roles;
+
+	@OneToMany(mappedBy = "student",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<Feedback> feedbacks = new ArrayList<>();
+
+
+	public User() {
+	}
+
+
+	public User(Long id, String firstName, String lastName, String email, String password) {
+
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -65,5 +98,13 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 }
