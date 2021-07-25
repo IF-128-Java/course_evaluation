@@ -45,8 +45,8 @@ public class AnswerToFeedbackServiceImpl implements AnswerToFeedbackService {
     public AnswerDto updateAnswer(AnswerDto answer, long id) {
         AnswerDto existingAnswerDto = findAnswerById(id);
         existingAnswerDto.setRate(answer.getRate());
-        existingAnswerDto.setQuestion(answer.getQuestion());
-        existingAnswerDto.setFeedback(answer.getFeedback());
+        existingAnswerDto.setQuestionId(answer.getQuestionId());
+        existingAnswerDto.setFeedbackId(answer.getFeedbackId());
         answerRepository.save(AnswerDtoMapper.fromDto(existingAnswerDto));
         return existingAnswerDto;
     }
