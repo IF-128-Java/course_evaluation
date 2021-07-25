@@ -1,4 +1,3 @@
-
 package ita.softserve.course_evaluation.entity;
 
 import java.util.Set;

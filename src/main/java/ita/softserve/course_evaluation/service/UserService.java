@@ -1,4 +1,3 @@
-
 package ita.softserve.course_evaluation.service;
 
 import ita.softserve.course_evaluation.dto.UserDto;
@@ -15,7 +14,7 @@ public interface UserService {
 
 	UserDto readByFirstName(String firstName);
 
-	UserDto createUser(UserDto dto);
+	 UserDto createUser(UserDto dto);
 
 	UserDto updateUser(UserDto dto);
 

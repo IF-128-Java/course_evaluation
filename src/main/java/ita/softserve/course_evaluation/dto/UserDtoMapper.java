@@ -22,7 +22,7 @@ public class UserDtoMapper {
         dto.setPassword(user.getPassword());
         dto.setRoles(user.getRoles());
         return dto;
-    }
+        }
 
     public static User fromDto (UserDto dto) {
         User user = new User();
@@ -33,15 +33,17 @@ public class UserDtoMapper {
         user.setPassword(dto.getPassword());
         user.setRoles(dto.getRoles());
         return user;
-    }
+        }
 
     public static List<UserDto> toDto(List<User> users) {
         UserDtoMapper userDtoMapper = new UserDtoMapper();
         return Objects.isNull(users) ? null : users.stream().map(UserDtoMapper::toDto).collect(Collectors.toList());
-    }
+        }
 
     public List<User> fromDto (List<UserDto> entities) {
-        UserDtoMapper userDtoMapper = new UserDtoMapper();
-        return Objects.isNull(entities) ? null: entities.stream().map(UserDtoMapper::fromDto).collect(Collectors.toList());
+    UserDtoMapper userDtoMapper = new UserDtoMapper();
+      return Objects.isNull(entities) ? null: entities.stream().map(UserDtoMapper::fromDto).collect(Collectors.toList());
     }
+
+
 }

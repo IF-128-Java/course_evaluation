@@ -16,20 +16,20 @@ import java.util.List;
 
 @RestController
 public class UserController {
-
+	
 	private final UserService userService;
-
+	
 	public UserController(UserService userService) {
 		this.userService = userService;
 	}
-
+	
 	@GetMapping(value = "/users")
 	public ResponseEntity<List<UserDto>> read() {
 		final List<UserDto> users = userService.readAll();
-
+		
 		return users != null && !users.isEmpty()
-				? new ResponseEntity<>(users, HttpStatus.OK)
-				: new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				       ? new ResponseEntity<>(users, HttpStatus.OK)
+				       : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 	@GetMapping(value="/user/{id}")
@@ -50,14 +50,14 @@ public class UserController {
 
 	}
 
-	@PutMapping(value="/user")
+    @PutMapping(value="/user")
 	public ResponseEntity<UserDto> updateUser (@RequestBody UserDto userDto) {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(userService.updateUser(userDto));
 
 	}
 
-	@DeleteMapping(value="/user/{id}")
+    @DeleteMapping(value="/user/{id}")
 	public void deleteUser(@PathVariable(value = "id") long id){
 		userService.deleteUser(id);
 	}
