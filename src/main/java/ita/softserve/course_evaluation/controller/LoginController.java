@@ -1,6 +1,7 @@
 package ita.softserve.course_evaluation.controller;
 
 import ita.softserve.course_evaluation.dto.AuthenticateRequestDto;
+import ita.softserve.course_evaluation.dto.SimpleUserDto;
 import ita.softserve.course_evaluation.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -31,5 +32,10 @@ public class LoginController {
 	public void logout(HttpServletRequest request, HttpServletResponse response) {
 		SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
 		securityContextLogoutHandler.logout(request, response, null);
+	}
+	
+	@PostMapping("/reg")
+	public ResponseEntity<?> registration(@RequestBody SimpleUserDto request) {
+		return authService.getRegistrationCredentials(request);
 	}
 }
