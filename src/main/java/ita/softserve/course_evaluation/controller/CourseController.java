@@ -22,9 +22,7 @@ import java.util.Objects;
 public class CourseController {
     private final CourseService courseService;
 
-    public CourseController(CourseService courseService) {
-        this.courseService = courseService;
-    }
+    public CourseController(CourseService courseService) { this.courseService = courseService; }
 
     @PostMapping
     public ResponseEntity<Course> addCourse(@RequestBody CourseDto courseDto) {

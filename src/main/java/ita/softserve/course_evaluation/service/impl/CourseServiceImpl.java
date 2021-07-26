@@ -4,7 +4,6 @@ package ita.softserve.course_evaluation.service.impl;
 import ita.softserve.course_evaluation.dto.CourseDto;
 import ita.softserve.course_evaluation.dto.dtoMapper.CourseDtoMapper;
 import ita.softserve.course_evaluation.entity.Course;
-import ita.softserve.course_evaluation.exception.CourseAlreadyExistException;
 import ita.softserve.course_evaluation.exception.CourseNotFoundException;
 import ita.softserve.course_evaluation.repository.CourseRepository;
 import ita.softserve.course_evaluation.service.CourseService;
@@ -30,12 +29,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(long id) {
         courseRepository.deleteById((id));
     }
 
     @Override
-    public CourseDto getById(int id) {
+    public CourseDto getById(long id) {
         return CourseDtoMapper.toDto(courseRepository.findById(id).orElseThrow(CourseNotFoundException::new));
     }
 

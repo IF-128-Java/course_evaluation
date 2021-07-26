@@ -10,9 +10,9 @@ public interface CourseService {
 
     Course addCourse(CourseDto course);
 
-    void deleteById(int id);
+    void deleteById(long id);
 
-    CourseDto getById(int id);
+    CourseDto getById(long id);
 
     Optional<Course> getByName(String name);
 

@@ -1,79 +1,35 @@
 package ita.softserve.course_evaluation.dto;
 
 import ita.softserve.course_evaluation.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.Objects;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class CourseDto {
 
-    private int id;
+    @Getter @Setter
+    private long id;
+
+    @Getter @Setter
     private String courseName;
+
+    @Getter @Setter
     private String description;
+
+    @Getter @Setter
     private Date startDate;
+
+    @Getter @Setter
     private Date endDate;
+
+    @Getter @Setter
     private User user;
-
-    public CourseDto() {
-
-    }
-
-    public CourseDto(int id, String courseName, String description, Date startDate, Date endDate, User user) {
-        this.id = id;
-        this.courseName = courseName;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.user = user;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     @Override
     public String toString() {
