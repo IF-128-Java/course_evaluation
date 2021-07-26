@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS role
 (
     id   bigserial NOT NULL,
-    role_name varchar(50),
+    role_name varchar(50) NOT NULL UNIQUE ,
     CONSTRAINT role_pkey PRIMARY KEY(id)
 );
 
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS question
     id bigserial NOT NULL,
     question_text varchar(255),
     is_pattern boolean,
-    feedback_request_id int NOT NULL,
+    feeback_request_id int NOT NULL,
     CONSTRAINT question_pkey PRIMARY KEY(id)
 );
 
@@ -118,3 +118,12 @@ CREATE TABLE IF NOT EXISTS course_feedback_request_question
     CONSTRAINT course_feedback_request_question_question_fkey FOREIGN KEY(question_id) REFERENCES question(id),
     CONSTRAINT course_feedback_request_questions_pkey PRIMARY KEY(question_id, feedback_request_id)
 );
+CREATE TABLE IF NOT EXISTS permission
+(
+    id  bigserial NOT NULL,
+    permission_name char(255) NOT NULL UNIQUE ,
+    role_id bigint,
+    CONSTRAINT permission_role_fkey FOREIGN KEY(role_id) REFERENCES role(id),
+    CONSTRAINT permission_pkey PRIMARY KEY(id)
+);
+
