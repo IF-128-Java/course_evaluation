@@ -1,0 +1,214 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.0.0" author="volodymyr.protsiv">
+        <createTable tableName="role">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="role_pkey" nullable="false"/>
+            </column>
+            <column name="role_name" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.1" author="volodymyr.protsiv">
+        <createTable tableName="groups">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="groups_pkey" nullable="false"/>
+            </column>
+            <column name="group_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.2" author="volodymyr.protsiv">
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="user_pkey" nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(100)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_id" type="BIGINT ">
+                <constraints foreignKeyName="users_group_fkey" referencedColumnNames="id" referencedTableName="groups"
+                             nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.3" author="volodymyr.protsiv">
+        <createTable tableName="question">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="question_pkey" nullable="false"/>
+            </column>
+            <column name="question_text" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_pattern" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.4" author="volodymyr.protsiv">
+        <createTable tableName="permission">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="permission_pkey" nullable="false"/>
+            </column>
+            <column name="permission_name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="role_id" type="BIGINT ">
+                <constraints foreignKeyName="permission_role_fkey" referencedColumnNames="id" referencedTableName="role"
+                             nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.5" author="volodymyr.protsiv">
+        <createTable tableName="course">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="course_pkey" nullable="false"/>
+            </column>
+            <column name="course_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="teacher_id" type="BIGINT">
+                <constraints foreignKeyName="course_teacher_fkey" referencedColumnNames="id" referencedTableName="users"
+                             nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.6" author="volodymyr.protsiv">
+        <createTable tableName="course_feedback_request">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="course_feedback_request_pkey" nullable="false"/>
+            </column>
+            <column name="feedback_description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="course_id" type="BIGINT ">
+                <constraints foreignKeyName="course_feedback_request_course_fkey" referencedColumnNames="id"
+                             referencedTableName="course" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.7" author="volodymyr.protsiv">
+        <createTable tableName="course_feedback">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="course_feedback_pkey" nullable="false"/>
+            </column>
+            <column name="comment" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="student_id" type="BIGINT ">
+                <constraints foreignKeyName="course_feedback_student_fkey" referencedColumnNames="id"
+                             referencedTableName="users" nullable="false"/>
+            </column>
+            <column name="feedback_request_id" type="BIGINT ">
+                <constraints foreignKeyName="course_feedback_feedback_fkey" referencedColumnNames="id"
+                             referencedTableName="course_feedback_request" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.8" author="volodymyr.protsiv">
+        <createTable tableName="answer_to_feedbacks">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="answer_to_feedbacks_pkey" nullable="false"/>
+            </column>
+            <column name="question_id" type="BIGINT">
+                <constraints foreignKeyName="answer_to_feedback_question_fkey" referencedColumnNames="id"
+                             referencedTableName="question" nullable="false"/>
+            </column>
+            <column name="feedback_id" type="BIGINT">
+                <constraints foreignKeyName="answer_to_feedback_feedback_fkey" referencedColumnNames="id"
+                             referencedTableName="course_feedback" nullable="false"/>
+            </column>
+            <column name="rate" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.9" author="volodymyr.protsiv">
+        <createTable tableName="user_roles">
+            <column name="role_id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="ser_roles_pkey" foreignKeyName="user_roles_roles_fkey"
+                             referencedColumnNames="id"
+                             referencedTableName="role" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="ser_roles_pkey" foreignKeyName="user_roles_user_fkey"
+                             referencedColumnNames="id"
+                             referencedTableName="users" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.10" author="volodymyr.protsiv">
+        <createTable tableName="course_group">
+            <column name="group_id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="course_group_pkey"
+                             foreignKeyName="course_group_group_fkey" referencedColumnNames="id"
+                             referencedTableName="groups" nullable="false"/>
+            </column>
+            <column name="course_id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="course_group_pkey"
+                             foreignKeyName="course_group_course_fkey" referencedColumnNames="id"
+                             referencedTableName="course" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.11" author="volodymyr.protsiv">
+        <createTable tableName="course_feedback_request_question">
+            <column name="feedback_request_id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="course_feedback_request_question_pkey"
+                             foreignKeyName="feedback_request_question_feedback_request_fkey" referencedColumnNames="id"
+                             referencedTableName="course_feedback_request" nullable="false"/>
+            </column>
+            <column name="question_id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="course_feedback_request_question_pkey"
+                             foreignKeyName="eedback_request_question_question_fkey" referencedColumnNames="id"
+                             referencedTableName="question" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
