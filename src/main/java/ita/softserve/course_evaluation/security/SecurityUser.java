@@ -42,7 +42,7 @@ public class SecurityUser implements UserDetails {
 	
 	private static List<SimpleGrantedAuthority> getAuthorities(Set<Role> roles){
 		return roles.stream().map(Role::getPermissions).flatMap(Collection::stream)
-				.map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
+				.map(permission -> new SimpleGrantedAuthority(permission.name()))
 				.collect(Collectors.toList());
 	}
 	

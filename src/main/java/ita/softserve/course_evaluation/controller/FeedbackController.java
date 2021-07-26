@@ -26,21 +26,21 @@ public class FeedbackController {
 	}
 	
 	@PostMapping
-	@PreAuthorize("hasAuthority('feedbacks:create')")
+	@PreAuthorize("hasAuthority('READ')")
 	public ResponseEntity<FeedbackDto> createFeedback(@RequestBody FeedbackDto dto) {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(feedbackService.create(dto));
 	}
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('feedbacks:read')")
+	@PreAuthorize("hasAuthority('WRITE')")
 	public ResponseEntity<FeedbackDto> getFeedback(@PathVariable Long id) {
 		return ResponseEntity.status(HttpStatus.OK)
 				       .body(feedbackService.getFeedbackById(id));
 	}
 	
 	@PutMapping("/{id}")
-	@PreAuthorize("hasAuthority('feedbacks:write')")
+	@PreAuthorize("hasAuthority('UPDATE')")
 	public ResponseEntity<FeedbackDto> editFeedback(@RequestBody FeedbackDto dto, @PathVariable Long id) {
 		dto.setId(id);
 		return ResponseEntity.status(HttpStatus.OK)
@@ -49,7 +49,7 @@ public class FeedbackController {
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	@PreAuthorize("hasAuthority('feedbacks:write')")
+	@PreAuthorize("hasAuthority('UPDATE')")
 	public void deleteFeedback(@PathVariable Long id) {
 		feedbackService.delete(id);
 	}
