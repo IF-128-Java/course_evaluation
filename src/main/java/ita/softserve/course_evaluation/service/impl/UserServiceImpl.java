@@ -8,7 +8,6 @@ import ita.softserve.course_evaluation.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -43,7 +42,7 @@ public class UserServiceImpl implements UserService {
 		daoUser.setLastName(dto.getLastName());
 		daoUser.setEmail(dto.getEmail());
 		daoUser.setPassword(dto.getPassword());
-		daoUser.setRole(dto.getRole());
+		daoUser.setRoles(dto.getRoles());
 
 
 		return UserDtoMapper.toDto(userRepository.save(daoUser));

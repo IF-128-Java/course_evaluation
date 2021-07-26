@@ -4,6 +4,7 @@ import ita.softserve.course_evaluation.entity.Group;
 import ita.softserve.course_evaluation.entity.Role;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class UserDto {
 	
@@ -17,20 +18,20 @@ public class UserDto {
 	
 	private String password;
 	
-	private Role role;
+	private Set<Role> roles;
 	
 	private Group group;
 	
 	public UserDto() {
 	}
 	
-	public UserDto(Long id, String firstName, String lastName, String email, String password, Role role, Group group) {
+	public UserDto(Long id, String firstName, String lastName, String email, String password, Set<Role> roles, Group group) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
-		this.role = role;
+		this.roles = roles;
 		this.group = group;
 	}
 	
@@ -74,12 +75,12 @@ public class UserDto {
 		this.password = password;
 	}
 	
-	public Role getRole() {
-		return role;
+	public Set<Role> getRoles() {
+		return roles;
 	}
 	
-	public void setRole(Role role) {
-		this.role = role;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 	
 	public Group getGroup() {
@@ -111,7 +112,7 @@ public class UserDto {
 				       ", lastName='" + lastName + '\'' +
 				       ", email='" + email + '\'' +
 				       ", password='" + password + '\'' +
-				       ", roles=" + role +
+				       ", roles=" + roles +
 				       ", group=" + group +
 				       '}';
 	}

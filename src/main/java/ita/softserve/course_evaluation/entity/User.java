@@ -2,7 +2,9 @@ package ita.softserve.course_evaluation.entity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -33,8 +36,9 @@ public class User {
 	@Column(name = "password")
 	private String password;
 	
+	@ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
 	@Column(name = "role_id")
-	private Role role;
+	private Set<Role> roles;
 	
 	@OneToMany(mappedBy = "student",
 			cascade = CascadeType.ALL,
@@ -96,12 +100,12 @@ public class User {
 		this.password = password;
 	}
 	
-	public Role getRole() {
-		return role;
+	public Set<Role> getRoles() {
+		return roles;
 	}
 	
-	public void setRole(Role role) {
-		this.role = role;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 }
 

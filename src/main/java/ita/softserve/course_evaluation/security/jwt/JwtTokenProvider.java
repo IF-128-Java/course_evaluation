@@ -30,9 +30,7 @@ public class JwtTokenProvider {
 	@Value("${jwt.header}")
 	private String authorizationHeader;
 	@Value("${jwt.expiration}")
-	private long validityInMilliseconds;
-	@Value("${jwt.prefix}")
-	private String tokenStartWith;
+	private long validity;
 	
 	public JwtTokenProvider(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
@@ -43,12 +41,11 @@ public class JwtTokenProvider {
 		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
 	}
 	
-	public String createToken(String username, String role) {
+	public String createToken(String username, String[] role) {
 		Claims claims = Jwts.claims().setSubject(username);
 		claims.put("role", role);
 		Date now = new Date();
-		Date validity = new Date(now.getTime() + validityInMilliseconds * 1000);
-		
+		Date validity = new Date(now.getTime() + this.validity * 1000);
 		return Jwts.builder()
 				       .setClaims(claims)
 				       .setIssuedAt(now)
@@ -75,7 +72,11 @@ public class JwtTokenProvider {
 		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
 	}
 	
-	public String resolveToken(HttpServletRequest request) {
-		return request.getHeader(authorizationHeader);
+	public String resolveToken(HttpServletRequest req) {
+		String bearerToken = req.getHeader("Authorization");
+		if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+			return bearerToken.substring(7, bearerToken.length());
+		}
+		return null;
 	}
 }

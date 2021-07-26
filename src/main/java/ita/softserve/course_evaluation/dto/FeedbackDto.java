@@ -1,6 +1,5 @@
 package ita.softserve.course_evaluation.dto;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
