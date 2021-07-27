@@ -1,6 +1,7 @@
 package ita.softserve.course_evaluation.repository;
 
 import ita.softserve.course_evaluation.entity.Group;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -31,7 +32,7 @@ public class GroupRepositoryTests {
 
     @Test
     public void testFindGroupByGroupNameIfNotExist(){
-        Optional<Group> actual = groupRepository.findGroupByGroupName("");
+        Optional<Group> actual = groupRepository.findGroupByGroupName(StringUtils.EMPTY);
 
         assertFalse(actual.isPresent());
     }

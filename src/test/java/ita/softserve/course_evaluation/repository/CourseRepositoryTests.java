@@ -2,6 +2,7 @@ package ita.softserve.course_evaluation.repository;
 
 import ita.softserve.course_evaluation.entity.Course;
 import ita.softserve.course_evaluation.entity.User;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -37,7 +38,7 @@ public class CourseRepositoryTests {
 
     @Test
     public void testFindByCourseNameIfNotExist(){
-        Optional<Course> actual = courseRepository.findByCourseName("");
+        Optional<Course> actual = courseRepository.findByCourseName(StringUtils.EMPTY);
 
         assertFalse(actual.isPresent());
     }
