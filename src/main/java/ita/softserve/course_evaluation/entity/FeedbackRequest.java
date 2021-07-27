@@ -1,5 +1,9 @@
 package ita.softserve.course_evaluation.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -20,6 +26,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "course_feedback_request")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class FeedbackRequest {
 	
 	@Id
@@ -39,7 +48,7 @@ public class FeedbackRequest {
 	private Long duration;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "course_id")
+	@JoinColumn(name = "course_id", nullable = false)
 	private Course course;
 	
 	@OneToMany(mappedBy = "feedbackRequest",
@@ -47,79 +56,13 @@ public class FeedbackRequest {
 			orphanRemoval = true)
 	private List<Feedback> feedbacks = new ArrayList<>();
 	
-	//TODO
-	//@ManyToMany
-	//question table
 	
-	
-	public FeedbackRequest() {
-	}
-	
-	public FeedbackRequest(Long id, String feedbackDescription, LocalDateTime startDate, LocalDateTime endDate, Long duration, Course course, List<Feedback> feedbacks) {
-		this.id = id;
-		this.feedbackDescription = feedbackDescription;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.duration = duration;
-		this.course = course;
-		this.feedbacks = feedbacks;
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public String getFeedbackDescription() {
-		return feedbackDescription;
-	}
-	
-	public void setFeedbackDescription(String feedbackDescription) {
-		this.feedbackDescription = feedbackDescription;
-	}
-	
-	public LocalDateTime getStartDate() {
-		return startDate;
-	}
-	
-	public void setStartDate(LocalDateTime startDate) {
-		this.startDate = startDate;
-	}
-	
-	public LocalDateTime getEndDate() {
-		return endDate;
-	}
-	
-	public void setEndDate(LocalDateTime endDate) {
-		this.endDate = endDate;
-	}
-	
-	public Long getDuration() {
-		return duration;
-	}
-	
-	public void setDuration(Long duration) {
-		this.duration = duration;
-	}
-	
-	public Course getCourse() {
-		return course;
-	}
-	
-	public void setCourse(Course courseId) {
-		this.course = courseId;
-	}
-	
-	public List<Feedback> getFeedbacks() {
-		return feedbacks;
-	}
-	
-	public void setFeedbacks(List<Feedback> feedbacks) {
-		this.feedbacks = feedbacks;
-	}
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "course_feedback_request_question",
+			joinColumns = @JoinColumn(name = "feedback_request_id"),
+			inverseJoinColumns = @JoinColumn(name = "question_id"))
+	private List<Question> questions = new ArrayList<>();
 	
 	@Override
 	public boolean equals(Object o) {
