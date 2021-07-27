@@ -4,6 +4,7 @@ import ita.softserve.course_evaluation.dto.FeedbackDto;
 import ita.softserve.course_evaluation.service.FeedbackService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,18 +26,21 @@ public class FeedbackController {
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasAuthority('READ')")
 	public ResponseEntity<FeedbackDto> createFeedback(@RequestBody FeedbackDto dto) {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(feedbackService.create(dto));
 	}
 	
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('WRITE')")
 	public ResponseEntity<FeedbackDto> getFeedback(@PathVariable Long id) {
 		return ResponseEntity.status(HttpStatus.OK)
 				       .body(feedbackService.getFeedbackById(id));
 	}
 	
 	@PutMapping("/{id}")
+	@PreAuthorize("hasAuthority('UPDATE')")
 	public ResponseEntity<FeedbackDto> editFeedback(@RequestBody FeedbackDto dto, @PathVariable Long id) {
 		dto.setId(id);
 		return ResponseEntity.status(HttpStatus.OK)
@@ -45,6 +49,7 @@ public class FeedbackController {
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
+	@PreAuthorize("hasAuthority('UPDATE')")
 	public void deleteFeedback(@PathVariable Long id) {
 		feedbackService.delete(id);
 	}
