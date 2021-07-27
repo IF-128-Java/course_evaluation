@@ -1,9 +1,16 @@
 package ita.softserve.course_evaluation.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class FeedbackRequestDto {
 	
 	private Long id;
@@ -13,75 +20,6 @@ public class FeedbackRequestDto {
 	private Long duration;
 	private Long course;
 	private List<Long> questionIds;
-	
-	public FeedbackRequestDto() {
-	}
-	
-	public FeedbackRequestDto(Long id, String feedbackDescription, LocalDateTime startDate, LocalDateTime endDate, Long duration, Long course, List<Long> questionIds) {
-		this.id = id;
-		this.feedbackDescription = feedbackDescription;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.duration = duration;
-		this.course = course;
-		this.questionIds = questionIds;
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public String getFeedbackDescription() {
-		return feedbackDescription;
-	}
-	
-	public void setFeedbackDescription(String feedbackDescription) {
-		this.feedbackDescription = feedbackDescription;
-	}
-	
-	public LocalDateTime getStartDate() {
-		return startDate;
-	}
-	
-	public void setStartDate(LocalDateTime startDate) {
-		this.startDate = startDate;
-	}
-	
-	public LocalDateTime getEndDate() {
-		return endDate;
-	}
-	
-	public void setEndDate(LocalDateTime endDate) {
-		this.endDate = endDate;
-	}
-	
-	public Long getDuration() {
-		return duration;
-	}
-	
-	public void setDuration(Long duration) {
-		this.duration = duration;
-	}
-	
-	public Long getCourse() {
-		return course;
-	}
-	
-	public void setCourse(Long courseId) {
-		this.course = courseId;
-	}
-	
-	public List<Long> getQuestionIds() {
-		return questionIds;
-	}
-	
-	public void setQuestionIds(List<Long> questionIds) {
-		this.questionIds = questionIds;
-	}
 	
 	@Override
 	public boolean equals(Object o) {

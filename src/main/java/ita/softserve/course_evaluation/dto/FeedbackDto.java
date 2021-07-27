@@ -1,9 +1,16 @@
 package ita.softserve.course_evaluation.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class FeedbackDto {
 	
 	private Long id;
@@ -11,67 +18,7 @@ public class FeedbackDto {
 	private String comment;
 	private Long studentId;
 	private Long feedbackRequestId;
-	private List<Long> answers;
-	
-	public FeedbackDto() {
-	}
-	
-	public FeedbackDto(Long id, LocalDateTime date, String comment, Long studentId, Long feedbackRequestId, List<Long> answers) {
-		this.id = id;
-		this.date = date;
-		this.comment = comment;
-		this.studentId = studentId;
-		this.feedbackRequestId = feedbackRequestId;
-		this.answers = answers;
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public LocalDateTime getDate() {
-		return date;
-	}
-	
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
-	
-	public String getComment() {
-		return comment;
-	}
-	
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-	
-	public Long getStudentId() {
-		return studentId;
-	}
-	
-	public void setStudentId(Long studentId) {
-		this.studentId = studentId;
-	}
-	
-	public Long getFeedbackRequestId() {
-		return feedbackRequestId;
-	}
-	
-	public void setFeedbackRequestId(Long feedbackRequestId) {
-		this.feedbackRequestId = feedbackRequestId;
-	}
-	
-	public List<Long> getAnswers() {
-		return answers;
-	}
-	
-	public void setAnswers(List<Long> answers) {
-		this.answers = answers;
-	}
+	private List<AnswerDto> answers;
 	
 	@Override
 	public boolean equals(Object o) {

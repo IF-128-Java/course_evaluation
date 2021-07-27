@@ -12,29 +12,31 @@ import javax.persistence.EntityNotFoundException;
 public class FeedbackServiceImpl implements FeedbackService {
 	
 	private final FeedbackRepository feedbackRepository;
+	private final FeedbackDtoMapper feedbackDtoMapper;
 	
-	public FeedbackServiceImpl(FeedbackRepository feedbackRepository) {
+	public FeedbackServiceImpl(FeedbackRepository feedbackRepository, FeedbackDtoMapper feedbackDtoMapper) {
 		this.feedbackRepository = feedbackRepository;
+		this.feedbackDtoMapper = feedbackDtoMapper;
 	}
 	
 	@Override
 	public FeedbackDto create(FeedbackDto dto) {
-		return FeedbackDtoMapper.toDto(feedbackRepository.save(FeedbackDtoMapper.fromDto(dto)));
+		return feedbackDtoMapper.toDto(feedbackRepository.save(feedbackDtoMapper.fromDto(dto)));
 	}
 	
 	@Override
 	public void delete(Long id) {
-		feedbackRepository.delete(FeedbackDtoMapper.fromDto(getFeedbackById(id)));
+		feedbackRepository.delete(feedbackDtoMapper.fromDto(getFeedbackById(id)));
 	}
 	
 	@Override
 	public FeedbackDto update(FeedbackDto dto) {
-		return FeedbackDtoMapper.toDto(feedbackRepository.save(FeedbackDtoMapper.fromDto(dto)));
+		return feedbackDtoMapper.toDto(feedbackRepository.save(feedbackDtoMapper.fromDto(dto)));
 	}
 	
 	@Override
 	public FeedbackDto getFeedbackById(Long id) {
-		return FeedbackDtoMapper.toDto(feedbackRepository.findById(id)
+		return feedbackDtoMapper.toDto(feedbackRepository.findById(id)
 				                            .orElseThrow(() -> new EntityNotFoundException("Feedback with id " + id + " not found")));
 	}
 }

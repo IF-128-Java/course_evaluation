@@ -1,5 +1,9 @@
 package ita.softserve.course_evaluation.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +26,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "course_feedback_request")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class FeedbackRequest {
 	
 	@Id
@@ -56,84 +63,6 @@ public class FeedbackRequest {
 			joinColumns = @JoinColumn(name = "feedback_request_id"),
 			inverseJoinColumns = @JoinColumn(name = "question_id"))
 	private List<Question> questions = new ArrayList<>();
-	
-	
-	public FeedbackRequest() {
-	}
-	
-	public FeedbackRequest(Long id, String feedbackDescription, LocalDateTime startDate, LocalDateTime endDate, Long duration, Course course, List<Question> questions) {
-		this.id = id;
-		this.feedbackDescription = feedbackDescription;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.duration = duration;
-		this.course = course;
-		this.questions = questions;
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public String getFeedbackDescription() {
-		return feedbackDescription;
-	}
-	
-	public void setFeedbackDescription(String feedbackDescription) {
-		this.feedbackDescription = feedbackDescription;
-	}
-	
-	public LocalDateTime getStartDate() {
-		return startDate;
-	}
-	
-	public void setStartDate(LocalDateTime startDate) {
-		this.startDate = startDate;
-	}
-	
-	public LocalDateTime getEndDate() {
-		return endDate;
-	}
-	
-	public void setEndDate(LocalDateTime endDate) {
-		this.endDate = endDate;
-	}
-	
-	public Long getDuration() {
-		return duration;
-	}
-	
-	public void setDuration(Long duration) {
-		this.duration = duration;
-	}
-	
-	public Course getCourse() {
-		return course;
-	}
-	
-	public void setCourse(Course courseId) {
-		this.course = courseId;
-	}
-	
-	public List<Feedback> getFeedbacks() {
-		return feedbacks;
-	}
-	
-	public void setFeedbacks(List<Feedback> feedbacks) {
-		this.feedbacks = feedbacks;
-	}
-	
-	public List<Question> getQuestions() {
-		return questions;
-	}
-	
-	public void setQuestions(List<Question> questions) {
-		this.questions = questions;
-	}
 	
 	@Override
 	public boolean equals(Object o) {

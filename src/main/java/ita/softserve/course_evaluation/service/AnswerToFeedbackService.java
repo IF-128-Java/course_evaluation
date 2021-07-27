@@ -7,8 +7,12 @@ import java.util.List;
 public interface AnswerToFeedbackService {
 
     List<AnswerDto> getAllAnswer();
+    
+    List<AnswerDto> getAllAnswerByFeedbackId(Long id);
 
     AnswerDto saveAnswer(AnswerDto answer);
+    
+    List<AnswerDto> saveAnswers(List<AnswerDto> answer);
 
     AnswerDto findAnswerById(long id);
 

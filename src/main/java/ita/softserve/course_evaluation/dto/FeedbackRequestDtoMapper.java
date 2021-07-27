@@ -6,6 +6,7 @@ import ita.softserve.course_evaluation.entity.Question;
 import ita.softserve.course_evaluation.repository.QuestionRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,7 @@ public class FeedbackRequestDtoMapper {
 	}
 	
 	public static FeedbackRequestDto toDto(FeedbackRequest feedbackRequest) {
-		List<Long> questionIds = feedbackRequest.getQuestions().stream().map((question) -> question.getId())
+		List<Long> questionIds = feedbackRequest.getQuestions().stream().map(Question::getId)
 				                         .collect(Collectors.toList());
 		return new FeedbackRequestDto(feedbackRequest.getId(), feedbackRequest.getFeedbackDescription(), feedbackRequest.getStartDate(), feedbackRequest.getEndDate(), feedbackRequest.getDuration(), feedbackRequest.getCourse().getId(), questionIds);
 	}
@@ -41,8 +42,8 @@ public class FeedbackRequestDtoMapper {
 		if (dto != null) {
 			List<Question> list = questionRepository.findAllById(dto.getQuestionIds());
 			Course course = new Course();
-			course.setId(dto.getId());
-			feedbackRequest = new FeedbackRequest(dto.getId(), dto.getFeedbackDescription(), dto.getStartDate(), dto.getEndDate(), dto.getDuration(), course, list);
+			course.setId(dto.getCourse());
+			feedbackRequest = new FeedbackRequest(dto.getId(), dto.getFeedbackDescription(), dto.getStartDate(), dto.getEndDate(), dto.getDuration(), course, new ArrayList<>(), list);
 		}
 		return feedbackRequest;
 	}
