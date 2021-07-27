@@ -1,67 +1,24 @@
 package ita.softserve.course_evaluation.dto;
 
-import java.sql.Timestamp;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
-public class FeedbackDto extends AbstractDto {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class FeedbackDto {
 	
 	private Long id;
 	private LocalDateTime date;
 	private String comment;
 	private Long studentId;
 	private Long feedbackRequestId;
-	
-	public FeedbackDto() {
-	}
-	
-	public FeedbackDto(Long id, LocalDateTime date, String comment, Long studentId, Long feedbackRequestId) {
-		this.id = id;
-		this.date = date;
-		this.comment = comment;
-		this.studentId = studentId;
-		this.feedbackRequestId = feedbackRequestId;
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public LocalDateTime getDate() {
-		return date;
-	}
-	
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
-	
-	public String getComment() {
-		return comment;
-	}
-	
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-	
-	public Long getStudentId() {
-		return studentId;
-	}
-	
-	public void setStudentId(Long studentId) {
-		this.studentId = studentId;
-	}
-	
-	public Long getFeedbackRequestId() {
-		return feedbackRequestId;
-	}
-	
-	public void setFeedbackRequestId(Long feedbackRequestId) {
-		this.feedbackRequestId = feedbackRequestId;
-	}
+	private List<AnswerDto> answers;
 	
 	@Override
 	public boolean equals(Object o) {
@@ -84,6 +41,7 @@ public class FeedbackDto extends AbstractDto {
 				       ", comment='" + comment + '\'' +
 				       ", studentId=" + studentId +
 				       ", feedbackRequestId=" + feedbackRequestId +
+				       ", answers=" + answers +
 				       '}';
 	}
 }

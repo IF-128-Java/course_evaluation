@@ -1,6 +1,10 @@
 package ita.softserve.course_evaluation.entity;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,6 +21,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "course_feedback")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Feedback {
 	
 	@Id
@@ -36,56 +43,6 @@ public class Feedback {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "feedback_request_id")
 	private FeedbackRequest feedbackRequest;
-	
-	public Feedback() {
-	}
-	
-	public Feedback(Long id, LocalDateTime date, String comment, User student) {
-		this.id = id;
-		this.date = date;
-		this.comment = comment;
-		this.student = student;
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public LocalDateTime getDate() {
-		return date;
-	}
-	
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
-	
-	public String getComment() {
-		return comment;
-	}
-	
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-	
-	public User getStudent() {
-		return student;
-	}
-	
-	public void setStudent(User student) {
-		this.student = student;
-	}
-	
-	public FeedbackRequest getFeedbackRequest() {
-		return feedbackRequest;
-	}
-	
-	public void setFeedbackRequest(FeedbackRequest feedbackRequest) {
-		this.feedbackRequest = feedbackRequest;
-	}
 	
 	@Override
 	public boolean equals(Object o) {
