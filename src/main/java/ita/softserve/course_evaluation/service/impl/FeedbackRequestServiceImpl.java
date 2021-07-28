@@ -2,36 +2,41 @@ package ita.softserve.course_evaluation.service.impl;
 
 import ita.softserve.course_evaluation.dto.FeedbackRequestDto;
 import ita.softserve.course_evaluation.dto.FeedbackRequestDtoMapper;
+import ita.softserve.course_evaluation.entity.Question;
 import ita.softserve.course_evaluation.repository.FeedbackRequestRepository;
+import ita.softserve.course_evaluation.repository.QuestionRepository;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	
 	private final FeedbackRequestRepository feedbackRequestRepository;
-	private final FeedbackRequestDtoMapper feedbackRequestDtoMapper;
+	private final QuestionRepository questionRepository;
 	
-	public FeedbackRequestServiceImpl(FeedbackRequestRepository feedbackRequestRepository, FeedbackRequestDtoMapper feedbackRequestDtoMapper) {
+	public FeedbackRequestServiceImpl(FeedbackRequestRepository feedbackRequestRepository, QuestionRepository questionRepository) {
 		this.feedbackRequestRepository = feedbackRequestRepository;
-		this.feedbackRequestDtoMapper = feedbackRequestDtoMapper;
+		this.questionRepository = questionRepository;
 	}
 	
 	@Override
 	public FeedbackRequestDto create(FeedbackRequestDto dto) {
-		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.save(feedbackRequestDtoMapper.fromDto(dto)));
+		List<Question> questions = questionRepository.findAllById(dto.getQuestionIds());
+		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.save(FeedbackRequestDtoMapper.fromDto(dto, questions)));
 	}
 	
 	@Override
 	public FeedbackRequestDto update(FeedbackRequestDto dto) {
-		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.save(feedbackRequestDtoMapper.fromDto(dto)));
+		List<Question> questions = questionRepository.findAllById(dto.getQuestionIds());
+		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.save(FeedbackRequestDtoMapper.fromDto(dto, questions)));
 	}
 	
 	@Override
 	public void delete(Long id) {
-		feedbackRequestRepository.delete(feedbackRequestDtoMapper.fromDto(getFeedbackRequestById(id)));
+		feedbackRequestRepository.deleteById(id);
 	}
 	
 	@Override
