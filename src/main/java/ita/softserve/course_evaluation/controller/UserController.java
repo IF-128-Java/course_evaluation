@@ -28,7 +28,7 @@ public class UserController {
 		this.userService = userService;
 	}
 	
-	@GetMapping
+	@GetMapping("/")
 	public ResponseEntity<List<UserDto>> read() {
 		final List<UserDto> users = userService.readAll();
 		
