@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class UserController {
 	}
 
 
-	@GetMapping(value="user/")
+	@GetMapping
 	public ResponseEntity<UserDto> readByName(@RequestParam String name){
 
 		return new ResponseEntity<>(userService.readByFirstName(name), HttpStatus.OK);
