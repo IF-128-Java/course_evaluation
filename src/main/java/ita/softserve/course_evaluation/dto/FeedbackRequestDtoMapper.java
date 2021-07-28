@@ -13,7 +13,7 @@ public class FeedbackRequestDtoMapper {
 	public static FeedbackRequestDto toDto(FeedbackRequest feedbackRequest) {
 		List<Long> questionIds = feedbackRequest.getQuestions().stream().map(Question::getId)
 				                         .collect(Collectors.toList());
-		return new FeedbackRequestDto(feedbackRequest.getId(), feedbackRequest.getFeedbackDescription(), feedbackRequest.getStartDate(), feedbackRequest.getEndDate(), feedbackRequest.getDuration(), feedbackRequest.getCourse().getId(), questionIds);
+		return new FeedbackRequestDto(feedbackRequest.getId(), feedbackRequest.getFeedbackDescription(), feedbackRequest.getStartDate(), feedbackRequest.getEndDate(), feedbackRequest.getCourse().getId(), questionIds);
 	}
 	
 	public static FeedbackRequest fromDto(FeedbackRequestDto dto, List<Question> questions) {
@@ -21,7 +21,7 @@ public class FeedbackRequestDtoMapper {
 		if (dto != null) {
 			Course course = new Course();
 			course.setId(dto.getCourse());
-			feedbackRequest = new FeedbackRequest(dto.getId(), dto.getFeedbackDescription(), dto.getStartDate(), dto.getEndDate(), dto.getDuration(), course, new ArrayList<>(), questions);
+			feedbackRequest = new FeedbackRequest(dto.getId(), dto.getFeedbackDescription(), dto.getStartDate(), dto.getEndDate(), 0L, course, new ArrayList<>(), questions);
 		}
 		return feedbackRequest;
 	}
