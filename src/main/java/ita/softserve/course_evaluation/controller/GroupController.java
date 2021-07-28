@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/groups")
+@RequestMapping("/api/v1/groups")
 public class GroupController {
 
 
@@ -28,7 +28,7 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    @GetMapping(value = "")
+    @GetMapping
     public ResponseEntity<List<GroupDto>> getAllGroups() {
 
         final List<GroupDto> groups = groupService.getAll();
@@ -39,7 +39,7 @@ public class GroupController {
     }
 
 
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<GroupDto> getGroupById(@PathVariable("id") long id) {
 
         if (id == 0) {
@@ -58,7 +58,7 @@ public class GroupController {
     public ResponseEntity<GroupDto> deleteGroup(@PathVariable long id) {
         final GroupDto group = groupService.getById(id);
 
-        if(group == null) {
+        if (group == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -66,7 +66,7 @@ public class GroupController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<GroupDto> addGroup(@RequestBody GroupDto groupdto) {
 
         if (groupdto == null) {
@@ -80,7 +80,7 @@ public class GroupController {
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("")
+    @PutMapping
     public ResponseEntity<GroupDto> updateGroup(@RequestBody GroupDto groupdto) {
 
         if (groupdto == null) {
