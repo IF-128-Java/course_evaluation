@@ -26,7 +26,7 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<QuestionDto>> getAllQuestions() {
         final List<QuestionDto> questions = questionService.getAllQuestion();
         return questions != null && !questions.isEmpty()
@@ -34,7 +34,7 @@ public class QuestionController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Question> addQuestion(@RequestBody QuestionDto question) {
         return new ResponseEntity<>(questionService.saveQuestion(question),
                 HttpStatus.CREATED);
