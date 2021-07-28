@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/answers")
+@RequestMapping("api/v1/answers")
 public class AnswerToFeedbackController {
 
     private final AnswerToFeedbackService answerService;
@@ -27,7 +27,7 @@ public class AnswerToFeedbackController {
         this.answerService = answerService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<AnswerDto>> getAllAnswers() {
         final List<AnswerDto> answerList = answerService.getAllAnswer();
         return answerList != null && !answerList.isEmpty()
@@ -35,7 +35,7 @@ public class AnswerToFeedbackController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<AnswerDto> addAnswer(AnswerDto answerDto) {
         return new ResponseEntity<>(answerService.saveAnswer(answerDto), HttpStatus.CREATED);
     }
