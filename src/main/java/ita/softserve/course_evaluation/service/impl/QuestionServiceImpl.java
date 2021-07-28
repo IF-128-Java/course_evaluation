@@ -49,7 +49,7 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionDto updateQuestion(QuestionDto questionDto, long id) {
         QuestionDto existingQuestionDto = findQuestionById(id);
         existingQuestionDto.setQuestionText(questionDto.getQuestionText());
-        existingQuestionDto.setPattern(questionDto.getPattern());
+        existingQuestionDto.setPattern(questionDto.isPattern());
         questionRepository.save(QuestionDtoMapper.fromDto(existingQuestionDto));
         return existingQuestionDto;
     }
