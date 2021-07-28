@@ -3,6 +3,7 @@ package ita.softserve.course_evaluation.dto;
 import ita.softserve.course_evaluation.entity.Question;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class QuestionDtoMapper {
@@ -16,7 +17,9 @@ public class QuestionDtoMapper {
     }
 
     public static List<Question> fromDto(List<QuestionDto> questionDto) {
-        return questionDto.stream()
+        return Objects.isNull(questionDto)
+                ? null
+                : questionDto.stream()
                 .map(QuestionDtoMapper::fromDto)
                 .collect(Collectors.toList());
     }
@@ -30,7 +33,9 @@ public class QuestionDtoMapper {
     }
 
     public static List<QuestionDto> toDto(List<Question> question) {
-        return question.stream()
+        return Objects.isNull(question)
+                ? null
+                : question.stream()
                 .map(QuestionDtoMapper::toDto)
                 .collect(Collectors.toList());
     }

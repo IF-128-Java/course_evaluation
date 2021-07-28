@@ -2,6 +2,7 @@ package ita.softserve.course_evaluation.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -15,6 +16,7 @@ import java.util.Collections;
 @Configuration
 @EnableSwagger2
 public class SpringFoxConfig {
+
 
     @Bean
     public Docket api() {

@@ -5,6 +5,7 @@ import ita.softserve.course_evaluation.entity.Feedback;
 import ita.softserve.course_evaluation.entity.Question;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class AnswerDtoMapper {
@@ -22,7 +23,9 @@ public class AnswerDtoMapper {
     }
 
     public static List<AnswerToFeedback> fromDto(List<AnswerDto> answerDtoList) {
-        return answerDtoList == null ? null : answerDtoList.stream()
+        return Objects.isNull(answerDtoList)
+                ? null
+                : answerDtoList.stream()
                 .map(AnswerDtoMapper::fromDto)
                 .collect(Collectors.toList());
     }
@@ -36,7 +39,9 @@ public class AnswerDtoMapper {
     }
 
     public static List<AnswerDto> toDto(List<AnswerToFeedback> answerList) {
-        return answerList.stream()
+        return Objects.isNull(answerList)
+                ? null
+                : answerList.stream()
                 .map(AnswerDtoMapper::toDto)
                 .collect(Collectors.toList());
     }
