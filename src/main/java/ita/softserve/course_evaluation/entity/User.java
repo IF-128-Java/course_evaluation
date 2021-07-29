@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
@@ -49,6 +50,9 @@ public class User {
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
 	private List<Feedback> feedbacks = new ArrayList<>();
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Group group;
 
 	public User(Long id, String firstName, String lastName, String email, String password) {
 		this.id = id;
