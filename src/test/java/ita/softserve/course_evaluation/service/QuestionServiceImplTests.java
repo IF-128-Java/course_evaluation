@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -104,7 +105,7 @@ public class QuestionServiceImplTests {
     public void testExceptionFindQuestionById(){
         when(questionRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        Throwable exception = assertThrows(RuntimeException.class, () -> questionService.findQuestionById(anyLong()));
+        Throwable exception = assertThrows(EntityNotFoundException.class, () -> questionService.findQuestionById(anyLong()));
 
         assertEquals(String.format("Question was not found for id: %d", 0), exception.getMessage());
 
