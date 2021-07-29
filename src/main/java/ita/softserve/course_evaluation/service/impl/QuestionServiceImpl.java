@@ -8,6 +8,7 @@ import ita.softserve.course_evaluation.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionDto findQuestionById(long id) {
         return QuestionDtoMapper.toDto(questionRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Question was not found for id: " + id)));
+                        new EntityNotFoundException("Question was not found for id: " + id)));
     }
 
     @Override

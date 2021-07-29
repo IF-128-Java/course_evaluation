@@ -56,5 +56,4 @@ public class CourseServiceImpl implements CourseService {
         List<CourseDto> courses = CourseDtoMapper.toDto(courseRepository.findAll());
         return Objects.isNull(courses) ? Collections.emptyList() : courses;
     }
-
 }
