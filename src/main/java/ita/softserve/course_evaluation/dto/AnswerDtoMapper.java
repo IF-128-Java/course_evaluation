@@ -15,8 +15,8 @@ public class AnswerDtoMapper {
         if (dto != null) {
             Question question = new Question();
             Feedback feedback = new Feedback();
-            feedback.setId(dto.getFeedback());
-            question.setId(dto.getQuestion());
+            feedback.setId(dto.getFeedbackId());
+            question.setId(dto.getQuestionId());
             answer = new AnswerToFeedback(dto.getId(), dto.getRate(), question, feedback);
         }
         return answer;

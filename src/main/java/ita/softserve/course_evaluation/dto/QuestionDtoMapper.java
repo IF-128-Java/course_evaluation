@@ -12,7 +12,7 @@ public class QuestionDtoMapper {
         Question question = new Question();
         question.setId(questionDto.getId());
         question.setQuestionText(questionDto.getQuestionText());
-        question.setPattern(questionDto.getPattern());
+        question.setPattern(questionDto.isPattern());
         return question;
     }
 

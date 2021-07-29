@@ -56,8 +56,4 @@ public class Course implements Serializable {
     @JoinColumn(name = "teacher_id", nullable = false)
     @Getter @Setter
     private User user;
-
-
-
 }
-
