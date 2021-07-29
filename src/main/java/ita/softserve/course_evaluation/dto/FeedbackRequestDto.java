@@ -17,7 +17,6 @@ public class FeedbackRequestDto {
 	private String feedbackDescription;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
-	private Long duration;
 	private Long course;
 	private List<Long> questionIds;
 	
@@ -26,12 +25,12 @@ public class FeedbackRequestDto {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		FeedbackRequestDto that = (FeedbackRequestDto) o;
-		return Objects.equals(id, that.id) && Objects.equals(feedbackDescription, that.feedbackDescription) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(duration, that.duration) && Objects.equals(course, that.course);
+		return Objects.equals(id, that.id) && Objects.equals(feedbackDescription, that.feedbackDescription) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(course, that.course);
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, feedbackDescription, startDate, endDate, duration, course);
+		return Objects.hash(id, feedbackDescription, startDate, endDate, course);
 	}
 	
 	@Override
@@ -41,7 +40,6 @@ public class FeedbackRequestDto {
 				       ", feedbackDescription='" + feedbackDescription + '\'' +
 				       ", startDate=" + startDate +
 				       ", endDate=" + endDate +
-				       ", duration=" + duration +
 				       ", course=" + course +
 				       ", questionIds=" + questionIds +
 				       '}';
