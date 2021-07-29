@@ -34,7 +34,7 @@ public class Group {
     @OneToMany(mappedBy = "group", orphanRemoval = false)
     private List<User> users = new ArrayList<>();
 
-    @ManyToMany (cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(
             name = "course_group",
             joinColumns = @JoinColumn(name = "group_id"),
