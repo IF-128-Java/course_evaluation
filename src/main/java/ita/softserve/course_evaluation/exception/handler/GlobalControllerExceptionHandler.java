@@ -8,17 +8,19 @@ import ita.softserve.course_evaluation.exception.dto.GenericExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.persistence.EntityNotFoundException;
 
 @Slf4j
 @RestControllerAdvice
-public class GlobalControllerExceptionHandler {
+public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({CourseNotFoundException.class})
     public ResponseEntity<GenericExceptionResponse> handleCourseNotFoundException(CourseNotFoundException exception) {
@@ -28,6 +30,7 @@ public class GlobalControllerExceptionHandler {
                 .status(HttpStatus.NOT_FOUND.value())
                 .error(exception.getClass().getSimpleName())
                 .build();
+        log.trace(exception.getMessage(), exception);
 
         return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
     }
@@ -72,7 +75,7 @@ public class GlobalControllerExceptionHandler {
     }
 
     @ExceptionHandler({AccessDeniedException.class})
-//    @MessageExceptionHandler({AccessDeniedException.class})
+    @MessageExceptionHandler({AccessDeniedException.class})
     public ResponseEntity<GenericExceptionResponse> handleAccessDeniedException(AccessDeniedException exception) {
 
         GenericExceptionResponse dto = GenericExceptionResponse.builder()

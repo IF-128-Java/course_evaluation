@@ -1,6 +1,9 @@
 package ita.softserve.course_evaluation.configuration;
 
+import ita.softserve.course_evaluation.exception.handler.ExceptionHandlerFilter;
 import ita.softserve.course_evaluation.security.jwt.JwtConfigurer;
+import ita.softserve.course_evaluation.security.jwt.JwtTokenFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private final JwtConfigurer jwtConfigurer;
-	
+
 	public SecurityConfig(JwtConfigurer jwtConfigurer) {
 		this.jwtConfigurer = jwtConfigurer;
 	}
