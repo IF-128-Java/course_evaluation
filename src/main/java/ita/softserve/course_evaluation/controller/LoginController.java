@@ -3,6 +3,7 @@ package ita.softserve.course_evaluation.controller;
 import ita.softserve.course_evaluation.dto.AuthenticateRequestDto;
 import ita.softserve.course_evaluation.dto.SimpleUserDto;
 import ita.softserve.course_evaluation.service.AuthService;
+import ita.softserve.course_evaluation.swagger.api.LoginApi;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("api/v1/auth")
-public class LoginController {
+public class LoginController implements LoginApi {
 	
 	private final AuthService authService;
 	

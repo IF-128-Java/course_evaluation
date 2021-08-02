@@ -2,6 +2,7 @@ package ita.softserve.course_evaluation.controller;
 
 import ita.softserve.course_evaluation.dto.AnswerDto;
 import ita.softserve.course_evaluation.service.AnswerToFeedbackService;
+import ita.softserve.course_evaluation.swagger.api.AnswerApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/answers")
-public class AnswerToFeedbackController {
+public class AnswerToFeedbackController implements AnswerApi {
 
     private final AnswerToFeedbackService answerService;
 

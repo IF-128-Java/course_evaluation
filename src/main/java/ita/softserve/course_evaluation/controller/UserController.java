@@ -2,6 +2,7 @@ package ita.softserve.course_evaluation.controller;
 
 import ita.softserve.course_evaluation.dto.UserDto;
 import ita.softserve.course_evaluation.service.UserService;
+import ita.softserve.course_evaluation.swagger.api.UserApi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -20,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/users")
-public class UserController {
+public class UserController implements UserApi {
 	
 	private final UserService userService;
 	

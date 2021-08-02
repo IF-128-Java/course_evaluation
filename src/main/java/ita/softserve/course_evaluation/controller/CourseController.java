@@ -3,6 +3,7 @@ package ita.softserve.course_evaluation.controller;
 import ita.softserve.course_evaluation.dto.CourseDto;
 import ita.softserve.course_evaluation.entity.Course;
 import ita.softserve.course_evaluation.service.CourseService;
+import ita.softserve.course_evaluation.swagger.api.CourseApi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +20,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("api/v1/courses/")
-public class CourseController {
+public class CourseController implements CourseApi {
     private final CourseService courseService;
 
     public CourseController(CourseService courseService) { this.courseService = courseService; }

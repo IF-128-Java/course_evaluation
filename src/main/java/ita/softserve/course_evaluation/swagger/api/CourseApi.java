@@ -1,78 +1,69 @@
 package ita.softserve.course_evaluation.swagger.api;
 
-
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import ita.softserve.course_evaluation.constants.HttpStatuses;
-import ita.softserve.course_evaluation.dto.QuestionDto;
-import ita.softserve.course_evaluation.entity.Question;
-import org.springframework.http.HttpStatus;
+import ita.softserve.course_evaluation.dto.AnswerDto;
+import ita.softserve.course_evaluation.dto.CourseDto;
+import ita.softserve.course_evaluation.entity.Course;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@Api(tags = "Question service REST API")
+@Api(tags = "Course service REST API")
 @ApiResponses({
         @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND),
         @ApiResponse(code = 500, message = HttpStatuses.INTERNAL_SERVER_ERROR)
 })
-public interface QuestionApi {
+public interface CourseApi {
 
-    @ApiOperation("Get All Questions List")
+    @ApiOperation(value = "Create new Course")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = HttpStatuses.OK, response = QuestionDto.class),
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = AnswerDto.class),
             @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
     })
-    @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<List<QuestionDto>> getAllQuestions();
+    ResponseEntity<Course> addCourse(@RequestBody CourseDto courseDto);
 
-    @ApiOperation("Create new Question")
+    @ApiOperation(value = "Get course by Id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = HttpStatuses.OK, response = QuestionDto.class),
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = AnswerDto.class),
             @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
     })
-    @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<Question> addQuestion(@ApiParam(value = "Need question in json format")
-                                         @RequestBody QuestionDto question);
+    ResponseEntity<CourseDto> getCourseById(@PathVariable int id);
 
-    @ApiOperation("Get Question by Id")
+    @ApiOperation(value = "Get All Courses List")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = HttpStatuses.OK, response = QuestionDto.class),
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = AnswerDto.class),
             @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
     })
-    @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<QuestionDto> getQuestionById(@PathVariable("id") long questionId);
+    ResponseEntity<List<CourseDto>> getCourses();
 
-    @ApiOperation("Update Question")
+    @ApiOperation(value = "Update Course")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = HttpStatuses.OK, response = QuestionDto.class),
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = AnswerDto.class),
             @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
     })
-    @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<QuestionDto> updateQuestion(@PathVariable("id") long id
-            , @RequestBody QuestionDto question);
+    ResponseEntity<CourseDto> updateCourse(@PathVariable int id, @RequestBody CourseDto courseDto);
 
-    @ApiOperation("Delete Question")
+    @ApiOperation(value = "Delete Course by Id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = HttpStatuses.OK, response = QuestionDto.class),
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = AnswerDto.class),
             @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
     })
-    ResponseEntity<String> deleteQuestion(@PathVariable("id") long id);
+    void deleteCourse(@PathVariable int id);
 
 }

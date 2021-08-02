@@ -2,6 +2,7 @@ package ita.softserve.course_evaluation.controller;
 
 import ita.softserve.course_evaluation.dto.FeedbackRequestDto;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
+import ita.softserve.course_evaluation.swagger.api.FeedbackRequestApi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v1/feedback_request")
-public class FeedbackRequestController {
+public class FeedbackRequestController implements FeedbackRequestApi {
 	
 	private final FeedbackRequestService feedbackRequestService;
 	
