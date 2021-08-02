@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 })
 public interface LoginApi {
 
-    @ApiOperation(value = "Authenticate user", tags = "Authenticate")
+    @ApiOperation(value = "Authenticate user")
     ResponseEntity<?> authenticate(@RequestBody AuthenticateRequestDto request);
 
     @ApiOperation(value = "Logout")

@@ -27,7 +27,7 @@ public interface GroupApi {
     @ApiOperation(value = "Get All Group List")
     ResponseEntity<List<GroupDto>> getAllGroups();
 
-    @ApiOperation(value = "Get Group by Id", tags = "Group by ID")
+    @ApiOperation(value = "Get Group by Id")
     ResponseEntity<GroupDto> getGroupById(@PathVariable("id") long id);
 
     @ApiOperation(value = "Delete Group")
