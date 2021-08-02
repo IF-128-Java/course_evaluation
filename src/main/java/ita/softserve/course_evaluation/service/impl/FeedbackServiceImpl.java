@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	
 	@Override
 	public FeedbackDto create(FeedbackDto dto) {
+		dto.setDate(LocalDateTime.now());
 		List<AnswerDto> answers = dto.getAnswers();
 		List<Long> longsIds = questionRepository.findAllQuestionIdsByFeedbackRequest(dto.getFeedbackRequestId());
 		Feedback feedbackFromDb = feedbackRepository.save(FeedbackDtoMapper.fromDto(dto));
