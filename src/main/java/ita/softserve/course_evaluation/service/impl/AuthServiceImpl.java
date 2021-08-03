@@ -2,7 +2,7 @@ package ita.softserve.course_evaluation.service.impl;
 
 import ita.softserve.course_evaluation.dto.AuthenticateRequestDto;
 import ita.softserve.course_evaluation.dto.SimpleUserDto;
-import ita.softserve.course_evaluation.dto.SimpleUserDtoMapper;
+import ita.softserve.course_evaluation.dto.SimpleUserDtoResponseMapper;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.security.jwt.JwtTokenProvider;
@@ -25,8 +25,8 @@ public class AuthServiceImpl implements AuthService {
 	
 	private final AuthenticationManager authenticationManager;
 	private final PasswordEncoder passwordEncoder;
-	private UserRepository userRepository;
-	private JwtTokenProvider jwtTokenProvider;
+	private final UserRepository userRepository;
+	private final JwtTokenProvider jwtTokenProvider;
 	
 	public AuthServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
 		this.authenticationManager = authenticationManager;
@@ -59,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
 			user.setFirstName(dto.getFirstName());
 			user.setLastName(dto.getLastName());
 			userRepository.save(user);
-			return ResponseEntity.ok(SimpleUserDtoMapper.toDto(user));
+			return ResponseEntity.ok(SimpleUserDtoResponseMapper.toDto(user));
 		}
 		return new ResponseEntity<>("User exist", HttpStatus.BAD_REQUEST);
 	}
