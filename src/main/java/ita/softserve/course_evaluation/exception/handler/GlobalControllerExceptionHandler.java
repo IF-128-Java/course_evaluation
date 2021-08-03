@@ -58,7 +58,6 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
         return new ResponseEntity<>(dto, HttpStatus.UNAUTHORIZED);
     }
 
-
     @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<GenericExceptionResponse> handleAuthException(AuthenticationException exception) {
 
@@ -97,7 +96,6 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
         return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
     }
 
-
     @ExceptionHandler({EntityNotFoundException.class})
     public ResponseEntity<GenericExceptionResponse> handleEntityNotFoundException(EntityNotFoundException exception) {
 
@@ -108,18 +106,6 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
                 .build();
 
         return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler({Exception.class})
-    public ResponseEntity<GenericExceptionResponse> handleAllException(Exception exception) {
-
-        GenericExceptionResponse dto = GenericExceptionResponse.builder()
-                .message(exception.getMessage())
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .error(exception.getClass().getSimpleName())
-                .build();
-
-        return new ResponseEntity<>(dto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler({UsernameNotFoundException.class})

@@ -3,6 +3,7 @@ package ita.softserve.course_evaluation.exception.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import ita.softserve.course_evaluation.exception.JwtAuthenticationException;
 import ita.softserve.course_evaluation.exception.dto.GenericExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,12 +27,12 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         log.info("Exception Handler Filter invoke");
         try {
             filterChain.doFilter(request, response);
-        } catch (Exception e) {
+        } catch (JwtAuthenticationException exception) {
 
             GenericExceptionResponse errorResponse = GenericExceptionResponse.builder()
-                    .message(e.getMessage())
+                    .message(exception.getMessage())
                     .status(HttpStatus.FORBIDDEN.value())
-                    .error(e.getClass().getSimpleName())
+                    .error(exception.getClass().getSimpleName())
                     .build();
 
             response.setStatus(HttpStatus.FORBIDDEN.value());
