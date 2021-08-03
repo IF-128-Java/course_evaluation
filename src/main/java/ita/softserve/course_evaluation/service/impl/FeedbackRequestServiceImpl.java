@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FeedbackRequestServiceImpl implements FeedbackRequestService {
@@ -24,13 +25,26 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	
 	@Override
 	public FeedbackRequestDto create(FeedbackRequestDto dto) {
-		List<Question> questions = questionRepository.findAllById(dto.getQuestionIds());
+		List<Question> questions = getQuestions(dto);
 		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.save(FeedbackRequestDtoMapper.fromDto(dto, questions)));
+	}
+	
+	private List<Question> getQuestions(FeedbackRequestDto dto) {
+		List<Question> questions = questionRepository.findAllById(dto.getQuestionIds())
+				                           .stream()
+				                           .filter(question -> !question.isPattern())
+				                           .collect(Collectors.toList());
+		List<Question> isPattern = questionRepository.findAll()
+				                           .stream()
+				                           .filter(Question::isPattern)
+				                           .collect(Collectors.toList());
+		questions.addAll(isPattern);
+		return questions;
 	}
 	
 	@Override
 	public FeedbackRequestDto update(FeedbackRequestDto dto) {
-		List<Question> questions = questionRepository.findAllById(dto.getQuestionIds());
+		List<Question> questions = getQuestions(dto);
 		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.save(FeedbackRequestDtoMapper.fromDto(dto, questions)));
 	}
 	
