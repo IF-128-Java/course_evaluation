@@ -32,7 +32,7 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourseDto> getCourseById(@PathVariable int id) {
+    public ResponseEntity<CourseDto> getCourseById(@PathVariable long id) {
         return Objects.isNull(courseService.getById(id)) ?
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
                 ResponseEntity.status(HttpStatus.OK).body(courseService.getById(id));
@@ -47,7 +47,8 @@ public class CourseController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<CourseDto> updateCourse(@PathVariable int id, @RequestBody CourseDto courseDto) {
+    public ResponseEntity<CourseDto> updateCourse(@PathVariable long id, @RequestBody CourseDto courseDto) {
+        courseDto.setId(id);
         return Objects.isNull(courseService.editCourse(courseDto)) ?
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
                 ResponseEntity.status(HttpStatus.OK).body(courseService.editCourse(courseDto));
@@ -55,7 +56,7 @@ public class CourseController {
 
 
     @DeleteMapping("/{id}")
-    public void deleteCourse(@PathVariable int id) {
+    public void deleteCourse(@PathVariable long id) {
         courseService.deleteById(id);
     }
 }
