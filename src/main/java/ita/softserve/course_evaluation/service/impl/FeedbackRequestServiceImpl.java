@@ -2,6 +2,7 @@ package ita.softserve.course_evaluation.service.impl;
 
 import ita.softserve.course_evaluation.dto.FeedbackRequestDto;
 import ita.softserve.course_evaluation.dto.FeedbackRequestDtoMapper;
+import ita.softserve.course_evaluation.entity.FeedbackRequest;
 import ita.softserve.course_evaluation.entity.Question;
 import ita.softserve.course_evaluation.repository.FeedbackRequestRepository;
 import ita.softserve.course_evaluation.repository.QuestionRepository;
@@ -25,27 +26,21 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	
 	@Override
 	public FeedbackRequestDto create(FeedbackRequestDto dto) {
-		List<Question> questions = getQuestions(dto);
-		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.save(FeedbackRequestDtoMapper.fromDto(dto, questions)));
+		FeedbackRequest feedbackRequest = FeedbackRequestDtoMapper.fromDto(dto);
+		feedbackRequest.setQuestions(getPatternQuestions());
+		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.save(feedbackRequest));
 	}
 	
-	private List<Question> getQuestions(FeedbackRequestDto dto) {
-		List<Question> questions = questionRepository.findAllById(dto.getQuestionIds())
-				                           .stream()
-				                           .filter(question -> !question.isPattern())
-				                           .collect(Collectors.toList());
-		List<Question> isPattern = questionRepository.findAll()
-				                           .stream()
-				                           .filter(Question::isPattern)
-				                           .collect(Collectors.toList());
-		questions.addAll(isPattern);
-		return questions;
+	private List<Question> getPatternQuestions() {
+		return questionRepository.findAll()
+				       .stream()
+				       .filter(Question::isPattern)
+				       .collect(Collectors.toList());
 	}
 	
 	@Override
 	public FeedbackRequestDto update(FeedbackRequestDto dto) {
-		List<Question> questions = getQuestions(dto);
-		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.save(FeedbackRequestDtoMapper.fromDto(dto, questions)));
+		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.save(FeedbackRequestDtoMapper.fromDto(dto)));
 	}
 	
 	@Override
@@ -56,6 +51,6 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	@Override
 	public FeedbackRequestDto getFeedbackRequestById(Long id) {
 		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.findById(id)
-				                                   .orElseThrow(() -> new EntityNotFoundException("Feedback request with id " + id + " not found")));
+				                                      .orElseThrow(() -> new EntityNotFoundException("Feedback request with id " + id + " not found")));
 	}
 }

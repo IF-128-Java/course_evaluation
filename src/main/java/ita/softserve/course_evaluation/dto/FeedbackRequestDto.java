@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
 @Data
@@ -15,10 +16,15 @@ public class FeedbackRequestDto {
 	
 	private Long id;
 	private String feedbackDescription;
+	@NotNull
+	@NotBlank
 	private LocalDateTime startDate;
+	@NotNull
+	@NotBlank
 	private LocalDateTime endDate;
+	@NotNull
+	@NotBlank
 	private Long course;
-	private List<Long> questionIds;
 	
 	@Override
 	public boolean equals(Object o) {
@@ -41,7 +47,6 @@ public class FeedbackRequestDto {
 				       ", startDate=" + startDate +
 				       ", endDate=" + endDate +
 				       ", course=" + course +
-				       ", questionIds=" + questionIds +
 				       '}';
 	}
 }
