@@ -8,7 +8,6 @@ import ita.softserve.course_evaluation.exception.dto.GenericExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -75,7 +74,6 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
     }
 
     @ExceptionHandler({AccessDeniedException.class})
-    @MessageExceptionHandler({AccessDeniedException.class})
     public ResponseEntity<GenericExceptionResponse> handleAccessDeniedException(AccessDeniedException exception) {
 
         GenericExceptionResponse dto = GenericExceptionResponse.builder()
