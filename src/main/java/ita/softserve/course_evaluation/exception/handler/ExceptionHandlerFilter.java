@@ -1,10 +1,12 @@
 package ita.softserve.course_evaluation.exception.handler;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ita.softserve.course_evaluation.exception.dto.GenericExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,31 +19,27 @@ import java.io.IOException;
 @Component
 @Slf4j
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("Exception Handler Filter invoke");
         try {
             filterChain.doFilter(request, response);
-            log.info("doFilterInternal");
         } catch (Exception e) {
-            log.info("inside exception catch block");
-            // custom error response class used across my project
+
             GenericExceptionResponse errorResponse = GenericExceptionResponse.builder()
                     .message(e.getMessage())
                     .status(HttpStatus.FORBIDDEN.value())
                     .error(e.getClass().getSimpleName())
                     .build();
 
-            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            response.getWriter().write(convertObjectToJson(errorResponse));
-        }
-    }
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-    public String convertObjectToJson(Object object) throws JsonProcessingException {
-        if (object == null) {
-            return null;
+            mapper.writeValue(response.getWriter(), errorResponse);
         }
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
     }
 }
