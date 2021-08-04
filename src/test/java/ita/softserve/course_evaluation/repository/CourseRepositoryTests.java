@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -21,20 +20,26 @@ public class CourseRepositoryTests {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Test
     public void testFindByCourseNameIfExists(){
+        User user = new User();
+
         Course course = new Course();
         course.setCourseName("Course Name");
         course.setDescription("Description");
         course.setStartDate(new Date());
         course.setEndDate(new Date());
-        course.setUser(new User());
+        course.setUser(userRepository.save(user));
 
-        Course expected = courseRepository.save(course);
-        List<Course> actual = courseRepository.findByCourseName(expected.getCourseName());
+        courseRepository.save(course);
+        List<Course> expected = List.of(course);
+        List<Course> actual = courseRepository.findByCourseName(course.getCourseName());
 
         assertFalse(actual.isEmpty());
-//        assertEquals(expected, actual.get());
+        assertEquals(expected, actual);
     }
 
     @Test

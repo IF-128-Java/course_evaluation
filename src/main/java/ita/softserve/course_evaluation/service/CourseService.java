@@ -4,7 +4,6 @@ import ita.softserve.course_evaluation.dto.CourseDto;
 import ita.softserve.course_evaluation.entity.Course;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CourseService {
 

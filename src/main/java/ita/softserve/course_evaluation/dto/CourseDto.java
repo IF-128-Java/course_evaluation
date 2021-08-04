@@ -25,7 +25,7 @@ public class CourseDto {
 
     private User user;
 
-    @JsonProperty("user")
+    @JsonProperty("teacher_id")
     private void unpackNested(Long teacher_id) {
         this.user = new User();
         user.setId(teacher_id);
