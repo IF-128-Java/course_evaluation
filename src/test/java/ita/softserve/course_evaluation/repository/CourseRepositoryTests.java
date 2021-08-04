@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,17 +30,17 @@ public class CourseRepositoryTests {
         course.setEndDate(new Date());
         course.setUser(new User());
 
-//        Course expected = courseRepository.save(course);
-//        Optional<Course> actual = courseRepository.findByCourseName(expected.getCourseName());
+        Course expected = courseRepository.save(course);
+        List<Course> actual = courseRepository.findByCourseName(expected.getCourseName());
 
-//        assertTrue(actual.isPresent());
+        assertFalse(actual.isEmpty());
 //        assertEquals(expected, actual.get());
     }
 
     @Test
     public void testFindByCourseNameIfNotExist(){
-        Optional<Course> actual = courseRepository.findByCourseName(StringUtils.EMPTY);
+        List<Course> actual = courseRepository.findByCourseName(StringUtils.EMPTY);
 
-        assertFalse(actual.isPresent());
+        assertTrue(actual.isEmpty());
     }
 }

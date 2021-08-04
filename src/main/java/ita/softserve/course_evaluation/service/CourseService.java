@@ -14,7 +14,7 @@ public interface CourseService {
 
     CourseDto getById(long id);
 
-    Optional<Course> getByName(String name);
+    List<Course> getByName(String name);
 
     CourseDto editCourse(CourseDto courseDto);
 
