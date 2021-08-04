@@ -109,7 +109,7 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
     }
 
     @ExceptionHandler({UsernameNotFoundException.class})
-    public ResponseEntity<GenericExceptionResponse> handleAllException(UsernameNotFoundException exception) {
+    public ResponseEntity<GenericExceptionResponse> handleNotFoundException(UsernameNotFoundException exception) {
 
         GenericExceptionResponse dto = GenericExceptionResponse.builder()
                 .message(exception.getMessage())

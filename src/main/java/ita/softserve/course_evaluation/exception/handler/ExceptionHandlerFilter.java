@@ -8,6 +8,8 @@ import ita.softserve.course_evaluation.exception.dto.GenericExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -27,7 +29,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         log.info("Exception Handler Filter invoke");
         try {
             filterChain.doFilter(request, response);
-        } catch (JwtAuthenticationException exception) {
+        } catch (AuthenticationException | AccessDeniedException exception) {
 
             GenericExceptionResponse errorResponse = GenericExceptionResponse.builder()
                     .message(exception.getMessage())
