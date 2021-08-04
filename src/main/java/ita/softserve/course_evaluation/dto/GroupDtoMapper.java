@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 public class GroupDtoMapper {
 
     private GroupDtoMapper(){
-        new IllegalAccessException("Utility class");
     }
 
     public static GroupDto entityToDto(Group group) {

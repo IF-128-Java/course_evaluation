@@ -18,6 +18,7 @@
         <sonar.projectKey>IF-128-Java_course_evaluation</sonar.projectKey>
         <sonar.organization>if-128-java</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
     </properties>
     <dependencies>
         <dependency>
@@ -50,7 +51,7 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
-            <version>3.0.0</version>
+            <version>${springfox-boot-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
