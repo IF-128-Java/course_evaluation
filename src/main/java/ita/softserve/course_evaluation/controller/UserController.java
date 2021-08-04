@@ -2,7 +2,7 @@ package ita.softserve.course_evaluation.controller;
 
 import ita.softserve.course_evaluation.dto.UserDto;
 import ita.softserve.course_evaluation.service.UserService;
-import ita.softserve.course_evaluation.swagger.api.UserApi;
+import ita.softserve.course_evaluation.api.UserApi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

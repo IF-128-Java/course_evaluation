@@ -1,4 +1,4 @@
-package ita.softserve.course_evaluation.swagger.api;
+package ita.softserve.course_evaluation.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Api(tags = "User service REST API")
 @ApiResponses(value = {
-        @ApiResponse(code = 200, message = HttpStatuses.OK, response = FeedbackDto.class),
+        @ApiResponse(code = 200, message = HttpStatuses.OK, response = UserDto.class),
         @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
         @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
         @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),

@@ -3,7 +3,7 @@ package ita.softserve.course_evaluation.controller;
 import ita.softserve.course_evaluation.dto.QuestionDto;
 import ita.softserve.course_evaluation.entity.Question;
 import ita.softserve.course_evaluation.service.QuestionService;
-import ita.softserve.course_evaluation.swagger.api.QuestionApi;
+import ita.softserve.course_evaluation.api.QuestionApi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;

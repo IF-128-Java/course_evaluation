@@ -2,7 +2,7 @@ package ita.softserve.course_evaluation.controller;
 
 import ita.softserve.course_evaluation.dto.FeedbackDto;
 import ita.softserve.course_evaluation.service.FeedbackService;
-import ita.softserve.course_evaluation.swagger.api.FeedbackApi;
+import ita.softserve.course_evaluation.api.FeedbackApi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

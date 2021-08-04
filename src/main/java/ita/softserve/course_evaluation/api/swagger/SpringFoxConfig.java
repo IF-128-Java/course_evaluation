@@ -1,4 +1,4 @@
-package ita.softserve.course_evaluation.swagger;
+package ita.softserve.course_evaluation.api.swagger;
 
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;

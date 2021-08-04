@@ -4,7 +4,7 @@ import ita.softserve.course_evaluation.dto.GroupDto;
 import ita.softserve.course_evaluation.dto.GroupDtoMapper;
 import ita.softserve.course_evaluation.entity.Group;
 import ita.softserve.course_evaluation.service.GroupService;
-import ita.softserve.course_evaluation.swagger.api.GroupApi;
+import ita.softserve.course_evaluation.api.GroupApi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

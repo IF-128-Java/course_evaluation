@@ -1,4 +1,4 @@
-package ita.softserve.course_evaluation.swagger.api;
+package ita.softserve.course_evaluation.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponses;

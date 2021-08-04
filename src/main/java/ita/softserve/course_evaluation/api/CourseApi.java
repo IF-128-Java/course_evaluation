@@ -1,4 +1,4 @@
-package ita.softserve.course_evaluation.swagger.api;
+package ita.softserve.course_evaluation.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +23,7 @@ public interface CourseApi {
 
     @ApiOperation(value = "Create new Course")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = HttpStatuses.OK, response = AnswerDto.class),
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = CourseDto.class),
             @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
@@ -32,7 +32,7 @@ public interface CourseApi {
 
     @ApiOperation(value = "Get course by Id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = HttpStatuses.OK, response = AnswerDto.class),
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = CourseDto.class),
             @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
@@ -41,7 +41,7 @@ public interface CourseApi {
 
     @ApiOperation(value = "Get All Courses List")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = HttpStatuses.OK, response = AnswerDto.class),
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = CourseDto.class),
             @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
@@ -50,7 +50,7 @@ public interface CourseApi {
 
     @ApiOperation(value = "Update Course")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = HttpStatuses.OK, response = AnswerDto.class),
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = CourseDto.class),
             @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
@@ -59,7 +59,7 @@ public interface CourseApi {
 
     @ApiOperation(value = "Delete Course by Id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = HttpStatuses.OK, response = AnswerDto.class),
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = CourseDto.class),
             @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
