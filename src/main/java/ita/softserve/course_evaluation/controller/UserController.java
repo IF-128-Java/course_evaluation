@@ -39,7 +39,7 @@ public class UserController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDto> readById(@PathVariable(value="id") long id){
-		return new ResponseEntity                                                                                                                                                                                   <>(userService.readById(id),  HttpStatus.OK);
+        return new ResponseEntity<>(userService.readById(id),  HttpStatus.OK);
 	}
 
 
