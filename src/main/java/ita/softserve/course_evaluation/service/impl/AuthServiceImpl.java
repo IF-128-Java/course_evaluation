@@ -40,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 			User user = userRepository.findUserByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
 			String [] roles = user.getRoles().stream().map(Enum::name).toArray(String[]::new);
-			String token = jwtTokenProvider.createToken(request.getEmail(), roles);
+			String token = jwtTokenProvider.createToken(request.getEmail(), user.getId(), roles);
 			Map<Object, Object> response = new HashMap<>();
 			response.put("token", token);
 			return ResponseEntity.ok(response);
