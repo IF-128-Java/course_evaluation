@@ -1,5 +1,6 @@
 package ita.softserve.course_evaluation.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import ita.softserve.course_evaluation.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,4 +24,11 @@ public class CourseDto {
     private Date endDate;
 
     private User user;
+
+    @JsonProperty("teacher_id")
+    private void unpackNested(Long teacher_id) {
+        this.user = new User();
+        user.setId(teacher_id);
+    }
+
 }
