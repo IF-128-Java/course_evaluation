@@ -7,8 +7,17 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+
 public class UserDtoMapper {
-	
+
+
+
+   static final  PasswordEncoder passwordEncoder= new BCryptPasswordEncoder(12);
+
 	
 	public static UserDto toDto(User user) {
 		UserDto dto = new UserDto();
@@ -18,6 +27,7 @@ public class UserDtoMapper {
 		dto.setEmail(user.getEmail());
 		dto.setPassword(user.getPassword());
 		dto.setRoles(user.getRoles());
+
 		return dto;
 	}
 	
@@ -27,8 +37,9 @@ public class UserDtoMapper {
 		user.setFirstName(dto.getFirstName());
 		user.setLastName(dto.getLastName());
 		user.setEmail(dto.getEmail());
-		user.setPassword(dto.getPassword());
+		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		user.setRoles(dto.getRoles());
+        user.setGroup((dto.getGroup()));
 		return user;
 	}
 	

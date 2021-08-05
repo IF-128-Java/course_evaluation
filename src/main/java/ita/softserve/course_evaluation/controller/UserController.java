@@ -28,7 +28,7 @@ public class UserController {
 		this.userService = userService;
 	}
 	
-	@GetMapping("/")
+	@GetMapping
 	public ResponseEntity<List<UserDto>> read() {
 		final List<UserDto> users = userService.readAll();
 		
@@ -39,12 +39,12 @@ public class UserController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDto> readById(@PathVariable(value="id") long id){
-		return new ResponseEntity<>(userService.readById(id),  HttpStatus.OK);
+        return new ResponseEntity<>(userService.readById(id),  HttpStatus.OK);
 	}
 
 
-	@GetMapping
-	public ResponseEntity<UserDto> readByName(@RequestParam String name){
+	@GetMapping("/search")
+	public ResponseEntity<List<UserDto>> readByName(@RequestParam(name="name") String name){
 
 		return new ResponseEntity<>(userService.readByFirstName(name), HttpStatus.OK);
 	}

@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -51,8 +52,15 @@ public class User {
 			orphanRemoval = true)
 	private List<Feedback> feedbacks = new ArrayList<>();
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Group group;
+
+	@OneToMany(mappedBy = "user",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<Course> courses = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="group_id")
+    private Group group;
 
 	public User(Long id, String firstName, String lastName, String email, String password) {
 		this.id = id;

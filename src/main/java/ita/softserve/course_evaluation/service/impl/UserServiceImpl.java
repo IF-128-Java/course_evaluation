@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
 public class UserServiceImpl implements UserService {
 	
@@ -28,7 +29,7 @@ public class UserServiceImpl implements UserService {
 	public  UserDto readById(long id ) { return UserDtoMapper.toDto(userRepository.findUserById( id).get());}
 
 	@Override
-	public UserDto   readByFirstName(String firstName) {return UserDtoMapper.toDto(userRepository.findUserByFirstName(firstName).get());}
+	public List<UserDto>   readByFirstName(String firstName) {return UserDtoMapper.toDto(userRepository.findUserByFirstName(firstName));}
 
 	@Override
 	public  UserDto createUser(UserDto dto) {
