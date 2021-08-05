@@ -8,7 +8,7 @@ import ita.softserve.course_evaluation.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.function.Supplier;
+
 
 @Service
 public class UserServiceImpl implements UserService {

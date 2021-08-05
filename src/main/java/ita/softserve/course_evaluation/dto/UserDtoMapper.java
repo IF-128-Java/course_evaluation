@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class UserDtoMapper {
 
 
-    final static PasswordEncoder passwordEncoder= new BCryptPasswordEncoder(12);;
+    final static PasswordEncoder passwordEncoder= new BCryptPasswordEncoder(12);
 
 	
 	public static UserDto toDto(User user) {

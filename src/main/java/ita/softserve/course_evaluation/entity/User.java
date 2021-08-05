@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 import java.util.ArrayList;
 import java.util.List;
