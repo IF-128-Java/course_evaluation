@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class UserDtoMapper {
 
 
-    final static PasswordEncoder passwordEncoder= new BCryptPasswordEncoder(12);
+    static final  PasswordEncoder passwordEncoder= new BCryptPasswordEncoder(12);
 
 	
 	public static UserDto toDto(User user) {
