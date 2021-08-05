@@ -1,10 +1,14 @@
 package ita.softserve.course_evaluation.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import ita.softserve.course_evaluation.constants.HttpStatuses;
 import ita.softserve.course_evaluation.dto.GroupDto;
 import ita.softserve.course_evaluation.dto.GroupDtoMapper;
 import ita.softserve.course_evaluation.entity.Group;
 import ita.softserve.course_evaluation.service.GroupService;
-import ita.softserve.course_evaluation.api.GroupApi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,9 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Api(tags = "Group service REST API")
 @RestController
 @RequestMapping("/api/v1/groups")
-public class GroupController implements GroupApi {
+public class GroupController {
 
 
     private GroupService groupService;
@@ -29,6 +34,12 @@ public class GroupController implements GroupApi {
         this.groupService = groupService;
     }
 
+    @ApiOperation(value = "Get All Group List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = GroupDto.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
     @GetMapping
     public ResponseEntity<List<GroupDto>> getAllGroups() {
 
@@ -39,7 +50,12 @@ public class GroupController implements GroupApi {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-
+    @ApiOperation(value = "Get Group by Id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = GroupDto.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
     @GetMapping("/{id}")
     public ResponseEntity<GroupDto> getGroupById(@PathVariable("id") long id) {
 
@@ -52,9 +68,15 @@ public class GroupController implements GroupApi {
         return group != null
                 ? new ResponseEntity<>(group, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
     }
 
+    @ApiOperation(value = "Delete Group")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = GroupDto.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+            @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND)
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<GroupDto> deleteGroup(@PathVariable long id) {
         final GroupDto group = groupService.getById(id);
@@ -67,6 +89,12 @@ public class GroupController implements GroupApi {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Create new Group")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = HttpStatuses.CREATED, response = GroupDto.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
     @PostMapping
     public ResponseEntity<GroupDto> addGroup(@RequestBody GroupDto groupdto) {
 
@@ -81,6 +109,12 @@ public class GroupController implements GroupApi {
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @ApiOperation(value = "Update Group")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = GroupDto.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
     @PutMapping
     public ResponseEntity<GroupDto> updateGroup(@RequestBody GroupDto groupdto) {
 
