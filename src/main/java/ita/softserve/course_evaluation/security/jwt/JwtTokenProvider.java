@@ -41,9 +41,10 @@ public class JwtTokenProvider {
 		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
 	}
 	
-	public String createToken(String username, String[] role) {
+	public String createToken(String username,Long userId, String[] role) {
 		Claims claims = Jwts.claims().setSubject(username);
 		claims.put("role", role);
+		claims.put("id", userId);
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + this.validity * 1000);
 		return Jwts.builder()
