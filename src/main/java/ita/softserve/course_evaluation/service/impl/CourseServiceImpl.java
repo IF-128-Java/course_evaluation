@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -39,7 +38,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Optional<Course> getByName(String name) {
+    public List<Course> getByName(String name) {
         return courseRepository.findByCourseName(name);
     }
 
