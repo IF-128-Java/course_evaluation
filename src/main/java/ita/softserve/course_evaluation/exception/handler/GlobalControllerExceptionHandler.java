@@ -3,6 +3,8 @@ package ita.softserve.course_evaluation.exception.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import ita.softserve.course_evaluation.exception.CourseAlreadyExistException;
 import ita.softserve.course_evaluation.exception.CourseNotFoundException;
+import ita.softserve.course_evaluation.exception.IdMatchException;
+import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
 import ita.softserve.course_evaluation.exception.JwtAuthenticationException;
 import ita.softserve.course_evaluation.exception.dto.GenericExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -118,5 +120,17 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
                 .build();
 
         return new ResponseEntity<>(dto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({InvalidOldPasswordException.class, IdMatchException.class})
+    public ResponseEntity<GenericExceptionResponse> handleInvalidOldPasswordExceptionAndIdMatchException(Exception exception) {
+
+        GenericExceptionResponse dto = GenericExceptionResponse.builder()
+                .message(exception.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(exception.getClass().getSimpleName())
+                .build();
+
+        return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
     }
 }
