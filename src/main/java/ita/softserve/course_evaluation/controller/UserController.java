@@ -32,7 +32,7 @@ public class UserController {
 	}
 
 	@ApiOperation(value = "Get All Users List")
-	@GetMapping("/")
+	@GetMapping
 	public ResponseEntity<List<UserDto>> read() {
 		final List<UserDto> users = userService.readAll();
 		
@@ -44,12 +44,13 @@ public class UserController {
 	@ApiOperation(value = "Get User by ID")
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDto> readById(@PathVariable(value="id") long id){
-		return new ResponseEntity<>(userService.readById(id),  HttpStatus.OK);
+        return new ResponseEntity<>(userService.readById(id),  HttpStatus.OK);
 	}
 
+
 	@ApiOperation(value = "Get User by Username")
-	@GetMapping
-	public ResponseEntity<UserDto> readByName(@RequestParam String name){
+	@GetMapping("/search")
+	public ResponseEntity<List<UserDto>> readByName(@RequestParam(name="name") String name){
 
 		return new ResponseEntity<>(userService.readByFirstName(name), HttpStatus.OK);
 	}

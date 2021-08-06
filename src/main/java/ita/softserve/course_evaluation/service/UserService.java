@@ -12,7 +12,7 @@ public interface UserService {
 
 	UserDto readById(long id);
 
-	UserDto readByFirstName(String firstName);
+	List<UserDto> readByFirstName(String firstName);
 
 	 UserDto createUser(UserDto dto);
 

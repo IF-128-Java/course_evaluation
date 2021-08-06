@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -35,18 +36,20 @@ public class UserRepositoryTests {
 
     @Test
     public void testFindUserByFirstNameIfExists(){
-        User expected = userRepository.save(user);
-        Optional<User> actual = userRepository.findUserByFirstName(expected.getFirstName());
+        User saved = userRepository.save(user);
+        List<User> expected = List.of(saved);
 
-        assertTrue(actual.isPresent());
-        assertEquals(expected, actual.get());
+        List<User> actual = userRepository.findUserByFirstName(saved.getFirstName());
+
+        assertFalse(actual.isEmpty());
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testFindUserByFirstNameIfNotExist(){
-        Optional<User> actual = userRepository.findUserByFirstName(StringUtils.EMPTY);
+        List<User> actual = userRepository.findUserByFirstName(StringUtils.EMPTY);
 
-        assertFalse(actual.isPresent());
+        assertTrue(actual.isEmpty());
     }
 
     @Test
