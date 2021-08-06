@@ -32,21 +32,21 @@ public class FeedbackRequestQuestionServiceImpl implements FeedbackRequestQuesti
 	}
 	
 	@Override
-	public void assignQuestion(Long feedbackRequestId, List<Long> questionId) {
+	public void assignQuestion(Long feedbackRequestId, List<Long> questionsId) {
 		Optional<FeedbackRequest> feedbackRequest = feedbackRequestRepository.findById(feedbackRequestId);
-		List<Question> question = questionRepository.findAllById(questionId);
+		List<Question> questions = questionRepository.findAllById(questionsId);
 		List<Question> existQuestion = questionRepository.findAllQuestionsByFeedbackRequest(feedbackRequestId);
-		question.removeIf(existQuestion::contains);
+		questions.removeIf(existQuestion::contains);
 		if (feedbackRequest.isPresent()) {
 			FeedbackRequest feedbackRequestDb = feedbackRequest.get();
-			List<Question> questions = feedbackRequest.get().getQuestions();
+			List<Question> feedbackRequestQuestions = feedbackRequest.get().getQuestions();
 			List<Long> questionIds = feedbackRequest.get().getQuestions()
 					                         .stream()
 					                         .map(Question::getId)
 					                         .collect(Collectors.toList());
-			if (!questionIds.contains(questionId)) {
-				questions.addAll(question);
-				feedbackRequestDb.setQuestions(questions);
+			if (!questionIds.contains(questionsId)) {
+				feedbackRequestQuestions.addAll(feedbackRequestQuestions);
+				feedbackRequestDb.setQuestions(feedbackRequestQuestions);
 				feedbackRequestRepository.save(feedbackRequestDb);
 			}
 		}

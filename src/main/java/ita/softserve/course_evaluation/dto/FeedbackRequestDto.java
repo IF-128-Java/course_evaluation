@@ -12,7 +12,7 @@ import java.util.Objects;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FeedbackRequestDto {
+public class  FeedbackRequestDto {
 	
 	private Long id;
 	private String feedbackDescription;
