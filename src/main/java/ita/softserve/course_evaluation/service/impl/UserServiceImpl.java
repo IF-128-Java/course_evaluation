@@ -1,24 +1,33 @@
 package ita.softserve.course_evaluation.service.impl;
 
+import ita.softserve.course_evaluation.dto.UpdatePasswordDto;
 import ita.softserve.course_evaluation.dto.UserDto;
 import ita.softserve.course_evaluation.dto.UserDtoMapper;
 import ita.softserve.course_evaluation.entity.User;
+import ita.softserve.course_evaluation.exception.IdMatchException;
+import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
+import ita.softserve.course_evaluation.dto.UpdateUserDto;
 import ita.softserve.course_evaluation.repository.UserRepository;
+import ita.softserve.course_evaluation.security.SecurityUser;
 import ita.softserve.course_evaluation.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
-
 
 @Service
 public class UserServiceImpl implements UserService {
-	
+
 	private final UserRepository userRepository;
-	
-	public UserServiceImpl(UserRepository userRepository) {
+	private final PasswordEncoder passwordEncoder;
+
+	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
-	
+
 	@Override
 
 	public List<UserDto>  readAll() {
@@ -26,7 +35,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public  UserDto readById(long id ) { return UserDtoMapper.toDto(userRepository.findUserById( id).get());}
+	public UserDto readById(long id ) {
+		checkAuthenticatedUser(id);
+
+		return UserDtoMapper.toDto(userRepository.findUserById(id).orElseThrow(
+				() -> new EntityNotFoundException("User with id: " + id + " not found!")
+		));
+	}
 
 	@Override
 	public List<UserDto>   readByFirstName(String firstName) {return UserDtoMapper.toDto(userRepository.findUserByFirstName(firstName));}
@@ -37,22 +52,41 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDto updateUser(UserDto dto) {
-		User daoUser = UserDtoMapper.fromDto(readById(dto.getId()));
+	public void updateUser(UpdateUserDto dto, Long userId) {
+		checkAuthenticatedUser(userId);
+
+		User daoUser = userRepository.findUserById(userId).orElseThrow(
+				() -> new EntityNotFoundException("User with id: " + userId + " not found!"));
+
 		daoUser.setFirstName(dto.getFirstName());
 		daoUser.setLastName(dto.getLastName());
-		daoUser.setEmail(dto.getEmail());
-		daoUser.setPassword(dto.getPassword());
-		daoUser.setRoles(dto.getRoles());
 
-
-		return UserDtoMapper.toDto(userRepository.save(daoUser));
+		userRepository.save(daoUser);
 	}
+
+	@Override
+	public void updatePassword(UpdatePasswordDto updatePasswordDto, Long userId) {
+		checkAuthenticatedUser(userId);
+
+		User daoUser = userRepository.findUserById(userId).orElseThrow(
+				() -> new EntityNotFoundException("User with id: " + userId + " not found!"));
+
+		if(!passwordEncoder.matches(updatePasswordDto.getOldPassword(), daoUser.getPassword())){
+			throw new InvalidOldPasswordException("Old password doesn't match!");
+		}
+
+		daoUser.setPassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
+		userRepository.save(daoUser);
+	}
+
 	@Override
 	public void deleteUser(long id){
 		User deletingUser = userRepository.getById(id);
 		userRepository.delete(deletingUser);
-		}
 	}
 
-
+	private void checkAuthenticatedUser(Long userId){
+		if(!((SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().equals(userId))
+			throw new IdMatchException("Ids don't match!");
+	}
+}
