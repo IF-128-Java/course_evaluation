@@ -33,7 +33,7 @@ public class FeedbackRequestController {
 
 	@ApiOperation(value = "Create FeedbackRequest")
 	@ApiResponses(value = {
-			@ApiResponse(code = 201, message = HttpStatuses.CREATED, response = FeedbackRequestDto.class),
+			@ApiResponse(code = 200, message = HttpStatuses.OK, response = FeedbackRequestDto.class),
 			@ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
 			@ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
 	})

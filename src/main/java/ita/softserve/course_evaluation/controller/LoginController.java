@@ -2,6 +2,9 @@ package ita.softserve.course_evaluation.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import ita.softserve.course_evaluation.constants.HttpStatuses;
 import ita.softserve.course_evaluation.dto.AuthenticateRequestDto;
 import ita.softserve.course_evaluation.dto.SimpleUserDto;
 import ita.softserve.course_evaluation.service.AuthService;
@@ -27,12 +30,22 @@ public class LoginController {
 	}
 
 	@ApiOperation(value = "Authenticate user")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = HttpStatuses.OK),
+			@ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+			@ApiResponse(code = 401, message = HttpStatuses.UNAUTHORIZED),
+			@ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+	})
 	@PostMapping("/login")
 	public ResponseEntity<?> authenticate(@RequestBody AuthenticateRequestDto request) {
 		return authService.getLoginCredentials(request);
 	}
 
 	@ApiOperation(value = "Logout")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = HttpStatuses.OK),
+			@ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+	})
 	@PostMapping("/logout")
 	public void logout(HttpServletRequest request, HttpServletResponse response) {
 		SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
@@ -40,6 +53,10 @@ public class LoginController {
 	}
 
 	@ApiOperation(value = "Registration")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = HttpStatuses.OK),
+			@ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+	})
 	@PostMapping("/reg")
 	public ResponseEntity<?> registration(@RequestBody SimpleUserDto request) {
 		return authService.getRegistrationCredentials(request);

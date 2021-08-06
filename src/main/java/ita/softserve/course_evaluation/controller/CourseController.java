@@ -32,9 +32,9 @@ public class CourseController {
 
     @ApiOperation(value = "Create new Course")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = Course.class),
-            @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 403, message = "Forbidden")
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = Course.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
     })
     @PostMapping
     public ResponseEntity<Course> addCourse(@RequestBody CourseDto courseDto) {
@@ -46,7 +46,6 @@ public class CourseController {
     @ApiOperation(value = "Get course by Id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = HttpStatuses.OK, response = CourseDto.class),
-            @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
     })
@@ -60,8 +59,6 @@ public class CourseController {
     @ApiOperation(value = "Get All Courses List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = HttpStatuses.OK, response = CourseDto.class),
-            @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
-            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
     })
     @GetMapping

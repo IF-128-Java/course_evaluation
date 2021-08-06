@@ -38,7 +38,8 @@ public class GroupController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = HttpStatuses.OK, response = GroupDto.class),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
-            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+            @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND)
     })
     @GetMapping
     public ResponseEntity<List<GroupDto>> getAllGroups() {
@@ -54,7 +55,8 @@ public class GroupController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = HttpStatuses.OK, response = GroupDto.class),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
-            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+            @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND),
     })
     @GetMapping("/{id}")
     public ResponseEntity<GroupDto> getGroupById(@PathVariable("id") long id) {

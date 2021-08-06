@@ -2,6 +2,9 @@ package ita.softserve.course_evaluation.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import ita.softserve.course_evaluation.constants.HttpStatuses;
 import ita.softserve.course_evaluation.dto.UserDto;
 import ita.softserve.course_evaluation.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -24,56 +27,87 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/users")
 public class UserController {
-	
-	private final UserService userService;
-	
-	public UserController(UserService userService) {
-		this.userService = userService;
-	}
 
-	@ApiOperation(value = "Get All Users List")
-	@GetMapping
-	public ResponseEntity<List<UserDto>> read() {
-		final List<UserDto> users = userService.readAll();
-		
-		return users != null && !users.isEmpty()
-				       ? new ResponseEntity<>(users, HttpStatus.OK)
-				       : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	}
+    private final UserService userService;
 
-	@ApiOperation(value = "Get User by ID")
-	@GetMapping("/{id}")
-	public ResponseEntity<UserDto> readById(@PathVariable(value="id") long id){
-        return new ResponseEntity<>(userService.readById(id),  HttpStatus.OK);
-	}
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @ApiOperation(value = "Get All Users List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = UserDto.class),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+            @ApiResponse(code = 401, message = HttpStatuses.UNAUTHORIZED),
+            @ApiResponse(code = 401, message = HttpStatuses.NOT_FOUND),
+    })
+    @GetMapping
+    public ResponseEntity<List<UserDto>> read() {
+        final List<UserDto> users = userService.readAll();
+
+        return users != null && !users.isEmpty()
+                ? new ResponseEntity<>(users, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @ApiOperation(value = "Get User by ID")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = UserDto.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> readById(@PathVariable(value = "id") long id) {
+        return new ResponseEntity<>(userService.readById(id), HttpStatus.OK);
+    }
 
 
-	@ApiOperation(value = "Get User by Username")
-	@GetMapping("/search")
-	public ResponseEntity<List<UserDto>> readByName(@RequestParam(name="name") String name){
+    @ApiOperation(value = "Get User by Username")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = UserDto.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
+    @GetMapping("/search")
+    public ResponseEntity<List<UserDto>> readByName(@RequestParam(name = "name") String name) {
 
-		return new ResponseEntity<>(userService.readByFirstName(name), HttpStatus.OK);
-	}
+        return new ResponseEntity<>(userService.readByFirstName(name), HttpStatus.OK);
+    }
 
-	@ApiOperation(value = "Create new User")
-	@PostMapping
-	public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(userService.createUser(userDto));
-	}
+    @ApiOperation(value = "Create new User")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = UserDto.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
+    @PostMapping
+    public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(userService.createUser(userDto));
+    }
 
-	@ApiOperation(value = "Update User")
+    @ApiOperation(value = "Update User")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = UserDto.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
     @PutMapping
-	public ResponseEntity<UserDto> updateUser (@RequestBody UserDto userDto) {
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(userService.updateUser(userDto));
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(userService.updateUser(userDto));
 
-	}
+    }
 
-	@ApiOperation("Delete User by Id")
+    @ApiOperation("Delete User by Id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
     @DeleteMapping("/{id}")
-	public void deleteUser(@PathVariable(value = "id") long id){
-		userService.deleteUser(id);
-	}
+    public void deleteUser(@PathVariable(value = "id") long id) {
+        userService.deleteUser(id);
+    }
 
 }

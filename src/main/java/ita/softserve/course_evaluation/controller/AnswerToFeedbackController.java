@@ -29,9 +29,9 @@ public class AnswerToFeedbackController {
     @ApiOperation(value = "Get All Answer List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = HttpStatuses.OK, response = AnswerDto.class),
-            @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
-            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+            @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND)
     })
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
@@ -71,7 +71,7 @@ public class AnswerToFeedbackController {
 
     @ApiOperation(value = "Delete Answer by Id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = HttpStatuses.OK, response = AnswerDto.class),
+            @ApiResponse(code = 200, message = HttpStatuses.OK),
             @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)

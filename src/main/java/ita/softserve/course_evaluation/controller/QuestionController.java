@@ -29,9 +29,9 @@ public class QuestionController {
     @ApiOperation("Get All Questions List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = HttpStatuses.OK, response = QuestionDto.class),
-            @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
-            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+            @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND),
     })
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
@@ -45,8 +45,8 @@ public class QuestionController {
     @ApiOperation("Create new Question")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = HttpStatuses.CREATED, response = QuestionDto.class),
-            @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 401, message = HttpStatuses.UNAUTHORIZED),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
     })
     @ResponseStatus(HttpStatus.CREATED)
@@ -59,9 +59,9 @@ public class QuestionController {
 
     @ApiOperation("Get Question by Id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = HttpStatuses.OK, response = QuestionDto.class),
-            @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
+            @ApiResponse(code = 201, message = HttpStatuses.OK, response = QuestionDto.class),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 401, message = HttpStatuses.UNAUTHORIZED),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
     })
     @ResponseStatus(HttpStatus.OK)
@@ -72,9 +72,9 @@ public class QuestionController {
 
     @ApiOperation("Update Question")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = HttpStatuses.OK, response = QuestionDto.class),
-            @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
+            @ApiResponse(code = 201, message = HttpStatuses.OK, response = QuestionDto.class),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 401, message = HttpStatuses.UNAUTHORIZED),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
     })
     @ResponseStatus(HttpStatus.OK)
@@ -86,9 +86,9 @@ public class QuestionController {
 
     @ApiOperation("Delete Question")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = HttpStatuses.OK, response = QuestionDto.class),
-            @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
+            @ApiResponse(code = 201, message = HttpStatuses.CREATED),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 401, message = HttpStatuses.UNAUTHORIZED),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
     })
     @DeleteMapping("{id}")
