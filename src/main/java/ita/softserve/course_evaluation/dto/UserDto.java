@@ -13,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
-	
+
 	private Long id;
 	
 	private String firstName;
@@ -21,8 +21,6 @@ public class UserDto {
 	private String lastName;
 	
 	private String email;
-	
-	private String password;
 	
 	private Set<Role> roles;
 	
@@ -33,11 +31,11 @@ public class UserDto {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		UserDto userDto = (UserDto) o;
-		return Objects.equals(id, userDto.id) && Objects.equals(firstName, userDto.firstName) && Objects.equals(lastName, userDto.lastName) && Objects.equals(email, userDto.email) && Objects.equals(password, userDto.password);
+		return Objects.equals(id, userDto.id) && Objects.equals(firstName, userDto.firstName) && Objects.equals(lastName, userDto.lastName) && Objects.equals(email, userDto.email);
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, firstName, lastName, email, password);
+		return Objects.hash(id, firstName, lastName, email);
 	}
 }
