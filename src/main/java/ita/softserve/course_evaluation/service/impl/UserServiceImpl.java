@@ -38,9 +38,7 @@ public class UserServiceImpl implements UserService {
 	public UserDto readById(long id ) {
 		checkAuthenticatedUser(id);
 
-		return UserDtoMapper.toDto(userRepository.findUserById(id).orElseThrow(
-				() -> new EntityNotFoundException("User with id: " + id + " not found!")
-		));
+		return UserDtoMapper.toDto(getUserById(id));
 	}
 
 	@Override
@@ -55,8 +53,7 @@ public class UserServiceImpl implements UserService {
 	public void updateUser(UpdateUserDto dto, Long userId) {
 		checkAuthenticatedUser(userId);
 
-		User daoUser = userRepository.findUserById(userId).orElseThrow(
-				() -> new EntityNotFoundException("User with id: " + userId + " not found!"));
+		User daoUser = getUserById(userId);
 
 		daoUser.setFirstName(dto.getFirstName());
 		daoUser.setLastName(dto.getLastName());
@@ -68,8 +65,7 @@ public class UserServiceImpl implements UserService {
 	public void updatePassword(UpdatePasswordDto updatePasswordDto, Long userId) {
 		checkAuthenticatedUser(userId);
 
-		User daoUser = userRepository.findUserById(userId).orElseThrow(
-				() -> new EntityNotFoundException("User with id: " + userId + " not found!"));
+		User daoUser = getUserById(userId);
 
 		if(!passwordEncoder.matches(updatePasswordDto.getOldPassword(), daoUser.getPassword())){
 			throw new InvalidOldPasswordException("Old password doesn't match!");
@@ -88,5 +84,10 @@ public class UserServiceImpl implements UserService {
 	private void checkAuthenticatedUser(Long userId){
 		if(!((SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().equals(userId))
 			throw new IdMatchException("Ids don't match!");
+	}
+
+	private User getUserById(Long id){
+		return userRepository.findUserById(id).orElseThrow(
+				() -> new EntityNotFoundException(String.format("User with id: %d not found!", id)));
 	}
 }
