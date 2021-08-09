@@ -1,7 +1,6 @@
 package ita.softserve.course_evaluation.service;
 
 import ita.softserve.course_evaluation.dto.GroupDto;
-import ita.softserve.course_evaluation.entity.Group;
 
 import java.util.List;
 
