@@ -30,12 +30,12 @@ public class Group {
     private String groupName;
 
     @OneToMany(mappedBy = "group", orphanRemoval = false)
-    private List<User> users = new ArrayList<>();
+    private List<User> users;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(
             name = "course_group",
             joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
-    private List<Course> courses = new ArrayList<>();
+    private List<Course> courses;
 }

@@ -54,9 +54,6 @@ public class GroupController {
     @GetMapping("/{id}")
     public ResponseEntity<GroupDto> getGroupById(@PathVariable("id") long id) {
 
-        if (id == 0) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);}
-
         final GroupDto group = groupService.getById(id);
 
         return group != null
