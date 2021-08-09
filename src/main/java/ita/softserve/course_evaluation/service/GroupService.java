@@ -11,11 +11,4 @@ public interface GroupService {
 
     GroupDto getById(long id);
 
-    void delete(long id);
-
-    Group create(GroupDto group);
-
-    GroupDto update(GroupDto group);
-
-
 }
