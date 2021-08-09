@@ -32,7 +32,7 @@ public class FeedbackRequestQuestionController {
 	}
 	
 	@PostMapping("/{id}/questions")
-	public void addQuestionToFeedbackRequest(@PathVariable("id") Long feedbackRequestId, @RequestBody List<Long> questionIds) {
+	public void addQuestionToFeedbackRequest(@PathVariable("id") Long feedbackRequestId, @RequestBody List<QuestionDto> questionIds) {
 		feedbackRequestQuestionService.assignQuestion(feedbackRequestId, questionIds);
 	}
 }

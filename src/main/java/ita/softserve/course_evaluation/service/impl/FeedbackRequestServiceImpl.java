@@ -3,15 +3,12 @@ package ita.softserve.course_evaluation.service.impl;
 import ita.softserve.course_evaluation.dto.FeedbackRequestDto;
 import ita.softserve.course_evaluation.dto.FeedbackRequestDtoMapper;
 import ita.softserve.course_evaluation.entity.FeedbackRequest;
-import ita.softserve.course_evaluation.entity.Question;
 import ita.softserve.course_evaluation.repository.FeedbackRequestRepository;
 import ita.softserve.course_evaluation.repository.QuestionRepository;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class FeedbackRequestServiceImpl implements FeedbackRequestService {
@@ -27,16 +24,9 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	@Override
 	public FeedbackRequestDto create(FeedbackRequestDto dto) {
 		FeedbackRequest feedbackRequest = FeedbackRequestDtoMapper.fromDto(dto);
-		feedbackRequest.setQuestions(getPatternQuestions());
 		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.save(feedbackRequest));
 	}
 	
-	private List<Question> getPatternQuestions() {
-		return questionRepository.findAll()
-				       .stream()
-				       .filter(Question::isPattern)
-				       .collect(Collectors.toList());
-	}
 	
 	@Override
 	public FeedbackRequestDto update(FeedbackRequestDto dto) {

@@ -8,5 +8,5 @@ public interface FeedbackRequestQuestionService {
 	
 	List<QuestionDto> getQuestionsByFeedbackRequest(Long id);
 	
-	void assignQuestion(Long feedbackRequestId, List<Long> questionIds);
+	void assignQuestion(Long feedbackRequestId, List<QuestionDto> questionIds);
 }
