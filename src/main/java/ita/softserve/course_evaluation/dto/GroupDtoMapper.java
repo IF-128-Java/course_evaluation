@@ -3,6 +3,7 @@ package ita.softserve.course_evaluation.dto;
 import ita.softserve.course_evaluation.dto.dtoMapper.CourseDtoMapper;
 import ita.softserve.course_evaluation.entity.Group;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public class GroupDtoMapper {
 
     public static List<GroupDto> entityToDto(List<Group> group) {
 
-        return group == null ? null : group.stream().map(GroupDtoMapper::entityToDto).collect(Collectors.toList());
+        return group == null ? Collections.emptyList() : group.stream().map(GroupDtoMapper::entityToDto).collect(Collectors.toList());
     }
 
     public static Group dtoToEntity(GroupDto groupdto) {
@@ -36,6 +37,6 @@ public class GroupDtoMapper {
 
     public static List<Group> dtoToEntity(List<GroupDto> groupdto) {
 
-        return groupdto == null ? null : groupdto.stream().map(GroupDtoMapper::dtoToEntity).collect(Collectors.toList());
+        return groupdto == null ? Collections.emptyList() : groupdto.stream().map(GroupDtoMapper::dtoToEntity).collect(Collectors.toList());
     }
 }
