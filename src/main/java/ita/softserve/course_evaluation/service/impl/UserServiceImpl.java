@@ -29,12 +29,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-
-	public List<UserDto>  readAll() {
-		return UserDtoMapper.toDto(userRepository.findAll());
-	}
-
-	@Override
 	public UserDto readById(long id ) {
 		checkAuthenticatedUser(id);
 
@@ -42,11 +36,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserDto>   readByFirstName(String firstName) {return UserDtoMapper.toDto(userRepository.findUserByFirstName(firstName));}
-
-	@Override
-	public  UserDto createUser(UserDto dto) {
-		return UserDtoMapper.toDto(userRepository.save(UserDtoMapper.fromDto(dto)));
+	public List<UserDto> readByFirstName(String firstName) {
+		return UserDtoMapper.toDto(userRepository.findUserByFirstName(firstName));
 	}
 
 	@Override
@@ -75,19 +66,13 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(daoUser);
 	}
 
-	@Override
-	public void deleteUser(long id){
-		User deletingUser = userRepository.getById(id);
-		userRepository.delete(deletingUser);
-	}
-
 	private void checkAuthenticatedUser(Long userId){
 		if(!((SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().equals(userId))
 			throw new IdMatchException("Ids don't match!");
 	}
 
 	private User getUserById(Long id){
-		return userRepository.findUserById(id).orElseThrow(
+		return userRepository.findById(id).orElseThrow(
 				() -> new EntityNotFoundException(String.format("User with id: %d not found!", id)));
 	}
 }
