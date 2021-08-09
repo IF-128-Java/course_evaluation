@@ -14,13 +14,15 @@ import java.util.stream.Collectors;
 
 @Data
 public class SecurityUser implements UserDetails {
-	
+
+	private final Long id;
 	private final String username;
 	private final String password;
 	private final List<SimpleGrantedAuthority> authorities;
 	private final boolean isActive;
 	
-	public SecurityUser(String username, String password, List<SimpleGrantedAuthority> authorities, boolean isActive) {
+	public SecurityUser(Long id, String username, String password, List<SimpleGrantedAuthority> authorities, boolean isActive) {
+		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.authorities = authorities;
@@ -28,9 +30,8 @@ public class SecurityUser implements UserDetails {
 	}
 	
 	public static UserDetails fromUser(User user) {
-		return new org.springframework.security.core.userdetails.User(
-				user.getEmail(), user.getPassword(), true, true, true,
-				true, getAuthorities(user.getRoles()));
+		return new SecurityUser(user.getId(), user.getEmail(), user.getPassword(),
+				getAuthorities(user.getRoles()), true);
 	}
 	
 	private static List<SimpleGrantedAuthority> getAuthorities(Set<Role> roles){

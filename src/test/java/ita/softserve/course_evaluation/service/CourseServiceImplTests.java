@@ -103,11 +103,12 @@ public class CourseServiceImplTests {
 
     @Test
     public void testGetByName(){
-        when(courseRepository.findByCourseName(anyString())).thenReturn(Optional.of(expected));
+        List<Course> expectedList = List.of(expected);
+        when(courseRepository.findByCourseName(anyString())).thenReturn(expectedList);
 
-        Optional<Course> actual = courseService.getByName(anyString());
+        List<Course> actual = courseService.getByName(anyString());
 
-        assertEquals(expected.getId(), actual.get().getId());
+        assertEquals(expectedList, actual);
 
         verify(courseRepository, times(1)).findByCourseName(anyString());
     }

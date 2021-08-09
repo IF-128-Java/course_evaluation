@@ -1,23 +1,18 @@
 package ita.softserve.course_evaluation.service;
 
+import ita.softserve.course_evaluation.dto.UpdatePasswordDto;
 import ita.softserve.course_evaluation.dto.UserDto;
-import ita.softserve.course_evaluation.entity.User;
+import ita.softserve.course_evaluation.dto.UpdateUserDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
 
-	List<UserDto> readAll();
-
 	UserDto readById(long id);
 
-	UserDto readByFirstName(String firstName);
+	List<UserDto> readByFirstName(String firstName);
 
-	 UserDto createUser(UserDto dto);
+	void updateUser(UpdateUserDto dto, Long userId);
 
-	UserDto updateUser(UserDto dto);
-
-	void deleteUser(long id);
-
+	void updatePassword(UpdatePasswordDto updatePasswordDto, Long userId);
 }

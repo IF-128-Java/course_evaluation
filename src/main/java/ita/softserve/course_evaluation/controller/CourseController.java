@@ -1,5 +1,10 @@
 package ita.softserve.course_evaluation.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import ita.softserve.course_evaluation.constants.HttpStatuses;
 import ita.softserve.course_evaluation.dto.CourseDto;
 import ita.softserve.course_evaluation.entity.Course;
 import ita.softserve.course_evaluation.service.CourseService;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Objects;
 
+@Api(tags = "Course service REST API")
 @RestController
 @RequestMapping("api/v1/courses/")
 public class CourseController {
@@ -24,6 +30,12 @@ public class CourseController {
 
     public CourseController(CourseService courseService) { this.courseService = courseService; }
 
+    @ApiOperation(value = "Create new Course")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = Course.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
     @PostMapping
     public ResponseEntity<Course> addCourse(@RequestBody CourseDto courseDto) {
         return Objects.isNull(courseDto) ?
@@ -31,13 +43,24 @@ public class CourseController {
                 ResponseEntity.status(HttpStatus.OK).body(courseService.addCourse(courseDto));
     }
 
+    @ApiOperation(value = "Get course by Id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = CourseDto.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<CourseDto> getCourseById(@PathVariable int id) {
+    public ResponseEntity<CourseDto> getCourseById(@PathVariable long id) {
         return Objects.isNull(courseService.getById(id)) ?
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
                 ResponseEntity.status(HttpStatus.OK).body(courseService.getById(id));
     }
 
+    @ApiOperation(value = "Get All Courses List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = CourseDto.class),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
     @GetMapping
     public ResponseEntity<List<CourseDto>> getCourses() {
         return Objects.isNull(courseService.getAll()) ?
@@ -45,17 +68,30 @@ public class CourseController {
                 ResponseEntity.status(HttpStatus.OK).body(courseService.getAll());
     }
 
-
+    @ApiOperation(value = "Update Course")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = CourseDto.class),
+            @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
     @PutMapping("/{id}")
-    public ResponseEntity<CourseDto> updateCourse(@PathVariable int id, @RequestBody CourseDto courseDto) {
+    public ResponseEntity<CourseDto> updateCourse(@PathVariable long id, @RequestBody CourseDto courseDto) {
+        courseDto.setId(id);
         return Objects.isNull(courseService.editCourse(courseDto)) ?
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
                 ResponseEntity.status(HttpStatus.OK).body(courseService.editCourse(courseDto));
     }
 
-
+    @ApiOperation(value = "Delete Course by Id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK),
+            @ApiResponse(code = 303, message = HttpStatuses.SEE_OTHER),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
     @DeleteMapping("/{id}")
-    public void deleteCourse(@PathVariable int id) {
+    public void deleteCourse(@PathVariable long id) {
         courseService.deleteById(id);
     }
 }

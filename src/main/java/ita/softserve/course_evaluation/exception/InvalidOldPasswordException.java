@@ -1,0 +1,11 @@
+package ita.softserve.course_evaluation.exception;
+
+public class InvalidOldPasswordException extends RuntimeException{
+
+    public InvalidOldPasswordException(String message) {
+        super(message);
+    }
+
+    public InvalidOldPasswordException() {
+    }
+}

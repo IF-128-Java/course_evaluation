@@ -26,10 +26,10 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("Exception Handler Filter invoke");
         try {
             filterChain.doFilter(request, response);
         } catch (AuthenticationException | AccessDeniedException exception) {
+        log.info("Exception Handler Filter invoke: {}",exception.getMessage());
 
             GenericExceptionResponse errorResponse = GenericExceptionResponse.builder()
                     .message(exception.getMessage())
