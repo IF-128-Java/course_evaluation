@@ -24,7 +24,13 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course addCourse(CourseDto courseDto) {
-        return courseRepository.save(CourseDtoMapper.toEntity(courseDto));
+        return courseRepository.save(Course.builder()
+                .courseName(courseDto.getCourseName())
+                .description(courseDto.getDescription())
+                .startDate(courseDto.getStartDate())
+                .endDate(courseDto.getEndDate())
+                .teacher(courseDto.getTeacher())
+                .build());
     }
 
     @Override
