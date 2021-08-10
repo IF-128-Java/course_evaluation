@@ -43,6 +43,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void deleteQuestionById(long id) {
+        System.out.println("hi");
         questionRepository.delete(QuestionDtoMapper.fromDto(findQuestionById(id)));
     }
 
