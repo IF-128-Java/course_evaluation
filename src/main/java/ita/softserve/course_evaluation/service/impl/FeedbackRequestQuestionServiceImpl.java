@@ -8,7 +8,6 @@ import ita.softserve.course_evaluation.repository.QuestionRepository;
 import ita.softserve.course_evaluation.service.FeedbackRequestQuestionService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +25,7 @@ public class FeedbackRequestQuestionServiceImpl implements FeedbackRequestQuesti
 	@Override
 	public List<QuestionDto> getQuestionsByFeedbackRequest(Long id) {
 		List<QuestionDto> questionDtoList = QuestionDtoMapper.toDto(questionRepository.findAllQuestionsByFeedbackRequest(id));
-		return questionDtoList.isEmpty() ? new ArrayList<>() : questionDtoList;
+		return questionDtoList;
 	}
 	
 	@Override
