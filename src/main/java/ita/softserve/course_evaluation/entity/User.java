@@ -1,7 +1,12 @@
 package ita.softserve.course_evaluation.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,7 +29,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User {
-	
+
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,10 +58,10 @@ public class User {
 	private List<Feedback> feedbacks = new ArrayList<>();
 
 
-	@OneToMany(mappedBy = "user",
+	@OneToMany(mappedBy = "teacher",
 			cascade = CascadeType.ALL,
-			orphanRemoval = true)
-	private List<Course> courses = new ArrayList<>();
+			orphanRemoval = false)    //  ToDo: What the reason to use orphanRemoval = true ?
+	private List<Course> courses;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="group_id")

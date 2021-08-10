@@ -2,6 +2,7 @@ package ita.softserve.course_evaluation.entity;
 
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,6 +26,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "course")
 public class Course implements Serializable {
@@ -50,7 +52,8 @@ public class Course implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id", nullable = false)
-    private User user;
+    @NotNull
+    private User teacher;
 
     @ManyToMany(mappedBy = "courses")
     private Set<Group> groups = new HashSet<>();
