@@ -1,9 +1,11 @@
 package ita.softserve.course_evaluation.configuration;
 
 import ita.softserve.course_evaluation.security.jwt.JwtConfigurer;
+import ita.softserve.course_evaluation.security.jwt.JwtTokenFilter;
 import ita.softserve.course_evaluation.security.oauth2.CustomOAuth2UserService;
 import ita.softserve.course_evaluation.security.RestAuthenticationEntryPoint;
 import ita.softserve.course_evaluation.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import ita.softserve.course_evaluation.security.oauth2.OAuth2AuthenticationFailureHandler;
 import ita.softserve.course_evaluation.security.oauth2.OAuthSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
@@ -33,6 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private final JwtConfigurer jwtConfigurer;
 	@Autowired
+	private JwtTokenFilter jwtTokenFilter;
+	@Autowired
 	private UserDetailsService customUserDetailsService;
 
 	@Autowired
@@ -40,6 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private OAuthSuccessHandler oAuthSuccessHandler;
+
+	@Autowired
+	OAuth2AuthenticationFailureHandler oAuthFailureHandler;
 
 	@Autowired
 	private CustomOAuth2UserService customOAuth2UserService;
@@ -50,9 +58,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-				.cors().and().csrf().disable()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.cors().and()
+				.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
+				.csrf().disable()
 				.formLogin()
 					.disable()
 				.httpBasic().disable()
@@ -67,24 +77,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest()
 					.authenticated().and()
 				.oauth2Login()
-					.loginPage(LOGIN_PAGE).permitAll()
+					.authorizationEndpoint()
+						.baseUri("/oauth2/authorize")
+						.authorizationRequestRepository(customAuthorizationRequestRepository())
+						.and()
+					.redirectionEndpoint()
+						.baseUri("login/oauth2/code/*")
+						.and()
 					.userInfoEndpoint()
 						.userService(customOAuth2UserService)
 						.and()
-					.authorizationEndpoint()
-						.baseUri("login/oauth2/code/*")
-						.authorizationRequestRepository(customAuthorizationRequestRepository())
-						.and()
 					.successHandler(oAuthSuccessHandler)
-					.and()
-					.logout()
-						.logoutRequestMatcher(new AntPathRequestMatcher("/logout", HttpMethod.GET.name()))
-						.logoutSuccessUrl(LOGIN_PAGE)
-						.permitAll()
-					.and()
-					.rememberMe();
-		http.apply(jwtConfigurer);
-//				.apply(jwtConfigurer);
+					.failureHandler(oAuthFailureHandler);
+//		http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+				http.apply(jwtConfigurer);
 	}
 	@Bean
 	public AuthorizationRequestRepository<OAuth2AuthorizationRequest> customAuthorizationRequestRepository() {

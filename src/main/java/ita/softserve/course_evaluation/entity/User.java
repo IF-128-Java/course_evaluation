@@ -53,11 +53,11 @@ public class User {
     @JoinColumn(name="group_id")
     private Group group;
 
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	private SocialProvider provider;
-
-	private String providerId;
+//	@NotNull
+//	@Enumerated(EnumType.STRING)
+//	private SocialProvider provider;
+//
+//	private String providerId;
 
 	public User(Long id, String firstName, String lastName, String email, String password) {
 		this.id = id;
