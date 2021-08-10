@@ -1,20 +1,11 @@
 package ita.softserve.course_evaluation.entity;
 
+import com.sun.istack.NotNull;
+import ita.softserve.course_evaluation.security.oauth2.users.SocialProvider;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.JoinColumn;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -61,6 +52,12 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="group_id")
     private Group group;
+
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private SocialProvider provider;
+
+	private String providerId;
 
 	public User(Long id, String firstName, String lastName, String email, String password) {
 		this.id = id;

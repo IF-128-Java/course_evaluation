@@ -1,6 +1,8 @@
 package ita.softserve.course_evaluation.security.oauth2;
 
+import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.OAuth2AuthenticationProcessingException;
+import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
@@ -19,6 +21,8 @@ public class CustomOidUserService extends OidcUserService {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
@@ -28,6 +32,11 @@ public class CustomOidUserService extends OidcUserService {
             Map<String, Object> attributes = new HashMap<>(OidcUser.getAttributes());
 
             String provider = userRequest.getClientRegistration().getRegistrationId();
+
+            String email = attributes.get("email").toString();
+            String name = attributes.get("name").toString();
+//            updateUser(email, name);
+
             return OidcUser;
 //            return userService.processUserRegistration(provider, attributes, null, null);
         } catch (AuthenticationException exception) {
@@ -36,6 +45,13 @@ public class CustomOidUserService extends OidcUserService {
             exception.printStackTrace();
             throw new OAuth2AuthenticationProcessingException(exception.getMessage(), exception.getCause());
         }
+
+    }
+    private void updateUser(String email, String name) {
+        User user = userRepository.findUserByEmail(email).orElse(new User());
+        user.setEmail(email);
+        user.setFirstName(name);
+        userRepository.save(user);
     }
 
 }
