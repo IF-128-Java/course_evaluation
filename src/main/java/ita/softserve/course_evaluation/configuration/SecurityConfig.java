@@ -2,14 +2,12 @@ package ita.softserve.course_evaluation.configuration;
 
 import ita.softserve.course_evaluation.security.jwt.JwtConfigurer;
 import ita.softserve.course_evaluation.security.jwt.JwtTokenFilter;
-import ita.softserve.course_evaluation.security.oauth2.CustomOAuth2UserService;
+import ita.softserve.course_evaluation.security.oauth2.*;
 import ita.softserve.course_evaluation.security.RestAuthenticationEntryPoint;
-import ita.softserve.course_evaluation.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
-import ita.softserve.course_evaluation.security.oauth2.OAuth2AuthenticationFailureHandler;
-import ita.softserve.course_evaluation.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -20,9 +18,17 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
+import org.springframework.security.oauth2.client.http.OAuth2ErrorResponseErrorHandler;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Arrays;
 
 
 @Configuration
@@ -30,7 +36,7 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequ
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public static final String LOGIN_PAGE = "/login";
-	
+
 	private final JwtConfigurer jwtConfigurer;
 	@Autowired
 	private JwtTokenFilter jwtTokenFilter;
@@ -48,10 +54,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private CustomOAuth2UserService customOAuth2UserService;
+	@Autowired
+	private CustomOidUserService customOidUserService;
 	public SecurityConfig(JwtConfigurer jwtConfigurer) {
 		this.jwtConfigurer = jwtConfigurer;
 	}
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -61,45 +69,47 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.csrf().disable()
 				.formLogin()
-					.disable()
+				.disable()
 				.httpBasic().disable()
 				.exceptionHandling()
 				.authenticationEntryPoint(new RestAuthenticationEntryPoint())
 				.and()
 				.authorizeRequests()
-					.antMatchers("/").permitAll()
-					.antMatchers("/api/v1/auth/login").permitAll()
-					.antMatchers("/api/v1/auth/reg").permitAll()
-					.antMatchers("/v2/**", "/webjars/**","/swagger-ui/*", "/swagger-ui.html", "/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security").permitAll()
+				.antMatchers("/").permitAll()
+				.antMatchers("/api/v1/auth/login").permitAll()
+				.antMatchers("/api/v1/auth/reg").permitAll()
+				.antMatchers("/v2/**", "/webjars/**","/swagger-ui/*", "/swagger-ui.html", "/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security").permitAll()
 				.anyRequest()
-					.authenticated().and()
+				.authenticated().and()
 				.oauth2Login()
-					.authorizationEndpoint()
-						.baseUri("/oauth2/authorize")
-						.authorizationRequestRepository(customAuthorizationRequestRepository())
-						.and()
-					.redirectionEndpoint()
-						.baseUri("/oauth2/callback/*")
-						.and()
-					.userInfoEndpoint()
-						.userService(customOAuth2UserService)
-						.and()
-					.successHandler(oAuthSuccessHandler)
-					.failureHandler(oAuthFailureHandler);
+				.authorizationEndpoint()
+				.authorizationRequestRepository(cookieOAuth2AuthorizationRequestRepository)
+				.and()
+				.redirectionEndpoint()
+				.and()
+				.userInfoEndpoint()
+				.oidcUserService(customOidUserService)
+				.userService(customOAuth2UserService)
+				.and()
+				.tokenEndpoint()
+				.accessTokenResponseClient(authorizationCodeTokenResponseClient());
+//				.and()
+//				.successHandler(oAuthSuccessHandler)
+//				.failureHandler(oAuthFailureHandler);
 //		http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-				http.apply(jwtConfigurer);
+		http.apply(jwtConfigurer);
 	}
 	@Bean
 	public AuthorizationRequestRepository<OAuth2AuthorizationRequest> customAuthorizationRequestRepository() {
 		return new HttpSessionOAuth2AuthorizationRequestRepository();
 	}
-	
+
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
-	
+
 	@Bean
 	protected PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder(12);
@@ -110,5 +120,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		authenticationManagerBuilder
 				.userDetailsService(customUserDetailsService)
 				.passwordEncoder(passwordEncoder());
+	}
+
+
+	private OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> authorizationCodeTokenResponseClient() {
+		OAuth2AccessTokenResponseHttpMessageConverter tokenResponseHttpMessageConverter = new OAuth2AccessTokenResponseHttpMessageConverter();
+		tokenResponseHttpMessageConverter.setTokenResponseConverter(new OAuth2AccessTokenResponseConverterWithDefaults());
+		RestTemplate restTemplate = new RestTemplate(Arrays.asList(new FormHttpMessageConverter(), tokenResponseHttpMessageConverter));
+		restTemplate.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
+		DefaultAuthorizationCodeTokenResponseClient tokenResponseClient = new DefaultAuthorizationCodeTokenResponseClient();
+		tokenResponseClient.setRestOperations(restTemplate);
+		return tokenResponseClient;
 	}
 }

@@ -19,4 +19,11 @@ public abstract class OAuth2UserInfo {
 
     public abstract String getEmail();
 
+    public String getFirstName() {
+        return "";
+    }
+
+    public String getLastName() {
+        return "";
+    }
 }

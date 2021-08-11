@@ -10,6 +10,7 @@ import ita.softserve.course_evaluation.security.oauth2.users.SocialProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -22,12 +23,14 @@ import java.util.Optional;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
-
         try {
             return processOAuth2User(oAuth2UserRequest, oAuth2User);
         } catch (AuthenticationException ex) {
@@ -63,16 +66,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
         User user = new User();
-
-//        user.setProvider(SocialProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
-//        user.setProviderId(oAuth2UserInfo.getId());
-        user.setFirstName(oAuth2UserInfo.getName());
+        user.setFirstName(oAuth2UserInfo.getName().split(" ")[0]);
+        user.setLastName(oAuth2UserInfo.getName().split(" ")[1]);
         user.setEmail(oAuth2UserInfo.getEmail());
+        user.setPassword(passwordEncoder.encode("changeit"));
         return userRepository.save(user);
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
-        existingUser.setFirstName(oAuth2UserInfo.getName());
+        existingUser.setFirstName(oAuth2UserInfo.getName().split(" ")[0]);
+        existingUser.setLastName(oAuth2UserInfo.getName().split(" ")[1]);
         return userRepository.save(existingUser);
     }
 
