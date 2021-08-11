@@ -41,7 +41,7 @@ public class CourseDtoMapper {
         return courseDto;
     }
 
-    public static List<Course> toEntity(List<CourseDto> coursesDto, List<TeacherToCourseDto> teacherDto) {
+    public static List<Course> toEntity(List<CourseDto> coursesDto) {
         return Objects.isNull(coursesDto) ? null : coursesDto.stream().map(CourseDtoMapper::toEntity).collect(Collectors.toList());
     }
 
