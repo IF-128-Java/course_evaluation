@@ -6,6 +6,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import ita.softserve.course_evaluation.exception.JwtAuthenticationException;
+import ita.softserve.course_evaluation.security.SecurityUser;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -53,6 +54,20 @@ public class JwtTokenProvider {
 				       .setExpiration(validity)
 				       .signWith(SignatureAlgorithm.HS256, secretKey)
 				       .compact();
+	}
+
+	public String createToken(Authentication authentication) {
+		SecurityUser userPrincipal = (SecurityUser) authentication.getPrincipal();
+
+		Date now = new Date();
+		Date expiryDate = new Date(now.getTime() + validity * 1000);
+
+		return Jwts.builder()
+				.setSubject(Long.toString(userPrincipal.getId()))
+				.setIssuedAt(new Date())
+				.setExpiration(expiryDate)
+				.signWith(SignatureAlgorithm.HS256, secretKey)
+				.compact();
 	}
 	
 	public boolean validateToken(String token) {

@@ -6,11 +6,10 @@ import ita.softserve.course_evaluation.security.oauth2.CustomOAuth2UserService;
 import ita.softserve.course_evaluation.security.RestAuthenticationEntryPoint;
 import ita.softserve.course_evaluation.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import ita.softserve.course_evaluation.security.oauth2.OAuth2AuthenticationFailureHandler;
-import ita.softserve.course_evaluation.security.oauth2.OAuthSuccessHandler;
+import ita.softserve.course_evaluation.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -24,8 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 @Configuration
@@ -44,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private HttpCookieOAuth2AuthorizationRequestRepository cookieOAuth2AuthorizationRequestRepository;
 
 	@Autowired
-	private OAuthSuccessHandler oAuthSuccessHandler;
+	private OAuth2AuthenticationSuccessHandler oAuthSuccessHandler;
 
 	@Autowired
 	OAuth2AuthenticationFailureHandler oAuthFailureHandler;
@@ -82,7 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						.authorizationRequestRepository(customAuthorizationRequestRepository())
 						.and()
 					.redirectionEndpoint()
-						.baseUri("login/oauth2/code/*")
+						.baseUri("/oauth2/callback/*")
 						.and()
 					.userInfoEndpoint()
 						.userService(customOAuth2UserService)
