@@ -3,6 +3,7 @@ package ita.softserve.course_evaluation.service;
 import ita.softserve.course_evaluation.dto.CourseDto;
 import ita.softserve.course_evaluation.dto.dtoMapper.CourseDtoMapper;
 import ita.softserve.course_evaluation.entity.Course;
+import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.CourseNotFoundException;
 import ita.softserve.course_evaluation.repository.CourseRepository;
 import ita.softserve.course_evaluation.service.impl.CourseServiceImpl;
@@ -52,6 +53,7 @@ public class CourseServiceImplTests {
         expected.setDescription("Description");
         expected.setStartDate(new Date());
         expected.setEndDate(new Date());
+        expected.setTeacher(new User(2L, "Test", "Teacher", "teacher@test.com", "123"));
 
         expectedDto = CourseDtoMapper.toDto(expected);
     }

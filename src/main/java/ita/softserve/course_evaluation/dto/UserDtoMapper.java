@@ -36,7 +36,7 @@ public class UserDtoMapper {
 		return Objects.isNull(users) ? null : users.stream().map(UserDtoMapper::toDto).collect(Collectors.toList());
 	}
 	
-	public List<User> fromDto(List<UserDto> entities) {
+	public static List<User> fromDto(List<UserDto> entities) {
 		UserDtoMapper userDtoMapper = new UserDtoMapper();
 		return Objects.isNull(entities) ? null : entities.stream().map(UserDtoMapper::fromDto).collect(Collectors.toList());
 	}

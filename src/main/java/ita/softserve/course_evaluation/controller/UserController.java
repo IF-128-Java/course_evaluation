@@ -11,6 +11,8 @@ import ita.softserve.course_evaluation.dto.UserDto;
 import ita.softserve.course_evaluation.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,7 +68,7 @@ public class UserController {
     })
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateUser(@RequestBody UpdateUserDto updateUserDto, @PathVariable Long id) {
+    public void updateUser(@Validated @RequestBody UpdateUserDto updateUserDto, @PathVariable Long id) {
         userService.updateUser(updateUserDto, id);
     }
 
@@ -79,7 +81,7 @@ public class UserController {
     })
 	@PatchMapping("/{id}/update-password")
 	@ResponseStatus(HttpStatus.OK)
-	public void updatePassword(@RequestBody UpdatePasswordDto updatePasswordDto, @PathVariable Long id){
+	public void updatePassword(@Validated @RequestBody UpdatePasswordDto updatePasswordDto, @PathVariable Long id){
 		userService.updatePassword(updatePasswordDto, id);
 	}
 }

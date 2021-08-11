@@ -1,7 +1,10 @@
 package ita.softserve.course_evaluation.dto.dtoMapper;
 
 import ita.softserve.course_evaluation.dto.CourseDto;
+import ita.softserve.course_evaluation.dto.TeacherToCourseDto;
 import ita.softserve.course_evaluation.entity.Course;
+import ita.softserve.course_evaluation.entity.User;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -20,7 +23,7 @@ public class CourseDtoMapper {
         course.setDescription(courseDto.getDescription());
         course.setStartDate(courseDto.getStartDate());
         course.setEndDate(courseDto.getEndDate());
-        course.setUser(courseDto.getUser());
+        course.setTeacher(courseDto.getTeacher());
         return course;
     }
 
@@ -34,11 +37,11 @@ public class CourseDtoMapper {
         courseDto.setDescription(course.getDescription());
         courseDto.setStartDate(course.getStartDate());
         courseDto.setEndDate(course.getEndDate());
-        courseDto.setUser(course.getUser());
+        courseDto.setTeacherId(course.getTeacher().getId());
         return courseDto;
     }
 
-    public static List<Course> toEntity(List<CourseDto> coursesDto) {
+    public static List<Course> toEntity(List<CourseDto> coursesDto, List<TeacherToCourseDto> teacherDto) {
         return Objects.isNull(coursesDto) ? null : coursesDto.stream().map(CourseDtoMapper::toEntity).collect(Collectors.toList());
     }
 
