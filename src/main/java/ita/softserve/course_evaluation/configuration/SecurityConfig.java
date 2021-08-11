@@ -47,10 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private HttpCookieOAuth2AuthorizationRequestRepository cookieOAuth2AuthorizationRequestRepository;
 
 	@Autowired
-	private OAuth2AuthenticationSuccessHandler oAuthSuccessHandler;
+	private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
 	@Autowired
-	OAuth2AuthenticationFailureHandler oAuthFailureHandler;
+	OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
 	@Autowired
 	private CustomOAuth2UserService customOAuth2UserService;
@@ -92,10 +92,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.userService(customOAuth2UserService)
 				.and()
 				.tokenEndpoint()
-				.accessTokenResponseClient(authorizationCodeTokenResponseClient());
-//				.and()
-//				.successHandler(oAuthSuccessHandler)
-//				.failureHandler(oAuthFailureHandler);
+				.accessTokenResponseClient(authorizationCodeTokenResponseClient())
+				.and()
+				.successHandler(oAuth2AuthenticationSuccessHandler)
+				.failureHandler(oAuth2AuthenticationFailureHandler);
 //		http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 		http.apply(jwtConfigurer);
 	}

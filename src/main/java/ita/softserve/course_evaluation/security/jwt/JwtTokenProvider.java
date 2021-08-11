@@ -58,12 +58,16 @@ public class JwtTokenProvider {
 
 	public String createToken(Authentication authentication) {
 		SecurityUser userPrincipal = (SecurityUser) authentication.getPrincipal();
+		Claims claims = Jwts.claims().setSubject(userPrincipal.getUsername());
+		claims.put("role", userPrincipal.getAuthorities());
+		claims.put("id", userPrincipal.getId());
 
 		Date now = new Date();
 		Date expiryDate = new Date(now.getTime() + validity * 1000);
 
 		return Jwts.builder()
-				.setSubject(Long.toString(userPrincipal.getId()))
+				.setSubject(userPrincipal.getUsername())
+				.setClaims(claims)
 				.setIssuedAt(new Date())
 				.setExpiration(expiryDate)
 				.signWith(SignatureAlgorithm.HS256, secretKey)

@@ -2,6 +2,7 @@ package ita.softserve.course_evaluation.entity;
 
 import com.sun.istack.NotNull;
 import ita.softserve.course_evaluation.security.oauth2.users.SocialProvider;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -36,6 +37,12 @@ public class User {
 	
 	@ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
 	@Column(name = "role_id")
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_roles",
+			joinColumns = { @JoinColumn(name = "USER_ID") },
+			inverseJoinColumns = {
+					@JoinColumn(name = "ROLE_ID")
+			})
 	private Set<Role> roles;
 	
 	@OneToMany(mappedBy = "student",

@@ -3,6 +3,7 @@ package ita.softserve.course_evaluation.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import javax.persistence.*;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -14,4 +15,16 @@ public enum Role {
 
     @Getter
     private final Set<Permission> permissions;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles",
+            joinColumns = { @JoinColumn(name = "ROLE_ID") },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "USER_ID")
+            })
+    private Set<User> users;
+
+    Role(Set<Permission> read) {
+        this.permissions = read;
+    }
 }

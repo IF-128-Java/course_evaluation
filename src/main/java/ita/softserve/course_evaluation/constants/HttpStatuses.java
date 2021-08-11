@@ -1,5 +1,10 @@
 package ita.softserve.course_evaluation.constants;
 
+import ita.softserve.course_evaluation.dto.OAuthUserDto;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public final class HttpStatuses {
     public static final String OK = "OK";
     public static final String CREATED = "Created";
@@ -13,4 +18,6 @@ public final class HttpStatuses {
 
     HttpStatuses() {
     }
+
+    public static final List<OAuthUserDto> OAUTH_USER_DTO_LIST = new ArrayList<>();
 }

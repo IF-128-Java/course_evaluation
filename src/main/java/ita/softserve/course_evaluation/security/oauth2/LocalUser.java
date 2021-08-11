@@ -1,5 +1,6 @@
 package ita.softserve.course_evaluation.security.oauth2;
 
+import ita.softserve.course_evaluation.security.SecurityUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
@@ -43,6 +44,18 @@ public class LocalUser extends User implements OidcUser, OAuth2User {
         this.userInfo = userInfo;
     }
 
+    public static LocalUser create(ita.softserve.course_evaluation.entity.User user,
+                                   Map<String, Object> attributes, OidcIdToken idToken, OidcUserInfo userInfo) {
+        LocalUser localUser = new LocalUser(user.getEmail(), user.getPassword(), true, true, true, true,
+                SecurityUser.fromUser(user).getAuthorities(), user, idToken, userInfo);
+        localUser.setAttributes(attributes);
+        return localUser;
+    }
+
+    public void setAttributes(Map<String, Object> attributes) {
+        this.attributes = attributes;
+    }
+
     @Override
     public Map<String, Object> getClaims() {
         return this.attributes;
@@ -66,5 +79,9 @@ public class LocalUser extends User implements OidcUser, OAuth2User {
     @Override
     public String getName() {
         return this.user.getFirstName() + " " + this.user.getLastName();
+    }
+
+    public ita.softserve.course_evaluation.entity.User getUser() {
+        return user;
     }
 }

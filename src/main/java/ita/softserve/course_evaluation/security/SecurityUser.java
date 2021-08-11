@@ -43,8 +43,7 @@ public class SecurityUser implements UserDetails, OAuth2User {
 		List<GrantedAuthority> authorities = Collections.
 				singletonList(new SimpleGrantedAuthority("ROLE_USER"));
 		return new SecurityUser(
-				user.getId(),user.getEmail(),user.getPassword(),
-				getAuthorities(user.getRoles()), true);
+				user.getId(),user.getEmail(),user.getPassword(), List.of(new SimpleGrantedAuthority[]{new SimpleGrantedAuthority(Role.ROLE_USER.name())}), true);
 	}
 
 	public static SecurityUser create(User user, Map<String, Object> attributes) {

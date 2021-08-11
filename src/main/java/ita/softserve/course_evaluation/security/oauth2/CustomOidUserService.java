@@ -21,37 +21,21 @@ public class CustomOidUserService extends OidcUserService {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserRepository userRepository;
 
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
-        OidcUser OidcUser = super.loadUser(userRequest);
-//        OAuth2User oAuth2User = super.loadUser(userRequest);
+        OidcUser oidcUser = super.loadUser(userRequest);
         try {
-            Map<String, Object> attributes = new HashMap<>(OidcUser.getAttributes());
-
-            String provider = userRequest.getClientRegistration().getRegistrationId();
-
-            String email = attributes.get("email").toString();
-            String name = attributes.get("name").toString();
-//            updateUser(email, name);
-
-            return OidcUser;
-//            return userService.processUserRegistration(provider, attributes, null, null);
-        } catch (AuthenticationException exception) {
-            throw exception;
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            throw new OAuth2AuthenticationProcessingException(exception.getMessage(), exception.getCause());
+            return userService.processUserRegistration(userRequest.getClientRegistration().getRegistrationId(), oidcUser.getAttributes(), oidcUser.getIdToken(),
+                    oidcUser.getUserInfo());
+        } catch (AuthenticationException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            // Throwing an instance of AuthenticationException will trigger the
+            // OAuth2AuthenticationFailureHandler
+            throw new OAuth2AuthenticationProcessingException(ex.getMessage(), ex.getCause());
         }
-
-    }
-    private void updateUser(String email, String name) {
-        User user = userRepository.findUserByEmail(email).orElse(new User());
-        user.setEmail(email);
-        user.setFirstName(name);
-        userRepository.save(user);
     }
 
 }
