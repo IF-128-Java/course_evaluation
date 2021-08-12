@@ -29,16 +29,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Value("${oauth2.authorizedRedirectUris}")
     private List<String> authorizedRedirectUris;
 
-//    private AppProperties appProperties;
-
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
 
     @Autowired
-    OAuth2AuthenticationSuccessHandler(JwtTokenProvider tokenProvider, /*AppProperties appProperties,*/
+    OAuth2AuthenticationSuccessHandler(JwtTokenProvider tokenProvider,
                                        HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
         this.tokenProvider = tokenProvider;
-//        this.appProperties = appProperties;
         this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
     }
 

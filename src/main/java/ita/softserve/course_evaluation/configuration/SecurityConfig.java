@@ -63,40 +63,40 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-				.cors().and()
-				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.cors().and()
+			.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
-				.csrf().disable()
-				.formLogin()
-				.disable()
-				.httpBasic().disable()
-				.exceptionHandling()
-				.authenticationEntryPoint(new RestAuthenticationEntryPoint())
+			.csrf().disable()
+			.formLogin()
+			.disable()
+			.httpBasic().disable()
+			.exceptionHandling()
+			.authenticationEntryPoint(new RestAuthenticationEntryPoint())
 				.and()
-				.authorizeRequests()
-				.antMatchers("/").permitAll()
-				.antMatchers("/api/v1/auth/login").permitAll()
-				.antMatchers("/api/v1/auth/reg").permitAll()
-				.antMatchers("/v2/**", "/webjars/**","/swagger-ui/*", "/swagger-ui.html", "/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security").permitAll()
-				.anyRequest()
-				.authenticated().and()
-				.oauth2Login()
+			.authorizeRequests()
+			.antMatchers("/").permitAll()
+			.antMatchers("/api/v1/auth/login").permitAll()
+			.antMatchers("/api/v1/auth/reg").permitAll()
+			.antMatchers("/v2/**", "/webjars/**","/swagger-ui/*", "/swagger-ui.html", "/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security").permitAll()
+			.anyRequest()
+			.authenticated()
+				.and()
+			.oauth2Login()
 				.authorizationEndpoint()
-				.authorizationRequestRepository(cookieOAuth2AuthorizationRequestRepository)
-				.and()
+					.authorizationRequestRepository(cookieOAuth2AuthorizationRequestRepository)
+					.and()
 				.redirectionEndpoint()
-				.and()
+					.and()
 				.userInfoEndpoint()
-				.oidcUserService(customOidUserService)
-				.userService(customOAuth2UserService)
-				.and()
+					.oidcUserService(customOidUserService)
+					.userService(customOAuth2UserService)
+					.and()
 				.tokenEndpoint()
-				.accessTokenResponseClient(authorizationCodeTokenResponseClient())
-				.and()
+					.accessTokenResponseClient(authorizationCodeTokenResponseClient())
+					.and()
 				.successHandler(oAuth2AuthenticationSuccessHandler)
 				.failureHandler(oAuth2AuthenticationFailureHandler);
-//		http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 		http.apply(jwtConfigurer);
 	}
 	@Bean
@@ -126,8 +126,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> authorizationCodeTokenResponseClient() {
 		OAuth2AccessTokenResponseHttpMessageConverter tokenResponseHttpMessageConverter = new OAuth2AccessTokenResponseHttpMessageConverter();
 		tokenResponseHttpMessageConverter.setTokenResponseConverter(new OAuth2AccessTokenResponseConverterWithDefaults());
+
 		RestTemplate restTemplate = new RestTemplate(Arrays.asList(new FormHttpMessageConverter(), tokenResponseHttpMessageConverter));
 		restTemplate.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
+
 		DefaultAuthorizationCodeTokenResponseClient tokenResponseClient = new DefaultAuthorizationCodeTokenResponseClient();
 		tokenResponseClient.setRestOperations(restTemplate);
 		return tokenResponseClient;

@@ -18,6 +18,4 @@ public final class HttpStatuses {
 
     HttpStatuses() {
     }
-
-    public static final List<OAuthUserDto> OAUTH_USER_DTO_LIST = new ArrayList<>();
 }
