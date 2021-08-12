@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import ita.softserve.course_evaluation.exception.JwtAuthenticationException;
 import ita.softserve.course_evaluation.security.SecurityUser;
+import ita.softserve.course_evaluation.security.oauth2.LocalUser;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -57,10 +58,10 @@ public class JwtTokenProvider {
 	}
 
 	public String createToken(Authentication authentication) {
-		SecurityUser userPrincipal = (SecurityUser) authentication.getPrincipal();
+		LocalUser userPrincipal = (LocalUser) authentication.getPrincipal();
 		Claims claims = Jwts.claims().setSubject(userPrincipal.getUsername());
-		claims.put("role", userPrincipal.getAuthorities());
-		claims.put("id", userPrincipal.getId());
+		claims.put("role", userPrincipal.getUser().getRoles());
+		claims.put("id", userPrincipal.getUser().getId());
 
 		Date now = new Date();
 		Date expiryDate = new Date(now.getTime() + validity * 1000);

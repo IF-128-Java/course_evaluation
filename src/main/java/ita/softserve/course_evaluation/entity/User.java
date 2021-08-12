@@ -10,6 +10,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 @NoArgsConstructor
@@ -37,13 +39,7 @@ public class User {
 	
 	@ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
 	@Column(name = "role_id")
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "user_roles",
-			joinColumns = { @JoinColumn(name = "USER_ID") },
-			inverseJoinColumns = {
-					@JoinColumn(name = "ROLE_ID")
-			})
-	private Set<Role> roles;
+	private Set<Role> roles = Stream.of(Role.ROLE_USER).collect(Collectors.toSet());
 	
 	@OneToMany(mappedBy = "student",
 			cascade = CascadeType.ALL,
