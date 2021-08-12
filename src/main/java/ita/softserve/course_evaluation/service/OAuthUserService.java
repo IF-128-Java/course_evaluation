@@ -1,6 +1,6 @@
 package ita.softserve.course_evaluation.service;
 
-import ita.softserve.course_evaluation.dto.SignUpRequest;
+import ita.softserve.course_evaluation.dto.SimpleUserDto;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.security.oauth2.LocalUser;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
@@ -12,6 +12,6 @@ public interface OAuthUserService {
 
     public LocalUser processUserRegistration(String registrationId, Map<String, Object> attributes, OidcIdToken idToken, OidcUserInfo userInfo);
 
-    User registerNewUser(final SignUpRequest signUpRequest);
+    User registerNewUser(final SimpleUserDto signUpRequest);
 
 }
