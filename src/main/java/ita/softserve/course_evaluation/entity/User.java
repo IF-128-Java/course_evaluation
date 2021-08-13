@@ -3,8 +3,13 @@ package ita.softserve.course_evaluation.entity;
 import com.sun.istack.NotNull;
 import ita.softserve.course_evaluation.security.oauth2.users.SocialProvider;
 import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -47,10 +52,10 @@ public class User {
 	private List<Feedback> feedbacks = new ArrayList<>();
 
 
-	@OneToMany(mappedBy = "user",
+	@OneToMany(mappedBy = "teacher",
 			cascade = CascadeType.ALL,
-			orphanRemoval = true)
-	private List<Course> courses = new ArrayList<>();
+			orphanRemoval = false)    //  ToDo: What the reason to use orphanRemoval = true ?
+	private List<Course> courses;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="group_id")

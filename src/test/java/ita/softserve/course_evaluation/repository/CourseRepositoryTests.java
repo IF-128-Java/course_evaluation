@@ -32,7 +32,7 @@ public class CourseRepositoryTests {
         course.setDescription("Description");
         course.setStartDate(new Date());
         course.setEndDate(new Date());
-        course.setUser(userRepository.save(user));
+        course.setTeacher(userRepository.save(user));
 
         courseRepository.save(course);
         List<Course> expected = List.of(course);

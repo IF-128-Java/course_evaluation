@@ -23,12 +23,14 @@ public class CourseDto {
 
     private Date endDate;
 
-    private User user;
+    private long teacherId;
+
+    private User teacher;
+
 
     @JsonProperty("teacher_id")
     private void unpackNested(Long teacher_id) {
-        this.user = new User();
-        user.setId(teacher_id);
+        this.teacher = new User();
+        teacher.setId(teacher_id);
     }
-
 }
