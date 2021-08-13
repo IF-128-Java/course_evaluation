@@ -1,12 +1,7 @@
 package ita.softserve.course_evaluation.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -73,5 +68,9 @@ public class User {
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
+	}
+
+	public User(long teacherId) {
+		this.id = teacherId;
 	}
 }

@@ -4,6 +4,7 @@ package ita.softserve.course_evaluation.service.impl;
 import ita.softserve.course_evaluation.dto.CourseDto;
 import ita.softserve.course_evaluation.dto.dtoMapper.CourseDtoMapper;
 import ita.softserve.course_evaluation.entity.Course;
+import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.CourseNotFoundException;
 import ita.softserve.course_evaluation.repository.CourseRepository;
 import ita.softserve.course_evaluation.service.CourseService;
@@ -29,7 +30,7 @@ public class CourseServiceImpl implements CourseService {
                 .description(courseDto.getDescription())
                 .startDate(courseDto.getStartDate())
                 .endDate(courseDto.getEndDate())
-                .teacher(courseDto.getTeacher())
+                .teacher(new User(courseDto.getTeacherId()))
                 .build());
     }
 
@@ -58,7 +59,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<CourseDto> getAll() {
-        List<CourseDto> courses = CourseDtoMapper.toDto(courseRepository.findAll());
+        List<CourseDto> courses = CourseDtoMapper.toDto(courseRepository.findAllCourses());
         return Objects.isNull(courses) ? Collections.emptyList() : courses;
     }
 }

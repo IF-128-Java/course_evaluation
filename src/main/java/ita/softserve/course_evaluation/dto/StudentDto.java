@@ -5,29 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
 import java.util.Set;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class CourseDto {
-
-    private long id;
-
-    private String courseName;
-
-    private String description;
-
-    private Date startDate;
-
-    private Date endDate;
-
-    private long teacherId;
-
+@NoArgsConstructor
+public class StudentDto {
+    private Long id;
     private String firstName;
-
     private String lastName;
-
+    private String email;
     private Set<Role> roles;
+    private Long groupId;
+    private String groupName;
 }

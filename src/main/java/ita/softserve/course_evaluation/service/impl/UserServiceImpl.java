@@ -1,16 +1,13 @@
 package ita.softserve.course_evaluation.service.impl;
 
 import ita.softserve.course_evaluation.dto.UpdatePasswordDto;
+import ita.softserve.course_evaluation.dto.UpdateUserDto;
 import ita.softserve.course_evaluation.dto.UserDto;
 import ita.softserve.course_evaluation.dto.UserDtoMapper;
 import ita.softserve.course_evaluation.entity.User;
-import ita.softserve.course_evaluation.exception.IdMatchException;
 import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
-import ita.softserve.course_evaluation.dto.UpdateUserDto;
 import ita.softserve.course_evaluation.repository.UserRepository;
-import ita.softserve.course_evaluation.security.SecurityUser;
 import ita.softserve.course_evaluation.service.UserService;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +27,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto readById(long id ) {
-		checkAuthenticatedUser(id);
-
 		return UserDtoMapper.toDto(getUserById(id));
 	}
 
@@ -41,10 +36,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updateUser(UpdateUserDto dto, Long userId) {
-		checkAuthenticatedUser(userId);
-
-		User daoUser = getUserById(userId);
+	public void updateUser(UpdateUserDto dto, String email) {
+		User daoUser = getUserByEmail(email);
 
 		daoUser.setFirstName(dto.getFirstName());
 		daoUser.setLastName(dto.getLastName());
@@ -53,26 +46,24 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updatePassword(UpdatePasswordDto updatePasswordDto, Long userId) {
-		checkAuthenticatedUser(userId);
+	public void updatePassword(UpdatePasswordDto dto, String email) {
+		User daoUser = getUserByEmail(email);
 
-		User daoUser = getUserById(userId);
-
-		if(!passwordEncoder.matches(updatePasswordDto.getOldPassword(), daoUser.getPassword())){
+		if(!passwordEncoder.matches(dto.getOldPassword(), daoUser.getPassword())){
 			throw new InvalidOldPasswordException("Old password doesn't match!");
 		}
 
-		daoUser.setPassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
+		daoUser.setPassword(passwordEncoder.encode(dto.getNewPassword()));
 		userRepository.save(daoUser);
-	}
-
-	private void checkAuthenticatedUser(Long userId){
-		if(!((SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().equals(userId))
-			throw new IdMatchException("Ids don't match!");
 	}
 
 	private User getUserById(Long id){
 		return userRepository.findById(id).orElseThrow(
 				() -> new EntityNotFoundException(String.format("User with id: %d not found!", id)));
+	}
+
+	private User getUserByEmail(String email){
+		return userRepository.findUserByEmail(email).orElseThrow(
+				() -> new EntityNotFoundException(String.format("User with email: %s not found!", email)));
 	}
 }

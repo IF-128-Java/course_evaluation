@@ -8,10 +8,12 @@ import ita.softserve.course_evaluation.constants.HttpStatuses;
 import ita.softserve.course_evaluation.dto.UpdatePasswordDto;
 import ita.softserve.course_evaluation.dto.UpdateUserDto;
 import ita.softserve.course_evaluation.dto.UserDto;
+import ita.softserve.course_evaluation.security.SecurityUser;
 import ita.softserve.course_evaluation.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
+import java.security.Principal;
 import java.util.List;
 
 @Api(tags = "User service REST API")
@@ -43,10 +47,10 @@ public class UserController {
             @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND)
     })
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> readById(@PathVariable(value = "id") long id) {
+    @PreAuthorize("authentication.principal.id == #id")
+    public ResponseEntity<UserDto> readById(@PathVariable Long id) {
         return new ResponseEntity<>(userService.readById(id), HttpStatus.OK);
     }
-
 
     @ApiOperation(value = "Get User by Username")
     @ApiResponses(value = {
@@ -66,10 +70,11 @@ public class UserController {
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
             @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND)
     })
-    @PatchMapping("/{id}")
+    @PatchMapping()
     @ResponseStatus(HttpStatus.OK)
-    public void updateUser(@Validated @RequestBody UpdateUserDto updateUserDto, @PathVariable Long id) {
-        userService.updateUser(updateUserDto, id);
+    public void updateUser(@Validated @RequestBody UpdateUserDto updateUserDto,
+                           @ApiIgnore Principal principal) {
+        userService.updateUser(updateUserDto, principal.getName());
     }
 
     @ApiOperation("Update user password")
@@ -79,9 +84,10 @@ public class UserController {
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
             @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND)
     })
-	@PatchMapping("/{id}/update-password")
+	@PatchMapping("/update-password")
 	@ResponseStatus(HttpStatus.OK)
-	public void updatePassword(@Validated @RequestBody UpdatePasswordDto updatePasswordDto, @PathVariable Long id){
-		userService.updatePassword(updatePasswordDto, id);
+	public void updatePassword(@Validated @RequestBody UpdatePasswordDto updatePasswordDto,
+                               @ApiIgnore Principal principal){
+		userService.updatePassword(updatePasswordDto, principal.getName());
 	}
 }
