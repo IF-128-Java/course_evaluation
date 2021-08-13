@@ -21,7 +21,7 @@ public class CourseDtoMapper {
         course.setDescription(courseDto.getDescription());
         course.setStartDate(courseDto.getStartDate());
         course.setEndDate(courseDto.getEndDate());
-        course.setTeacher(courseDto.getTeacher());
+        course.setTeacher(new User(courseDto.getTeacherId()));
         return course;
     }
 
@@ -36,6 +36,9 @@ public class CourseDtoMapper {
         courseDto.setStartDate(course.getStartDate());
         courseDto.setEndDate(course.getEndDate());
         courseDto.setTeacherId(course.getTeacher().getId());
+        courseDto.setFirstName(course.getTeacher().getFirstName());
+        courseDto.setLastName(course.getTeacher().getLastName());
+        courseDto.setRoles(course.getTeacher().getRoles());
         return courseDto;
     }
 
