@@ -77,12 +77,6 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(daoUser);
 	}
 
-
-	private void checkAuthenticatedUser(Long userId){
-		if(!((SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId().equals(userId))
-			throw new IdMatchException("Ids don't match!");
-	}
-
 	private User getUserById(Long id){
 		return userRepository.findById(id).orElseThrow(
 				() -> new EntityNotFoundException(String.format("User with id: %d not found!", id)));
