@@ -21,6 +21,8 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class JwtTokenProvider {
@@ -59,20 +61,23 @@ public class JwtTokenProvider {
 
 	public String createToken(Authentication authentication) {
 		LocalUser userPrincipal = (LocalUser) authentication.getPrincipal();
-		Claims claims = Jwts.claims().setSubject(userPrincipal.getUsername());
-		claims.put("role", userPrincipal.getUser().getRoles());
-		claims.put("id", userPrincipal.getUser().getId());
-
-		Date now = new Date();
-		Date expiryDate = new Date(now.getTime() + validity * 1000);
-
-		return Jwts.builder()
-				.setSubject(userPrincipal.getUsername())
-				.setClaims(claims)
-				.setIssuedAt(new Date())
-				.setExpiration(expiryDate)
-				.signWith(SignatureAlgorithm.HS256, secretKey)
-				.compact();
+		return createToken(userPrincipal.getUser().getEmail()
+				,userPrincipal.getUser().getId()
+				, userPrincipal.getUser().getRoles().stream().map(Enum::name).toArray(String[]::new));
+//		Claims claims = Jwts.claims().setSubject(userPrincipal.getUsername());
+//		claims.put("role", userPrincipal.getUser().getRoles());
+//		claims.put("id", userPrincipal.getUser().getId());
+//
+//		Date now = new Date();
+//		Date expiryDate = new Date(now.getTime() + validity * 1000);
+//
+//		return Jwts.builder()
+//				.setSubject(userPrincipal.getUsername())
+//				.setClaims(claims)
+//				.setIssuedAt(new Date())
+//				.setExpiration(expiryDate)
+//				.signWith(SignatureAlgorithm.HS256, secretKey)
+//				.compact();
 	}
 	
 	public boolean validateToken(String token) {

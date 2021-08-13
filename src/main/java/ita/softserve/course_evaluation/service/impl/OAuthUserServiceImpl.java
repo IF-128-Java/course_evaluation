@@ -76,7 +76,7 @@ public class OAuthUserServiceImpl implements OAuthUserService {
         user.setFirstName(signUpRequest.getFirstName());
         user.setLastName(signUpRequest.getLastName());
         user.setEmail(signUpRequest.getEmail());
-        user.setRoles(Stream.of(Role.ROLE_STUDENT).collect(Collectors.toSet()));
+        user.setRoles(Stream.of(Role.ROLE_ADMIN).collect(Collectors.toSet()));
         user.setPassword(signUpRequest.getPassword());
 
         user = userRepository.save(user);

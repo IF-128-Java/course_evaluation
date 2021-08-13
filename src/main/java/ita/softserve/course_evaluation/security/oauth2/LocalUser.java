@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.util.Collection;
 import java.util.Map;
 
+
 public class LocalUser extends User implements OidcUser, OAuth2User {
 
     private static final long serialVersionUID = -2845160792248762779L;
@@ -18,6 +19,7 @@ public class LocalUser extends User implements OidcUser, OAuth2User {
     private final OidcUserInfo userInfo;
     private Map<String, Object> attributes;
     private ita.softserve.course_evaluation.entity.User user;
+
 
     public LocalUser(final String userID, final String password,
                      final boolean enabled, final boolean accountNonExpired,

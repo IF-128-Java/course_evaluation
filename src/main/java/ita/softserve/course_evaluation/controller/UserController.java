@@ -8,9 +8,12 @@ import ita.softserve.course_evaluation.constants.HttpStatuses;
 import ita.softserve.course_evaluation.dto.UpdatePasswordDto;
 import ita.softserve.course_evaluation.dto.UpdateUserDto;
 import ita.softserve.course_evaluation.dto.UserDto;
+import ita.softserve.course_evaluation.security.oauth2.LocalUser;
 import ita.softserve.course_evaluation.service.UserService;
+import ita.softserve.course_evaluation.util.GeneralUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -82,4 +85,15 @@ public class UserController {
 	public void updatePassword(@RequestBody UpdatePasswordDto updatePasswordDto, @PathVariable Long id){
 		userService.updatePassword(updatePasswordDto, id);
 	}
+
+    @GetMapping("/user")
+//    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> getUserContent() {
+        return ResponseEntity.ok("User content goes here");
+    }
+
+    @GetMapping("/user/me")
+    public ResponseEntity<?> getCurrentUser( LocalUser user) {
+        return ResponseEntity.ok(user.getUser());
+    }
 }
