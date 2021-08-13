@@ -142,12 +142,12 @@ public class CourseServiceImplTests {
 
     @Test
     public void testGetAll(){
-        when(courseRepository.findAll()).thenReturn(List.of(expected));
+        when(courseRepository.findAllCourses()).thenReturn(List.of(expected));
 
         List<CourseDto> actual = courseService.getAll();
 
         assertFalse(actual.isEmpty());
 
-        verify(courseRepository, times(1)).findAll();
+        verify(courseRepository, times(1)).findAllCourses();
     }
 }
