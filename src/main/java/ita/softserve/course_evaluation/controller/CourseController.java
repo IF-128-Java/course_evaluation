@@ -94,4 +94,16 @@ public class CourseController {
     public void deleteCourse(@PathVariable long id) {
         courseService.deleteById(id);
     }
+
+    @ApiOperation(value = "Get course list by group id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
+    @GetMapping("/group/{id}")
+    public ResponseEntity<List<CourseDto>> getCoursesByGroupId(@PathVariable long id) {
+        return Objects.isNull(courseService.getCoursesByGroupId(id)) ?
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
+                ResponseEntity.status(HttpStatus.OK).body(courseService.getCoursesByGroupId(id));
+    }
 }

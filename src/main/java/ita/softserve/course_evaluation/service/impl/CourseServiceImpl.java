@@ -62,4 +62,11 @@ public class CourseServiceImpl implements CourseService {
         List<CourseDto> courses = CourseDtoMapper.toDto(courseRepository.findAllCourses());
         return Objects.isNull(courses) ? Collections.emptyList() : courses;
     }
+
+    @Override
+    public List<CourseDto> getCoursesByGroupId(long id) {
+        List<CourseDto> courses = CourseDtoMapper.toDto(courseRepository.findCoursesOfGroup(id));
+        return Objects.isNull(courses) ? Collections.emptyList() : courses;
+    }
+
 }

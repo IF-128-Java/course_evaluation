@@ -19,4 +19,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Optional<Course> findById(Long id);
 
     List<Course> findByCourseName(String courseName);
+
+    @Query(value = "SELECT c.id, c.course_name, c.description, c.start_date, c.end_date, c.teacher_id FROM course c INNER JOIN course_group g ON c.id = g.course_id WHERE g.group_id = ?1", nativeQuery = true)
+    List<Course> findCoursesOfGroup(long id);
+
 }

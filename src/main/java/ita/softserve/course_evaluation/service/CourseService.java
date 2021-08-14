@@ -18,4 +18,6 @@ public interface CourseService {
     CourseDto editCourse(CourseDto courseDto);
 
     List<CourseDto> getAll();
+
+    List<CourseDto> getCoursesByGroupId(long id);
 }
