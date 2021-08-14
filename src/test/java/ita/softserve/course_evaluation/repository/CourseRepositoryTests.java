@@ -36,7 +36,7 @@ public class CourseRepositoryTests {
 
         courseRepository.save(course);
         List<Course> expected = List.of(course);
-        List<Course> actual = courseRepository.findByCourseName(course.getCourseName());
+        List<Course> actual = courseRepository.findCourseByName(course.getCourseName());
 
         assertFalse(actual.isEmpty());
         assertEquals(expected, actual);
@@ -44,7 +44,7 @@ public class CourseRepositoryTests {
 
     @Test
     public void testFindByCourseNameIfNotExist(){
-        List<Course> actual = courseRepository.findByCourseName(StringUtils.EMPTY);
+        List<Course> actual = courseRepository.findCourseByName(StringUtils.EMPTY);
 
         assertTrue(actual.isEmpty());
     }
