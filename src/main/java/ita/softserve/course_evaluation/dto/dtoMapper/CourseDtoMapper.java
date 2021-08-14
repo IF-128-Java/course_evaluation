@@ -2,6 +2,7 @@ package ita.softserve.course_evaluation.dto.dtoMapper;
 
 import ita.softserve.course_evaluation.dto.CourseDto;
 import ita.softserve.course_evaluation.entity.Course;
+import ita.softserve.course_evaluation.entity.User;
 
 import java.util.List;
 import java.util.Objects;
