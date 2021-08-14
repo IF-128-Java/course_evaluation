@@ -13,6 +13,7 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class User {
 
 	@ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
 	@Column(name = "role_id")
-	private Set<Role> roles = Stream.of(Role.ROLE_ADMIN).collect(Collectors.toSet());
+	private Set<Role> roles;
 
 	@OneToMany(mappedBy = "student",
 			cascade = CascadeType.ALL,

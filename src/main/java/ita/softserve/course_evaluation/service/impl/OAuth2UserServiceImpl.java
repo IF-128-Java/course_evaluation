@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class OAuthUserServiceImpl implements OAuthUserService {
+public class OAuth2UserServiceImpl implements OAuthUserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public OAuthUserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public OAuth2UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -76,7 +76,7 @@ public class OAuthUserServiceImpl implements OAuthUserService {
         user.setFirstName(signUpRequest.getFirstName());
         user.setLastName(signUpRequest.getLastName());
         user.setEmail(signUpRequest.getEmail());
-        user.setRoles(Stream.of(Role.ROLE_ADMIN).collect(Collectors.toSet()));
+        user.setRoles(Stream.of(Role.ROLE_STUDENT).collect(Collectors.toSet()));
         user.setPassword(signUpRequest.getPassword());
 
         user = userRepository.save(user);
