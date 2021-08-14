@@ -12,7 +12,7 @@
     <artifactId>course_evaluation</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Course Evaluation</name>
-    <description>Demo project for Spring Boot</description>
+    <description>This project was created by team IF128 Softserve ITA</description>
     <properties>
         <java.version>11</java.version>
         <sonar.projectKey>IF-128-Java_course_evaluation</sonar.projectKey>
@@ -68,11 +68,6 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <version>3.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.modelmapper</groupId>
-            <artifactId>modelmapper</artifactId>
-            <version>${modelmapper.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
