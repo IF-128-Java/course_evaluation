@@ -24,11 +24,10 @@ public class CustomOidUserService extends OidcUserService {
         try {
             return oAuthUserService.processUserRegistration(userRequest.getClientRegistration().getRegistrationId(), oidcUser.getAttributes(), oidcUser.getIdToken(),
                     oidcUser.getUserInfo());
-        } catch (AuthenticationException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new OAuth2AuthenticationProcessingException(ex.getMessage(), ex.getCause());
+        } catch (AuthenticationException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new OAuth2AuthenticationProcessingException(exception.getMessage(), exception.getCause());
         }
     }
 
