@@ -88,4 +88,5 @@ public class UserController {
                                @ApiIgnore Principal principal){
 		userService.updatePassword(updatePasswordDto, principal.getName());
 	}
+
 }
