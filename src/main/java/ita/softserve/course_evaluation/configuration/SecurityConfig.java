@@ -1,8 +1,12 @@
 package ita.softserve.course_evaluation.configuration;
 
 import ita.softserve.course_evaluation.security.jwt.JwtConfigurer;
-import ita.softserve.course_evaluation.security.jwt.JwtTokenFilter;
-import ita.softserve.course_evaluation.security.oauth2.*;
+import ita.softserve.course_evaluation.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import ita.softserve.course_evaluation.security.oauth2.OAuth2AccessTokenResponseConverterWithDefaults;
+import ita.softserve.course_evaluation.security.oauth2.OAuth2AuthenticationFailureHandler;
+import ita.softserve.course_evaluation.security.oauth2.OAuth2AuthenticationSuccessHandler;
+import ita.softserve.course_evaluation.security.oauth2.CustomOidUserService;
+import ita.softserve.course_evaluation.security.oauth2.CustomOAuth2UserService;
 import ita.softserve.course_evaluation.security.RestAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -35,11 +39,9 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	public static final String LOGIN_PAGE = "/login";
 
 	private final JwtConfigurer jwtConfigurer;
-	@Autowired
-	private JwtTokenFilter jwtTokenFilter;
+
 	@Autowired
 	private UserDetailsService customUserDetailsService;
 
@@ -54,8 +56,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private CustomOAuth2UserService customOAuth2UserService;
+
 	@Autowired
 	private CustomOidUserService customOidUserService;
+
 	public SecurityConfig(JwtConfigurer jwtConfigurer) {
 		this.jwtConfigurer = jwtConfigurer;
 	}

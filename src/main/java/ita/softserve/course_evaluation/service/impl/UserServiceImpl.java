@@ -1,38 +1,18 @@
 package ita.softserve.course_evaluation.service.impl;
 
-import ita.softserve.course_evaluation.dto.*;
-import ita.softserve.course_evaluation.entity.Role;
 import ita.softserve.course_evaluation.dto.UpdatePasswordDto;
 import ita.softserve.course_evaluation.dto.UpdateUserDto;
 import ita.softserve.course_evaluation.dto.UserDto;
 import ita.softserve.course_evaluation.dto.UserDtoMapper;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
-import ita.softserve.course_evaluation.exception.OAuth2AuthenticationProcessingException;
-import ita.softserve.course_evaluation.exception.UserAlreadyExistAuthenticationException;
-import ita.softserve.course_evaluation.repository.UserRepository;
-import ita.softserve.course_evaluation.security.SecurityUser;
-import ita.softserve.course_evaluation.security.oauth2.LocalUser;
-import ita.softserve.course_evaluation.security.oauth2.users.OAuth2UserInfo;
-import ita.softserve.course_evaluation.security.oauth2.users.OAuth2UserInfoFactory;
-import ita.softserve.course_evaluation.security.oauth2.users.SocialProvider;
-import ita.softserve.course_evaluation.service.UserService;
-import ita.softserve.course_evaluation.util.GeneralUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class UserServiceImpl implements UserService {
