@@ -105,8 +105,8 @@ public class CourseServiceImplTests {
 
     @Test
     public void testGetByName(){
-        List<CourseDto> expectedList = List.of(expectedDto);
-        when(CourseDtoMapper.toDto(courseRepository.findCourseByName(anyString()))).thenReturn(expectedList);
+        List<Course> expectedList = List.of(expected);
+        when(courseRepository.findCourseByName(anyString())).thenReturn(expectedList);
 
         List<CourseDto> actual = courseService.getByName(anyString());
 

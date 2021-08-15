@@ -64,9 +64,7 @@ public class CourseController {
     })
     @GetMapping("name/{courseName}")
     public ResponseEntity<List<CourseDto>> getCourseByName(@PathVariable String courseName) {
-        return Objects.isNull(courseService.getByName(courseName)) ?
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) :
-                ResponseEntity.status(HttpStatus.OK).body(courseService.getByName(courseName));
+        return ResponseEntity.status(HttpStatus.OK).body(courseService.getByName(courseName));
     }
 
     @ApiOperation(value = "Get All Courses List")
@@ -76,9 +74,7 @@ public class CourseController {
     })
     @GetMapping
     public ResponseEntity<List<CourseDto>> getCourses() {
-        return Objects.isNull(courseService.getAll()) ?
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) :
-                ResponseEntity.status(HttpStatus.OK).body(courseService.getAll());
+        return ResponseEntity.status(HttpStatus.OK).body(courseService.getAll());
     }
 
     @ApiOperation(value = "Update Course")

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CourseRepository extends JpaRepository<Course, Long>, CrudRepository<Course, Long> {
+public interface CourseRepository extends JpaRepository<Course, Long> {
 
     @Query(value = "SELECT c.id, course_name, description, start_date, end_date, teacher_id, first_name, last_name FROM course c " +
             "LEFT JOIN users u ON c.teacher_id = u.id", nativeQuery = true)
