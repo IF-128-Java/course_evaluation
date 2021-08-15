@@ -13,7 +13,7 @@ public interface CourseService {
 
     CourseDto getById(long id);
 
-    List<Course> getByName(String name);
+    List<CourseDto> getByName(String courseName);
 
     CourseDto editCourse(CourseDto courseDto);
 
