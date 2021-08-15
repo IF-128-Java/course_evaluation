@@ -36,7 +36,6 @@ public class Course implements Serializable {
     private long id;
 
     @NotNull
-//    @Lob
     @Column(name = "course_Name", nullable = false)
     private String courseName;
 
