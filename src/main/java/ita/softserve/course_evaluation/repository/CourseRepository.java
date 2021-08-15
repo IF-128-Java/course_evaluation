@@ -20,7 +20,10 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     List<Course> findByCourseName(String courseName);
 
-    @Query(value = "SELECT c.id, c.course_name, c.description, c.start_date, c.end_date, c.teacher_id FROM course c INNER JOIN course_group g ON c.id = g.course_id WHERE g.group_id = ?1", nativeQuery = true)
-    List<Course> findCoursesOfGroup(long id);
+    @Query(value = "SELECT c.id, c.course_name, c.description, c.start_date, c.end_date, c.teacher_id FROM course c INNER JOIN course_group g ON c.id = g.course_id WHERE g.group_id = ?1 AND c.end_date < NOW()", nativeQuery = true)
+    List<Course> finishedCoursesOfGroup(long id);
+
+    @Query(value = "SELECT c.id, c.course_name, c.description, c.start_date, c.end_date, c.teacher_id FROM course c INNER JOIN course_group g ON c.id = g.course_id WHERE g.group_id = ?1 AND c.start_date < NOW() AND c.end_date > NOW()", nativeQuery = true)
+    List<Course> currentCoursesOfGroup(long id);
 
 }

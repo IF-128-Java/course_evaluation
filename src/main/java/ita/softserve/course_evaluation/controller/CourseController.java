@@ -95,15 +95,27 @@ public class CourseController {
         courseService.deleteById(id);
     }
 
-    @ApiOperation(value = "Get course list by group id")
+    @ApiOperation(value = "Get finished courses of group")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
     })
     @GetMapping("/group/{id}")
-    public ResponseEntity<List<CourseDto>> getCoursesByGroupId(@PathVariable long id) {
-        return Objects.isNull(courseService.getCoursesByGroupId(id)) ?
+    public ResponseEntity<List<CourseDto>> finisheCoursesByGroupId(@PathVariable long id) {
+        return Objects.isNull(courseService.finishedCoursesByGroupId(id)) ?
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
-                ResponseEntity.status(HttpStatus.OK).body(courseService.getCoursesByGroupId(id));
+                ResponseEntity.status(HttpStatus.OK).body(courseService.finishedCoursesByGroupId(id));
+    }
+
+    @ApiOperation(value = "Get current courses of group")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
+    @GetMapping("/current/group/{id}")
+    public ResponseEntity<List<CourseDto>> currentCoursesByGroupId(@PathVariable long id) {
+        return Objects.isNull(courseService.currentCoursesByGroupId(id)) ?
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
+                ResponseEntity.status(HttpStatus.OK).body(courseService.currentCoursesByGroupId(id));
     }
 }
