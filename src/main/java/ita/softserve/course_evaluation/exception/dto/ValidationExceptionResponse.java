@@ -6,17 +6,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class GenericExceptionResponse {
-
+public class ValidationExceptionResponse {
     @Builder.Default()
     private LocalDateTime timestamp = LocalDateTime.now();
 
     private String error;
-    private String message;
+    private Map<String, String> fields;
     private Integer status;
 }
