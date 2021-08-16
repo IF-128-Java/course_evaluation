@@ -111,9 +111,8 @@ public class CourseController {
     })
     @GetMapping("/group/{id}")
     public ResponseEntity<List<CourseDto>> finisheCoursesByGroupId(@PathVariable long id) {
-        return Objects.isNull(courseService.finishedCoursesByGroupId(id)) ?
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
-                ResponseEntity.status(HttpStatus.OK).body(courseService.finishedCoursesByGroupId(id));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(courseService.finishedCoursesByGroupId(id));
     }
 
     @ApiOperation(value = "Get current courses of group")
@@ -123,8 +122,7 @@ public class CourseController {
     })
     @GetMapping("/current/group/{id}")
     public ResponseEntity<List<CourseDto>> currentCoursesByGroupId(@PathVariable long id) {
-        return Objects.isNull(courseService.currentCoursesByGroupId(id)) ?
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
-                ResponseEntity.status(HttpStatus.OK).body(courseService.currentCoursesByGroupId(id));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(courseService.currentCoursesByGroupId(id));
     }
 }
