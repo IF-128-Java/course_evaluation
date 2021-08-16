@@ -156,24 +156,12 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
-
-        ValidationExceptionResponse dto = ValidationExceptionResponse.builder()
-                .fields(
-                        exception.getBindingResult()
-                        .getAllErrors()
-                        .stream()
-                        .collect(Collectors.toMap(
-                                (error) -> ((FieldError) error).getField(),
-                                DefaultMessageSourceResolvable::getDefaultMessage
-                        ))
-                )
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        GenericExceptionResponse dto = GenericExceptionResponse.builder()
+                .message(ex.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(" ")))
                 .status(HttpStatus.BAD_REQUEST.value())
-                .error(exception.getClass().getSimpleName())
+                .error(ex.getClass().getSimpleName())
                 .build();
-
-        log.info("Global Exception Handler invoke: {}", exception.getMessage());
-
         return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
     }
 }

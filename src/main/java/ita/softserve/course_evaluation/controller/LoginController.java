@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @Api(tags = "Login service REST API")
 @RestController
@@ -58,7 +59,7 @@ public class LoginController {
 			@ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
 	})
 	@PostMapping("/reg")
-	public ResponseEntity<?> registration(@RequestBody SimpleUserDto request) {
+	public ResponseEntity<?> registration(@Valid @RequestBody SimpleUserDto request) {
 		return authService.getRegistrationCredentials(request);
 	}
 }
