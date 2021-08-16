@@ -52,7 +52,6 @@ public class Course implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id", nullable = false)
-    @NotNull
     private User teacher;
 
     @ManyToMany(mappedBy = "courses")

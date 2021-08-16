@@ -19,5 +19,4 @@ public class GenericExceptionResponse {
     private String error;
     private String message;
     private Integer status;
-
 }

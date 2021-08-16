@@ -1,12 +1,12 @@
 package ita.softserve.course_evaluation.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import ita.softserve.course_evaluation.entity.User;
+import ita.softserve.course_evaluation.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -25,12 +25,9 @@ public class CourseDto {
 
     private long teacherId;
 
-    private User teacher;
+    private String firstName;
 
+    private String lastName;
 
-    @JsonProperty("teacher_id")
-    private void unpackNested(Long teacher_id) {
-        this.teacher = new User();
-        teacher.setId(teacher_id);
-    }
+    private Set<Role> roles;
 }

@@ -3,6 +3,7 @@ package ita.softserve.course_evaluation.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import javax.persistence.*;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -13,4 +14,5 @@ public enum Role {
 
     @Getter
     private final Set<Permission> permissions;
+
 }

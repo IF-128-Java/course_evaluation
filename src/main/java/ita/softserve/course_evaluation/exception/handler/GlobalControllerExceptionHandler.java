@@ -3,10 +3,10 @@ package ita.softserve.course_evaluation.exception.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import ita.softserve.course_evaluation.exception.CourseAlreadyExistException;
 import ita.softserve.course_evaluation.exception.CourseNotFoundException;
-import ita.softserve.course_evaluation.exception.IdMatchException;
 import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
 import ita.softserve.course_evaluation.exception.JwtAuthenticationException;
 import ita.softserve.course_evaluation.exception.dto.GenericExceptionResponse;
+import ita.softserve.course_evaluation.exception.dto.ValidationExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
@@ -141,8 +141,8 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
         return new ResponseEntity<>(dto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({InvalidOldPasswordException.class, IdMatchException.class})
-    public ResponseEntity<GenericExceptionResponse> handleInvalidOldPasswordExceptionAndIdMatchException(Exception exception) {
+    @ExceptionHandler({InvalidOldPasswordException.class})
+    public ResponseEntity<GenericExceptionResponse> handleInvalidOldPasswordException(Exception exception) {
 
         GenericExceptionResponse dto = GenericExceptionResponse.builder()
                 .message(exception.getMessage())
@@ -158,15 +158,15 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        GenericExceptionResponse dto = GenericExceptionResponse.builder()
-                .message(
+        ValidationExceptionResponse dto = ValidationExceptionResponse.builder()
+                .fields(
                         exception.getBindingResult()
                         .getAllErrors()
                         .stream()
                         .collect(Collectors.toMap(
                                 (error) -> ((FieldError) error).getField(),
                                 DefaultMessageSourceResolvable::getDefaultMessage
-                        )).toString()
+                        ))
                 )
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(exception.getClass().getSimpleName())

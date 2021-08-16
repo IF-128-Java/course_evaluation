@@ -13,9 +13,13 @@ public interface CourseService {
 
     CourseDto getById(long id);
 
-    List<Course> getByName(String name);
+    List<CourseDto> getByName(String courseName);
 
     CourseDto editCourse(CourseDto courseDto);
 
     List<CourseDto> getAll();
+
+    List<CourseDto> finishedCoursesByGroupId(long id);
+
+    List<CourseDto> currentCoursesByGroupId(long id);
 }

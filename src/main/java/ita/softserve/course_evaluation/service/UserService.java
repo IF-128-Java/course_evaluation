@@ -12,7 +12,7 @@ public interface UserService {
 
 	List<UserDto> readByFirstName(String firstName);
 
-	void updateUser(UpdateUserDto dto, Long userId);
+	void updateUser(UpdateUserDto dto, String email);
 
-	void updatePassword(UpdatePasswordDto updatePasswordDto, Long userId);
+	void updatePassword(UpdatePasswordDto updatePasswordDto, String email);
 }
