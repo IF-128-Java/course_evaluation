@@ -45,8 +45,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getByName(String name) {
-        return courseRepository.findByCourseName(name);
+    public List<CourseDto> getByName(String courseName) {
+        return CourseDtoMapper.toDto(courseRepository.findCourseByName(courseName));
     }
 
     @Override
@@ -62,4 +62,17 @@ public class CourseServiceImpl implements CourseService {
         List<CourseDto> courses = CourseDtoMapper.toDto(courseRepository.findAllCourses());
         return Objects.isNull(courses) ? Collections.emptyList() : courses;
     }
+
+    @Override
+    public List<CourseDto> finishedCoursesByGroupId(long id) {
+        List<CourseDto> courses = CourseDtoMapper.toDto(courseRepository.finishedCoursesOfGroup(id));
+        return Objects.isNull(courses) ? Collections.emptyList() : courses;
+    }
+
+    @Override
+    public List<CourseDto> currentCoursesByGroupId(long id) {
+        List<CourseDto> courses = CourseDtoMapper.toDto(courseRepository.currentCoursesOfGroup(id));
+        return Objects.isNull(courses) ? Collections.emptyList() : courses;
+    }
+
 }

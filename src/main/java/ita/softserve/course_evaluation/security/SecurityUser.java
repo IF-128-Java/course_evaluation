@@ -6,10 +6,9 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -20,7 +19,7 @@ public class SecurityUser implements UserDetails {
 	private final String password;
 	private final List<SimpleGrantedAuthority> authorities;
 	private final boolean isActive;
-	
+
 	public SecurityUser(Long id, String username, String password, List<SimpleGrantedAuthority> authorities, boolean isActive) {
 		this.id = id;
 		this.username = username;
@@ -28,7 +27,7 @@ public class SecurityUser implements UserDetails {
 		this.authorities = authorities;
 		this.isActive = isActive;
 	}
-	
+
 	public static UserDetails fromUser(User user) {
 		return new SecurityUser(user.getId(), user.getEmail(), user.getPassword(),
 				getAuthorities(user.getRoles()), true);
@@ -39,7 +38,7 @@ public class SecurityUser implements UserDetails {
 				.map(permission -> new SimpleGrantedAuthority(permission.name()))
 				.collect(Collectors.toList());
 	}
-	
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return authorities;
@@ -74,4 +73,5 @@ public class SecurityUser implements UserDetails {
 	public boolean isEnabled() {
 		return isActive;
 	}
+
 }

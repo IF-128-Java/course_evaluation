@@ -105,16 +105,15 @@ public class CourseServiceImplTests {
 
     @Test
     public void testGetByName(){
-        List<Course> expectedList = List.of(expected);
-        when(courseRepository.findByCourseName(anyString())).thenReturn(expectedList);
+        List<CourseDto> expectedList = List.of(expectedDto);
+        when(courseRepository.findCourseByName(anyString())).thenReturn(List.of(expected));
 
-        List<Course> actual = courseService.getByName(anyString());
+        List<CourseDto> actual = courseService.getByName(anyString());
 
         assertEquals(expectedList, actual);
 
-        verify(courseRepository, times(1)).findByCourseName(anyString());
+        verify(courseRepository, times(1)).findCourseByName(anyString());
     }
-
     @Test
     public void testCorrectEditCourse(){
         when(courseRepository.existsById(anyLong())).thenReturn(true);

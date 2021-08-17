@@ -6,6 +6,9 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import ita.softserve.course_evaluation.exception.JwtAuthenticationException;
+import ita.softserve.course_evaluation.security.oauth2.LocalUser;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +23,7 @@ import java.util.Base64;
 import java.util.Date;
 
 @Component
+@Slf4j
 public class JwtTokenProvider {
 	
 	private final UserDetailsService userDetailsService;
@@ -52,6 +56,14 @@ public class JwtTokenProvider {
 				       .setExpiration(validity)
 				       .signWith(SignatureAlgorithm.HS256, secretKey)
 				       .compact();
+	}
+
+	public String createToken(Authentication authentication) {
+		LocalUser userPrincipal = (LocalUser) authentication.getPrincipal();
+		log.info("Token with Authentication parameter was created");
+		return createToken(userPrincipal.getUser().getEmail()
+				,userPrincipal.getUser().getId()
+				, userPrincipal.getUser().getRoles().stream().map(Enum::name).toArray(String[]::new));
 	}
 	
 	public boolean validateToken(String token) {
