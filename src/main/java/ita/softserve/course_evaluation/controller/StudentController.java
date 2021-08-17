@@ -57,4 +57,19 @@ public class StudentController {
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) :
                 ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentsByGroupId(id));
     }
+    
+    @ApiOperation(value = "Get All Students by course id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+            @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND)
+    })
+    
+    @GetMapping("/course/{id}")
+    public ResponseEntity<List<StudentDto>> getStudentsByCourseId(@PathVariable long id) {
+        return Objects.isNull(studentService.getStudentsByCourseId(id)) ?
+                       ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) :
+                       ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentsByCourseId(id));
+    }
 }
