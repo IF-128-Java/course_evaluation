@@ -22,4 +22,6 @@ public interface CourseService {
     List<CourseDto> finishedCoursesByGroupId(long id);
 
     List<CourseDto> currentCoursesByGroupId(long id);
+
+    List <CourseDto> getAvailableCourses();
 }
