@@ -15,7 +15,7 @@ public class SimpleUserDto {
 	
 	private String email;
 	private String password;
-	private String passwordMatching;
+	private String confirmPassword;
 	private String firstName;
 	private String lastName;
 	
