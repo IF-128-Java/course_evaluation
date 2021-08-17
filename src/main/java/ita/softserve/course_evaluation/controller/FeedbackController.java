@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Objects;
+
 @Api(tags = "Feedback service REST API")
 @RestController
 @RequestMapping("api/v1/feedback")
@@ -55,5 +58,14 @@ public class FeedbackController {
 													   @PathVariable Long id) {
 		return ResponseEntity.status(HttpStatus.OK)
 				       .body(feedbackService.getFeedbackById(id));
+	}
+
+	@GetMapping("/feedback_request/{id}")
+	@PreAuthorize("hasAuthority('WRITE')")
+	public ResponseEntity <List<FeedbackDto>> getAllFeedbackByFeedbackRequestId(@ApiParam(value = "FeedbackRequest id. Cannot be empty")
+																	@PathVariable Long id){
+	return Objects.isNull(feedbackService.findAllByFeedbackRequestId(id)) ?
+			ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
+			ResponseEntity.status(HttpStatus.OK).body(feedbackService.findAllByFeedbackRequestId(id));
 	}
 }

@@ -79,4 +79,10 @@ public class FeedbackServiceImpl implements FeedbackService {
 				                          .orElseThrow(() -> new EntityNotFoundException("Feedback with id " + id + " not found"));
 		return FeedbackDtoMapper.toDto(feedbackFromDb, answersFromDb);
 	}
+
+	@Override
+	public List<FeedbackDto> findAllByFeedbackRequestId(Long id) {
+		List<Feedback> feedbacks = feedbackRepository.findAllFeedbackByFeedbackRequestId(id);
+		return feedbacks.stream().map(f -> FeedbackDtoMapper.toDto(f, answerToFeedbackService.getAllAnswerByFeedbackId(f.getId()))).collect(Collectors.toList());
+	}
 }
