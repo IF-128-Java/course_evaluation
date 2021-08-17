@@ -4,15 +4,19 @@ import ita.softserve.course_evaluation.dto.UpdatePasswordDto;
 import ita.softserve.course_evaluation.dto.UpdateUserDto;
 import ita.softserve.course_evaluation.dto.UserDto;
 import ita.softserve.course_evaluation.dto.UserDtoMapper;
+import ita.softserve.course_evaluation.dto.UserProfileDtoResponse;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
+import ita.softserve.course_evaluation.exception.NotSavedException;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.*;
+import java.io.IOException;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,8 +30,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDto readById(long id ) {
-		return UserDtoMapper.toDto(getUserById(id));
+	public UserProfileDtoResponse readById(long id ) {
+		User daoUser = getUserById(id);
+
+		return UserProfileDtoResponse.builder()
+				.firstName(daoUser.getFirstName())
+				.lastName(daoUser.getLastName())
+				.email(daoUser.getEmail())
+				.profilePicture(daoUser.getProfilePicture())
+				.build();
 	}
 
 	@Override
@@ -56,6 +67,18 @@ public class UserServiceImpl implements UserService {
 		daoUser.setPassword(passwordEncoder.encode(dto.getNewPassword()));
 		userRepository.save(daoUser);
 	}
+
+	@Override
+	public void updateUserProfilePicture(MultipartFile image, String email) {
+		User daoUser = getUserByEmail(email);
+
+		try {
+            daoUser.setProfilePicture(image.getBytes());
+			userRepository.save(daoUser);
+        } catch (IOException e) {
+            throw new NotSavedException("File has not been saved!");
+        }
+    }
 
 	private User getUserById(Long id){
 		return userRepository.findById(id).orElseThrow(

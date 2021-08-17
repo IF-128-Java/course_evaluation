@@ -146,7 +146,7 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
     }
 
     @ExceptionHandler({InvalidOldPasswordException.class})
-    public ResponseEntity<GenericExceptionResponse> handleInvalidOldPasswordException(Exception exception) {
+    public ResponseEntity<GenericExceptionResponse> handleInvalidOldPasswordException(InvalidOldPasswordException exception) {
 
         GenericExceptionResponse dto = GenericExceptionResponse.builder()
                 .message(exception.getMessage())
