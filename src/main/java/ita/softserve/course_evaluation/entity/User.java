@@ -58,6 +58,8 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="group_id")
     private Group group;
+    private boolean isActive = false;
+    private boolean isLocked = false;
 
 	public User(Long id, String firstName, String lastName, String email, String password) {
 		this.id = id;

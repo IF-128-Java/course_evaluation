@@ -7,7 +7,11 @@ import io.swagger.annotations.ApiResponses;
 import ita.softserve.course_evaluation.constants.HttpStatuses;
 import ita.softserve.course_evaluation.dto.AuthenticateRequestDto;
 import ita.softserve.course_evaluation.dto.SimpleUserDto;
+import ita.softserve.course_evaluation.registration.RegistrationService;
 import ita.softserve.course_evaluation.service.AuthService;
+import ita.softserve.course_evaluation.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginController {
 	
 	private final AuthService authService;
+	@Autowired
+	private RegistrationService registrationService;
 	
 	public LoginController(AuthService authService) {
 		this.authService = authService;
@@ -59,6 +65,6 @@ public class LoginController {
 	})
 	@PostMapping("/reg")
 	public ResponseEntity<?> registration(@RequestBody SimpleUserDto request) {
-		return authService.getRegistrationCredentials(request);
+		return new ResponseEntity<>(registrationService.register(request), HttpStatus.CREATED);
 	}
 }

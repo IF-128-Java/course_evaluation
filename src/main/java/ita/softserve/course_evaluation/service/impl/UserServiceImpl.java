@@ -57,6 +57,19 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(daoUser);
 	}
 
+	@Override
+	public String signUp(User user) {
+		boolean userExists = userRepository.findUserByEmail(user.getEmail()).isPresent();
+		if (userExists){
+			throw new IllegalStateException("email already exist");
+		}
+		String encodePassword = passwordEncoder.encode(user.getPassword());
+		user.setPassword(encodePassword);
+
+		userRepository.save(user);
+		return "sign up";
+	}
+
 	private User getUserById(Long id){
 		return userRepository.findById(id).orElseThrow(
 				() -> new EntityNotFoundException(String.format("User with id: %d not found!", id)));
