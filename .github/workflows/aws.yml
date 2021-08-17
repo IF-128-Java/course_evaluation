@@ -76,7 +76,7 @@ jobs:
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
-        task-definition: first-run-task-definition.json
+        task-definition: courseevaluation-task-definition:1.json
         container-name: courseevaluation
         image: ${{ steps.build-image.outputs.image }}
 
