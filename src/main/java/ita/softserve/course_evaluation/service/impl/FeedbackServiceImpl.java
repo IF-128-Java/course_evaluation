@@ -9,6 +9,8 @@ import ita.softserve.course_evaluation.repository.QuestionRepository;
 import ita.softserve.course_evaluation.service.AnswerToFeedbackService;
 import ita.softserve.course_evaluation.service.FeedbackService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -81,8 +83,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	}
 
 	@Override
-	public List<FeedbackDto> findAllByFeedbackRequestId(Long id) {
-		List<Feedback> feedbacks = feedbackRepository.findAllFeedbackByFeedbackRequestId(id);
-		return feedbacks.stream().map(f -> FeedbackDtoMapper.toDto(f, answerToFeedbackService.getAllAnswerByFeedbackId(f.getId()))).collect(Collectors.toList());
+	public Page<FeedbackDto> findAllByFeedbackRequestId(Pageable pageable, Long id) {
+		return feedbackRepository.findAllFeedbackByFeedbackRequestId(pageable, id).map(f -> FeedbackDtoMapper.toDto(f, answerToFeedbackService.getAllAnswerByFeedbackId(f.getId())));
 	}
 }
