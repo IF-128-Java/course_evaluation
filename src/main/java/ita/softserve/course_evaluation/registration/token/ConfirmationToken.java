@@ -10,17 +10,12 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
+@Entity
 public class ConfirmationToken {
 
-    @SequenceGenerator(
-            name = "confirmation_token_sequence",
-            sequenceName = "confirmation_token_sequence",
-            allocationSize = 1
-    )
     @Id
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "confirmation_token_sequence"
+            strategy = GenerationType.IDENTITY
     )
     private Long id;
     @Column(nullable = false)
@@ -29,6 +24,7 @@ public class ConfirmationToken {
     private LocalDateTime createdAt;
     @Column(nullable = false)
     private LocalDateTime expiredAt;
+
     private LocalDateTime confirmedAt;
 
     @ManyToOne

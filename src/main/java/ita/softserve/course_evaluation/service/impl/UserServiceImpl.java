@@ -6,12 +6,19 @@ import ita.softserve.course_evaluation.dto.UserDto;
 import ita.softserve.course_evaluation.dto.UserDtoMapper;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
+import ita.softserve.course_evaluation.exception.UserAlreadyExistAuthenticationException;
+import ita.softserve.course_evaluation.registration.ActivaUserRepository;
+import ita.softserve.course_evaluation.registration.UserActive;
+import ita.softserve.course_evaluation.registration.token.ConfirmationToken;
+import ita.softserve.course_evaluation.registration.token.ConfirmationTokenService;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -19,6 +26,10 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	@Autowired
+	private ConfirmationTokenService confirmationTokenService;
+	@Autowired
+	private ActivaUserRepository activaUserRepository;
 
 	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
@@ -57,19 +68,6 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(daoUser);
 	}
 
-	@Override
-	public String signUp(User user) {
-		boolean userExists = userRepository.findUserByEmail(user.getEmail()).isPresent();
-		if (userExists){
-			throw new IllegalStateException("email already exist");
-		}
-		String encodePassword = passwordEncoder.encode(user.getPassword());
-		user.setPassword(encodePassword);
-
-		userRepository.save(user);
-		return "sign up";
-	}
-
 	private User getUserById(Long id){
 		return userRepository.findById(id).orElseThrow(
 				() -> new EntityNotFoundException(String.format("User with id: %d not found!", id)));
@@ -79,4 +77,38 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findUserByEmail(email).orElseThrow(
 				() -> new EntityNotFoundException(String.format("User with email: %s not found!", email)));
 	}
+
+
+	@Override
+	public String signUp(User user) {
+		boolean userExists = userRepository.findUserByEmail(user.getEmail()).isPresent();
+		if (userExists){
+			throw new UserAlreadyExistAuthenticationException("email already exist");
+		}
+		String encodePassword = passwordEncoder.encode(user.getPassword());
+		user.setPassword(encodePassword);
+
+		userRepository.save(user);
+
+		String token = UUID.randomUUID().toString();
+		ConfirmationToken confirmationToken = new ConfirmationToken(
+				token,
+				LocalDateTime.now(),
+				LocalDateTime.now().plusMinutes(15),
+				user
+		);
+		UserActive userActive = new UserActive();
+		userActive.setUser(user);
+
+		activaUserRepository.save(userActive);
+		confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+		//TODO: SEND EMAIL
+		return token;
+	}
+
+	public int enableAppUser(String email) {
+		return userRepository.enableAppUser(email);
+	}
+
 }

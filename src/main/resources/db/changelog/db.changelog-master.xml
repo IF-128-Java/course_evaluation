@@ -5,4 +5,5 @@
     <include file="classpath:db/changelog/db.changelog-setup.xml"/>
     <include file="classpath:db/changelog/db.changelog-insert-role-permission.xml"/>
     <include file="classpath:db/changelog/v.1.2.0/db.changelog-add-unique-group-name.xml"/>
+    <include file="classpath:db/changelog/v.1.2.0/db.changelog-add-cofirmation-token-table.xml"/>
 </databaseChangeLog>

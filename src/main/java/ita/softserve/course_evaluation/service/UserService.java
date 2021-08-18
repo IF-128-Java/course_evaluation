@@ -18,4 +18,5 @@ public interface UserService {
 	void updatePassword(UpdatePasswordDto updatePasswordDto, String email);
 
 	String signUp(User user);
+	int enableAppUser(String email);
 }
