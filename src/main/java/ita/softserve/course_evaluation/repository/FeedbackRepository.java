@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
 
     @Query(value = "SELECT * From course_feedback where feedback_request_id = ?1", nativeQuery = true)
-    Page<Feedback> findAllFeedbackByFeedbackRequestId (Pageable pageable, Long Id);
+    Page<Feedback> findAllFeedbackByFeedbackRequestId (Pageable pageable, Long id);
 
 }
