@@ -11,4 +11,7 @@ public final class ValidationConstants {
 
     public static final String EMPTY_OLD_PASSWORD = "The old password can not be empty!";
     public static final String EMPTY_NEW_PASSWORD = "The new password can not be empty!";
+
+    public static final String NULL_IMAGE = "Image can not be null!";
+    public static final String INVALID_IMAGE_TYPE = "Download PNG or JPEG only!";
 }
