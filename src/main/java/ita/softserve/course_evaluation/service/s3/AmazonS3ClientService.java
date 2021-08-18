@@ -7,10 +7,12 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.util.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -36,8 +38,12 @@ public class AmazonS3ClientService {
                 .build();
     }
 
-    public void upload(String bucketName, String fileName, InputStream inputStream){
-        s3client.putObject(bucketName, fileName, inputStream, new ObjectMetadata());
+    public void upload(String bucketName, String fileName, InputStream inputStream) throws IOException {
+        ObjectMetadata metaData = new ObjectMetadata();
+        byte[] bytes = IOUtils.toByteArray(inputStream);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+        metaData.setContentLength(bytes.length);
+        s3client.putObject(bucketName, fileName, byteArrayInputStream, metaData);
     }
 
     public byte[] download(String bucketName, String fileReference) throws IOException {
