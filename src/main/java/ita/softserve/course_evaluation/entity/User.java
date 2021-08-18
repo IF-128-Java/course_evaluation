@@ -75,5 +75,5 @@ public class User {
 	}
 
 	@Column(name = "profile_picture")
-	private byte[] profilePicture;
+	private String profilePicturePath;
 }

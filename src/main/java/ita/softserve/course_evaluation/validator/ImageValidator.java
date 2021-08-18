@@ -19,7 +19,7 @@ public class ImageValidator implements ConstraintValidator<ImageValidation, Mult
 
     @Override
     public boolean isValid(MultipartFile image, ConstraintValidatorContext context) {
-        if(image == null || image.isEmpty()){
+        if(image == null || image.getContentType() == null){
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(ValidationConstants.NULL_IMAGE)
                     .addConstraintViolation();

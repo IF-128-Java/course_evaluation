@@ -54,4 +54,8 @@ jobs:
           FACEBOOK_CLIENT_SECRET: ${{secrets.FACEBOOK_CLIENT_SECRET}}
           GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
           GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
+          AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
+          AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY}}
+          AWS_USERS_FOLDER: ${{secrets.AWS_USERS_FOLDER}}
+          AWS_BUCKET_NAME: ${{secrets.AWS_BUCKET_NAME}}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar

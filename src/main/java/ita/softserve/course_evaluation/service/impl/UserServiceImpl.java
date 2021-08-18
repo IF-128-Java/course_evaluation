@@ -7,26 +7,35 @@ import ita.softserve.course_evaluation.dto.UserDtoMapper;
 import ita.softserve.course_evaluation.dto.UserProfileDtoResponse;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
-import ita.softserve.course_evaluation.exception.NotSavedException;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.UserService;
+import ita.softserve.course_evaluation.util.S3Utils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
-import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+	@Value("${aws.users-folder}")
+	private String USERS_FOLDER;
+
+	@Value("${aws.bucket-name}")
+	private String BUCKET_NAME;
+
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final S3Utils s3Utils;
 
-	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, S3Utils s3Utils) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.s3Utils = s3Utils;
 	}
 
 	@Override
@@ -37,7 +46,9 @@ public class UserServiceImpl implements UserService {
 				.firstName(daoUser.getFirstName())
 				.lastName(daoUser.getLastName())
 				.email(daoUser.getEmail())
-				.profilePicture(daoUser.getProfilePicture())
+				.profilePicture(
+						Objects.isNull(daoUser.getProfilePicturePath()) ? null : s3Utils.downloadFile(daoUser.getProfilePicturePath(), BUCKET_NAME, USERS_FOLDER)
+				)
 				.build();
 	}
 
@@ -72,13 +83,13 @@ public class UserServiceImpl implements UserService {
 	public void updateUserProfilePicture(MultipartFile image, String email) {
 		User daoUser = getUserByEmail(email);
 
-		try {
-            daoUser.setProfilePicture(image.getBytes());
-			userRepository.save(daoUser);
-        } catch (IOException e) {
-            throw new NotSavedException("File has not been saved!");
-        }
-    }
+		if(Objects.nonNull(daoUser.getProfilePicturePath()))
+			s3Utils.deleteFile(daoUser.getProfilePicturePath(), BUCKET_NAME, USERS_FOLDER);
+
+		daoUser.setProfilePicturePath(s3Utils.saveFile(image, BUCKET_NAME, USERS_FOLDER));
+		userRepository.save(daoUser);
+
+	}
 
 	private User getUserById(Long id){
 		return userRepository.findById(id).orElseThrow(
