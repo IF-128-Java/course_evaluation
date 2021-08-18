@@ -125,4 +125,15 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(courseService.currentCoursesByGroupId(id));
     }
+
+    @ApiOperation(value = "Get list of available courses")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
+    @GetMapping("/available/")
+    public ResponseEntity<List<CourseDto>> getAvailableCourses() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(courseService.getAvailableCourses());
+    }
 }

@@ -30,4 +30,9 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query(value = "SELECT c.id, course_name, description, start_date, end_date, teacher_id, first_name, last_name FROM course c " +
             "LEFT JOIN users u ON c.teacher_id = u.id WHERE course_name LIKE %:courseName%", nativeQuery = true)
     List<Course> findCourseByName(@Param("courseName") String courseName);
+
+    @Query(value = "SELECT c.id, course_name, description, start_date, end_date, teacher_id, first_name, last_name FROM course c " +
+            "LEFT JOIN users u ON c.teacher_id = u.id WHERE c.start_date >NOW()", nativeQuery = true)
+    List<Course> getAvailableCourses();
+
 }
