@@ -1,5 +1,6 @@
 package ita.softserve.course_evaluation.registration.token;
 
+import ita.softserve.course_evaluation.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,9 @@ public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationT
             "WHERE c.token = ?1")
     int updateConfirmedAt(String token,
                           LocalDateTime confirmedAt);
+
+
+    ConfirmationToken findByAppUser(User user);
+
+    void deleteByAppUser(User user);
 }

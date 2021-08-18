@@ -5,12 +5,15 @@ import ita.softserve.course_evaluation.entity.Role;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.OAuth2AuthenticationProcessingException;
 import ita.softserve.course_evaluation.exception.UserAlreadyExistAuthenticationException;
+import ita.softserve.course_evaluation.registration.ActivaUserRepository;
+import ita.softserve.course_evaluation.registration.UserActive;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.security.oauth2.LocalUser;
 import ita.softserve.course_evaluation.security.oauth2.users.OAuth2UserInfo;
 import ita.softserve.course_evaluation.security.oauth2.users.OAuth2UserInfoFactory;
 import ita.softserve.course_evaluation.service.OAuthUserService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
@@ -26,6 +29,8 @@ public class OAuth2UserServiceImpl implements OAuthUserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private ActivaUserRepository activaUserRepository;
 
     public OAuth2UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -80,6 +85,10 @@ public class OAuth2UserServiceImpl implements OAuthUserService {
         user.setPassword(signUpRequest.getPassword());
 
         user = userRepository.save(user);
+        UserActive userActive = new UserActive();
+        userActive.setUser(user);
+        userActive.setEnabled(true);
+        activaUserRepository.save(userActive);
         userRepository.flush();
         return user;
     }

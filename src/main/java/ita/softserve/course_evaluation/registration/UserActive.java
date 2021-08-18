@@ -13,7 +13,7 @@ public class UserActive {
     private Long id;
     private boolean locked;
     private boolean enabled;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(
             nullable = false,
             name = "USER_ID"

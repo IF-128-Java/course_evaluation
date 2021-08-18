@@ -8,10 +8,12 @@ import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
 import ita.softserve.course_evaluation.exception.UserAlreadyExistAuthenticationException;
 import ita.softserve.course_evaluation.registration.ActivaUserRepository;
+import ita.softserve.course_evaluation.registration.RegistrationService;
 import ita.softserve.course_evaluation.registration.UserActive;
 import ita.softserve.course_evaluation.registration.token.ConfirmationToken;
 import ita.softserve.course_evaluation.registration.token.ConfirmationTokenService;
 import ita.softserve.course_evaluation.repository.UserRepository;
+import ita.softserve.course_evaluation.service.MailSender;
 import ita.softserve.course_evaluation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,11 +27,14 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
+
 	private final PasswordEncoder passwordEncoder;
 	@Autowired
 	private ConfirmationTokenService confirmationTokenService;
 	@Autowired
 	private ActivaUserRepository activaUserRepository;
+	@Autowired
+	private  MailSender mailSender;
 
 	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
@@ -81,30 +86,50 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public String signUp(User user) {
-		boolean userExists = userRepository.findUserByEmail(user.getEmail()).isPresent();
-		if (userExists){
+		Optional<User> userExists = userRepository.findUserByEmail(user.getEmail());
+		if (userExists.isPresent()){
+			UserActive userActive = activaUserRepository.getByUser(userExists.get());
+			if(!userActive.isEnabled()){
+				String mailToken = UUID.randomUUID().toString();
+				ConfirmationToken confirmationToken = new ConfirmationToken(
+						mailToken,
+						LocalDateTime.now(),
+						LocalDateTime.now().plusMinutes(15),
+						userExists.get()
+				);
+				confirmationTokenService.updateConfirmationToken(userExists.get(), confirmationToken);
+//				confirmationTokenService.saveConfirmationToken(confirmationToken);
+				String address = "http://localhost:8080";
+				String message = String.format(
+						"Hello, %s! \n" + "Your activation link: %s/api/v1/auth/confirm?token=%s",
+						user.getFirstName() + " " + user.getLastName(),
+						address,
+						mailToken
+				);
+				mailSender.send(user.getEmail(),"Activation", message);
+				throw new UserAlreadyExistAuthenticationException("Email already exist. Please activate it");
+			}
 			throw new UserAlreadyExistAuthenticationException("email already exist");
-		}
+			}
 		String encodePassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodePassword);
 
 		userRepository.save(user);
 
-		String token = UUID.randomUUID().toString();
+		String mailToken = UUID.randomUUID().toString();
 		ConfirmationToken confirmationToken = new ConfirmationToken(
-				token,
+				mailToken,
 				LocalDateTime.now(),
 				LocalDateTime.now().plusMinutes(15),
 				user
 		);
-		UserActive userActive = new UserActive();
-		userActive.setUser(user);
+		UserActive userActive2 = new UserActive();
+		userActive2.setUser(user);
 
-		activaUserRepository.save(userActive);
+		activaUserRepository.save(userActive2);
 		confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-		//TODO: SEND EMAIL
-		return token;
+		return mailToken;
 	}
 
 	public int enableAppUser(String email) {
