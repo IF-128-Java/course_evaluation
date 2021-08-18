@@ -75,4 +75,11 @@ public class CourseServiceImpl implements CourseService {
         return Objects.isNull(courses) ? Collections.emptyList() : courses;
     }
 
+    @Override
+    public List<CourseDto> getAvailableCourses() {
+        List<CourseDto> courses = CourseDtoMapper.toDto(courseRepository.getAvailableCourses());
+        return Objects.isNull(courses) ? Collections.emptyList() : courses;
+    }
+
+
 }
