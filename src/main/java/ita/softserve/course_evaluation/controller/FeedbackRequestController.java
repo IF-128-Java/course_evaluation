@@ -43,7 +43,7 @@ public class FeedbackRequestController {
 			@ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
 	})
 	@PostMapping
-	@PreAuthorize("hasAuthority('WRITE')")
+	@PreAuthorize("hasAuthority('UPDATE')")
 	public ResponseEntity<FeedbackRequestDto> createFeedbackRequest(@RequestBody FeedbackRequestDto dto) {
 		return ResponseEntity.status(HttpStatus.OK)
 				       .body(feedbackRequestService.create(dto));
@@ -56,7 +56,6 @@ public class FeedbackRequestController {
 			@ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
 	})
 	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('WRITE')")
 	public ResponseEntity<FeedbackRequestDto> getFeedbackRequest(@PathVariable Long id) {
 		return ResponseEntity.status(HttpStatus.OK)
 				       .body(feedbackRequestService.getFeedbackRequestById(id));
