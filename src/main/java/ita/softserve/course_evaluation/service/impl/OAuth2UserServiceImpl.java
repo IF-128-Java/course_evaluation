@@ -5,8 +5,6 @@ import ita.softserve.course_evaluation.entity.Role;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.OAuth2AuthenticationProcessingException;
 import ita.softserve.course_evaluation.exception.UserAlreadyExistAuthenticationException;
-import ita.softserve.course_evaluation.registration.ActivaUserRepository;
-import ita.softserve.course_evaluation.registration.UserActive;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.security.oauth2.LocalUser;
 import ita.softserve.course_evaluation.security.oauth2.users.OAuth2UserInfo;
@@ -29,8 +27,6 @@ public class OAuth2UserServiceImpl implements OAuthUserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    @Autowired
-    private ActivaUserRepository activaUserRepository;
 
     public OAuth2UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -83,12 +79,9 @@ public class OAuth2UserServiceImpl implements OAuthUserService {
         user.setEmail(signUpRequest.getEmail());
         user.setRoles(Stream.of(Role.ROLE_STUDENT).collect(Collectors.toSet()));
         user.setPassword(signUpRequest.getPassword());
+        user.setEnabled(true);
 
         user = userRepository.save(user);
-        UserActive userActive = new UserActive();
-        userActive.setUser(user);
-        userActive.setEnabled(true);
-        activaUserRepository.save(userActive);
         userRepository.flush();
         return user;
     }

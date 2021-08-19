@@ -27,23 +27,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="1.2.3" author="mykhailo.fedenko">
-        <createTable tableName="user_active">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="user_active_pkey" nullable="false"/>
-            </column>
-            <column name="locked" type="BOOLEAN" defaultValueBoolean="false">
-                <constraints nullable="false"/>
-            </column>
-            <column name="enabled" type="BOOLEAN" defaultValueBoolean="false">
+    <changeSet id="1.2.7" author="mykhailo.fedenko">
+        <addColumn tableName="users">
+            <column name="accountVerified" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="user_id" type="BIGINT">
-                <constraints foreignKeyName="user_active_fkey" referencedColumnNames="id" referencedTableName="users"
-                             nullable="true"/>
-            </column>
-        </createTable>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

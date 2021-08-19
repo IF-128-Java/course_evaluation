@@ -7,9 +7,6 @@ import ita.softserve.course_evaluation.dto.UserDtoMapper;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
 import ita.softserve.course_evaluation.exception.UserAlreadyExistAuthenticationException;
-import ita.softserve.course_evaluation.registration.ActivaUserRepository;
-import ita.softserve.course_evaluation.registration.RegistrationService;
-import ita.softserve.course_evaluation.registration.UserActive;
 import ita.softserve.course_evaluation.registration.token.ConfirmationToken;
 import ita.softserve.course_evaluation.registration.token.ConfirmationTokenService;
 import ita.softserve.course_evaluation.repository.UserRepository;
@@ -31,8 +28,6 @@ public class UserServiceImpl implements UserService {
 	private final PasswordEncoder passwordEncoder;
 	@Autowired
 	private ConfirmationTokenService confirmationTokenService;
-	@Autowired
-	private ActivaUserRepository activaUserRepository;
 	@Autowired
 	private  MailSender mailSender;
 
@@ -88,8 +83,7 @@ public class UserServiceImpl implements UserService {
 	public String signUp(User user) {
 		Optional<User> userExists = userRepository.findUserByEmail(user.getEmail());
 		if (userExists.isPresent()){
-			UserActive userActive = activaUserRepository.getByUser(userExists.get());
-			if(!userActive.isEnabled()){
+			if(!user.isEnabled()){
 				String mailToken = UUID.randomUUID().toString();
 				ConfirmationToken confirmationToken = new ConfirmationToken(
 						mailToken,
@@ -99,7 +93,7 @@ public class UserServiceImpl implements UserService {
 				);
 				confirmationTokenService.updateConfirmationToken(userExists.get(), confirmationToken);
 //				confirmationTokenService.saveConfirmationToken(confirmationToken);
-				String address = "http://localhost:8080";
+				String address = "http://localhost:4200";
 				String message = String.format(
 						"Hello, %s! \n" + "Your activation link: %s/api/v1/auth/confirm?token=%s",
 						user.getFirstName() + " " + user.getLastName(),
@@ -123,10 +117,7 @@ public class UserServiceImpl implements UserService {
 				LocalDateTime.now().plusMinutes(15),
 				user
 		);
-		UserActive userActive2 = new UserActive();
-		userActive2.setUser(user);
 
-		activaUserRepository.save(userActive2);
 		confirmationTokenService.saveConfirmationToken(confirmationToken);
 
 		return mailToken;

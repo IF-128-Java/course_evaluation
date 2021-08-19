@@ -66,7 +66,7 @@ public class LoginController {
 	}
 
 	@GetMapping(path = "confirm")
-	public String confirm(@RequestParam("token") String token) {
-		return registrationService.confirmToken(token);
+	public ResponseEntity<String> confirm(@RequestParam("token") String token) {
+		return new ResponseEntity<>(registrationService.confirmToken(token), HttpStatus.OK);
 	}
 }

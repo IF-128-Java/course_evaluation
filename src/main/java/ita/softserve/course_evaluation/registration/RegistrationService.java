@@ -13,6 +13,7 @@ import ita.softserve.course_evaluation.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @Slf4j
 public class RegistrationService {
+
+    @Value("${site.base.url.https}")
+    private String baseUrl;
 
     private final EmailValidator emailValidator;
     private final UserService userService;
@@ -44,16 +48,7 @@ public class RegistrationService {
 
         String token = userService.signUp(user);
 
-        sendActivationMessage(user, "http://localhost:8080", token);
-//        String address = "http://localhost:8080";
-//        String message = String.format(
-//                "Hello, %s! \n" + "Your activation link: %s/api/v1/auth/confirm?token=%s",
-//                user.getFirstName() + " " + user.getLastName(),
-//                address,
-//                token
-//        );
-//        mailSender.send(user.getEmail(),"Class Evaluation activation", message);
-//        log.info(message);
+        sendActivationMessage(user, baseUrl, token);
 
         return ResponseEntity.ok(SimpleUserDtoResponseMapper.toDto(user));
     }
@@ -78,6 +73,7 @@ public class RegistrationService {
         confirmationTokenService.setConfirmedAt(token);
         userService.enableAppUser(
                 confirmationToken.getAppUser().getEmail());
+        log.info("Token was confirmed");
         return "confirmed";
     }
 

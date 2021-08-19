@@ -59,6 +59,9 @@ public class User {
     @JoinColumn(name="group_id")
     private Group group;
 
+    @Column(name = "enabled")
+    private boolean enabled = false;
+
 	public User(Long id, String firstName, String lastName, String email, String password) {
 		this.id = id;
 		this.firstName = firstName;
