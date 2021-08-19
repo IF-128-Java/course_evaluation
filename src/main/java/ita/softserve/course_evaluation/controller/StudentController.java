@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Objects;
 
 @Api(tags = "Course service REST API")
 @RestController
@@ -38,23 +37,18 @@ public class StudentController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<StudentDto> getStudentById(@PathVariable long id) {
-        return Objects.isNull(studentService.getById(id)) ?
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) :
-                ResponseEntity.status(HttpStatus.OK).body(studentService.getById(id));
+          return ResponseEntity.status(HttpStatus.OK).body(studentService.getById(id));
     }
 
 
-    @ApiOperation(value = "Get All Students from group with ID")
+    @ApiOperation(value = "Get list of Students from group with ID")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
-            @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND)
     })
     @GetMapping("/group/{id}")
     public ResponseEntity<List<StudentDto>> getStudentsByGroupId(@PathVariable long id) {
-        return Objects.isNull(studentService.getStudentsByGroupId(id)) ?
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) :
-                ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentsByGroupId(id));
+          return ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentsByGroupId(id));
     }
 }

@@ -27,21 +27,15 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    @ApiOperation(value = "Get All Group List")
+    @ApiOperation(value = "Get all Group list")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = HttpStatuses.OK, response = GroupDto.class),
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
-            @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND)
     })
     @GetMapping
     public ResponseEntity<List<GroupDto>> getAllGroups() {
-
-        final List<GroupDto> groups = groupService.getAll();
-
-        return groups != null && !groups.isEmpty()
-                ? new ResponseEntity<>(groups, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(groupService.getAll(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get Group by Id")
@@ -53,11 +47,7 @@ public class GroupController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<GroupDto> getGroupById(@PathVariable("id") long id) {
+        return new ResponseEntity<>(groupService.getById(id), HttpStatus.OK);
 
-        final GroupDto group = groupService.getById(id);
-
-        return group != null
-                ? new ResponseEntity<>(group, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
