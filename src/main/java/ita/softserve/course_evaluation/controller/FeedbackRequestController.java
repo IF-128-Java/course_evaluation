@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiResponses;
 import ita.softserve.course_evaluation.constants.HttpStatuses;
 import ita.softserve.course_evaluation.dto.FeedbackRequestDto;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,8 +19,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Objects;
 
 @Api(tags = "FeedbackRequest service REST API")
 @RestController
@@ -30,7 +35,7 @@ public class FeedbackRequestController {
 	public FeedbackRequestController(FeedbackRequestService feedbackRequestService) {
 		this.feedbackRequestService = feedbackRequestService;
 	}
-
+	
 	@ApiOperation(value = "Create FeedbackRequest")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = HttpStatuses.OK, response = FeedbackRequestDto.class),
@@ -39,11 +44,11 @@ public class FeedbackRequestController {
 	})
 	@PostMapping
 	@PreAuthorize("hasAuthority('WRITE')")
-	public ResponseEntity<FeedbackRequestDto>  createFeedbackRequest(@RequestBody FeedbackRequestDto dto) {
+	public ResponseEntity<FeedbackRequestDto> createFeedbackRequest(@RequestBody FeedbackRequestDto dto) {
 		return ResponseEntity.status(HttpStatus.OK)
 				       .body(feedbackRequestService.create(dto));
 	}
-
+	
 	@ApiOperation(value = "Get FeedbackRequest by Id")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = HttpStatuses.OK, response = FeedbackRequestDto.class),
@@ -56,7 +61,7 @@ public class FeedbackRequestController {
 		return ResponseEntity.status(HttpStatus.OK)
 				       .body(feedbackRequestService.getFeedbackRequestById(id));
 	}
-
+	
 	@ApiOperation(value = "Update FeedbackRequest")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = HttpStatuses.OK, response = FeedbackRequestDto.class),
@@ -70,7 +75,7 @@ public class FeedbackRequestController {
 		return ResponseEntity.status(HttpStatus.OK)
 				       .body(feedbackRequestService.update(dto));
 	}
-
+	
 	@ApiOperation(value = "Delete FeedbackRequest by Id")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = HttpStatuses.OK),
@@ -82,5 +87,18 @@ public class FeedbackRequestController {
 	@PreAuthorize("hasAuthority('UPDATE')")
 	public void deleteFeedbackRequest(@PathVariable Long id) {
 		feedbackRequestService.delete(id);
+	}
+	
+	@ApiOperation(value = "Get all feedbacks by course id")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = HttpStatuses.OK, response = FeedbackRequestDto.class),
+			@ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+			@ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+	})
+	@GetMapping("/course/{id}")
+	public ResponseEntity<Page<FeedbackRequestDto>> getAllFeedbackRequestByCourse(@RequestParam int page, @RequestParam int size, @PathVariable Long id) {
+		return Objects.isNull(feedbackRequestService.findAllByCourseId(PageRequest.of(page, size), id)) ?
+				       ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
+				       ResponseEntity.status(HttpStatus.OK).body(feedbackRequestService.findAllByCourseId(PageRequest.of(page, size), id));
 	}
 }

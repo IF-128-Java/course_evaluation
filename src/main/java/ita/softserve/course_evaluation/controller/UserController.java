@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -108,5 +109,17 @@ public class UserController {
                                          @ApiIgnore Principal principal){
 
         userService.updateUserProfilePicture(image, principal.getName());
+    }
+
+    @ApiOperation("Delete the default user profile picture")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+            @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND)
+    })
+    @DeleteMapping("/profile-picture")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUserProfilePicture(@ApiIgnore Principal principal){
+        userService.deleteUserProfilePicture(principal.getName());
     }
 }

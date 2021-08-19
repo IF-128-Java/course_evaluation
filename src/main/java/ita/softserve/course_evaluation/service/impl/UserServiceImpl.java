@@ -91,6 +91,17 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+	@Override
+	public void deleteUserProfilePicture(String email) {
+		User daoUser = getUserByEmail(email);
+
+		if(Objects.nonNull(daoUser.getProfilePicturePath())){
+			s3Utils.deleteFile(daoUser.getProfilePicturePath(), BUCKET_NAME, USERS_FOLDER);
+			daoUser.setProfilePicturePath(null);
+			userRepository.save(daoUser);
+		}
+	}
+
 	private User getUserById(Long id){
 		return userRepository.findById(id).orElseThrow(
 				() -> new EntityNotFoundException(String.format("User with id: %d not found!", id)));

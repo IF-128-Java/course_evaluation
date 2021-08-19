@@ -9,4 +9,6 @@ public interface StudentService {
     StudentDto getById(long id);
 
     List<StudentDto> getStudentsByGroupId(long id);
+	
+	List<StudentDto> getStudentsByCourseId(long id);
 }

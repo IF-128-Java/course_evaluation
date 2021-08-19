@@ -19,4 +19,6 @@ public interface UserService {
 	void updatePassword(UpdatePasswordDto updatePasswordDto, String email);
 
 	void updateUserProfilePicture(MultipartFile image, String email);
+
+	void deleteUserProfilePicture(String email);
 }

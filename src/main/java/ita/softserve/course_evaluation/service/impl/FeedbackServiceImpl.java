@@ -9,6 +9,8 @@ import ita.softserve.course_evaluation.repository.QuestionRepository;
 import ita.softserve.course_evaluation.service.AnswerToFeedbackService;
 import ita.softserve.course_evaluation.service.FeedbackService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -78,5 +80,10 @@ public class FeedbackServiceImpl implements FeedbackService {
 		Feedback feedbackFromDb = feedbackRepository.findById(id)
 				                          .orElseThrow(() -> new EntityNotFoundException("Feedback with id " + id + " not found"));
 		return FeedbackDtoMapper.toDto(feedbackFromDb, answersFromDb);
+	}
+
+	@Override
+	public Page<FeedbackDto> findAllByFeedbackRequestId(Pageable pageable, Long id) {
+		return feedbackRepository.findAllFeedbackByFeedbackRequestId(pageable, id).map(f -> FeedbackDtoMapper.toDto(f, answerToFeedbackService.getAllAnswerByFeedbackId(f.getId())));
 	}
 }

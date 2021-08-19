@@ -29,4 +29,10 @@ public class StudentServiceImpl implements StudentService {
         return StudentDtoMapper.toDto(userRepository.getStudentsByGroupId(id));
 
     }
+    
+    @Override
+    public List<StudentDto> getStudentsByCourseId(long id) {
+        List<StudentDto> students = StudentDtoMapper.toDto(userRepository.getStudentsByCourseId(id));
+        return Objects.isNull(students) ? Collections.emptyList() : students;
+    }
 }
