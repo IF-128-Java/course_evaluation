@@ -14,4 +14,6 @@ public final class ValidationConstants {
 
     public static final String NULL_IMAGE = "Image can not be null!";
     public static final String INVALID_IMAGE_TYPE = "Download PNG or JPEG only!";
+
+    public static final String INVALID_IMAGE_SIZE = "Max file size: %sMB!";
 }
