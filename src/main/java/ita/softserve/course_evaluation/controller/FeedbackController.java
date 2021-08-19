@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiResponses;
 import ita.softserve.course_evaluation.constants.HttpStatuses;
 import ita.softserve.course_evaluation.dto.FeedbackDto;
 import ita.softserve.course_evaluation.service.FeedbackService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,7 +18,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Objects;
 
 @Api(tags = "Feedback service REST API")
 @RestController
@@ -55,5 +60,14 @@ public class FeedbackController {
 													   @PathVariable Long id) {
 		return ResponseEntity.status(HttpStatus.OK)
 				       .body(feedbackService.getFeedbackById(id));
+	}
+
+	@GetMapping("/feedback_request/{id}")
+	@PreAuthorize("hasAuthority('WRITE')")
+	public ResponseEntity <Page<FeedbackDto>> getAllFeedbackByFeedbackRequestId(@ApiParam(value = "FeedbackRequest id. Cannot be empty")
+																					@RequestParam int page, @RequestParam int size, @PathVariable Long id){
+	return Objects.isNull(feedbackService.findAllByFeedbackRequestId(PageRequest.of(page, size),id)) ?
+			ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
+			ResponseEntity.status(HttpStatus.OK).body(feedbackService.findAllByFeedbackRequestId(PageRequest.of(page, size),id));
 	}
 }

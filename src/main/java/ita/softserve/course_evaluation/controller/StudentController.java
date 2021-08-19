@@ -1,6 +1,10 @@
 package ita.softserve.course_evaluation.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import ita.softserve.course_evaluation.constants.HttpStatuses;
 import ita.softserve.course_evaluation.dto.StudentDto;
 import ita.softserve.course_evaluation.service.StudentService;
 import org.springframework.http.HttpStatus;
@@ -24,6 +28,14 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+
+    @ApiOperation(value = "Get Student by ID")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = StudentDto.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+            @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND)
+    })
     @GetMapping("/{id}")
     public ResponseEntity<StudentDto> getStudentById(@PathVariable long id) {
         return Objects.isNull(studentService.getById(id)) ?
@@ -31,10 +43,33 @@ public class StudentController {
                 ResponseEntity.status(HttpStatus.OK).body(studentService.getById(id));
     }
 
+
+    @ApiOperation(value = "Get All Students from group with ID")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+            @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND)
+    })
     @GetMapping("/group/{id}")
     public ResponseEntity<List<StudentDto>> getStudentsByGroupId(@PathVariable long id) {
         return Objects.isNull(studentService.getStudentsByGroupId(id)) ?
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) :
                 ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentsByGroupId(id));
+    }
+    
+    @ApiOperation(value = "Get All Students by course id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+            @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND)
+    })
+    
+    @GetMapping("/course/{id}")
+    public ResponseEntity<List<StudentDto>> getStudentsByCourseId(@PathVariable long id) {
+        return Objects.isNull(studentService.getStudentsByCourseId(id)) ?
+                       ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) :
+                       ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentsByCourseId(id));
     }
 }

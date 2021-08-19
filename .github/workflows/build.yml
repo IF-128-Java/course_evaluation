@@ -48,4 +48,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GIT_HUB_CLIENT_ID: ${{secrets.GIT_HUB_CLIENT_ID}}
+          GIT_HUB_CLIENT_SECRET: ${{secrets.GIT_HUB_CLIENT_SECRET}}
+          FACEBOOK_CLIENT_ID: ${{secrets.FACEBOOK_CLIENT_ID}}
+          FACEBOOK_CLIENT_SECRET: ${{secrets.FACEBOOK_CLIENT_SECRET}}
+          GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
+          GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
+          AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
+          AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY}}
+          AWS_USERS_FOLDER: ${{secrets.AWS_USERS_FOLDER}}
+          AWS_BUCKET_NAME: ${{secrets.AWS_BUCKET_NAME}}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar

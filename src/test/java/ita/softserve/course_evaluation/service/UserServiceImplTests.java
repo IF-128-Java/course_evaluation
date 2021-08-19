@@ -3,6 +3,7 @@ package ita.softserve.course_evaluation.service;
 import ita.softserve.course_evaluation.dto.UpdatePasswordDto;
 import ita.softserve.course_evaluation.dto.UpdateUserDto;
 import ita.softserve.course_evaluation.dto.UserDto;
+import ita.softserve.course_evaluation.dto.UserProfileDtoResponse;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
 import ita.softserve.course_evaluation.repository.UserRepository;
@@ -66,9 +67,9 @@ public class UserServiceImplTests {
     public void testReadById(){
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
-        UserDto actual = userService.readById(anyLong());
+        UserProfileDtoResponse actual = userService.readById(anyLong());
 
-        assertEquals(user.getId(), actual.getId());
+        assertEquals(user.getEmail(), actual.getEmail());
         verify(userRepository, times(1)).findById(anyLong());
     }
 
