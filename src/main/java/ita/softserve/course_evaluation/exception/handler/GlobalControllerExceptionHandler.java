@@ -25,6 +25,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -162,10 +163,14 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    ResponseEntity<GenericExceptionResponse> onConstraintValidationException(
-            ConstraintViolationException exception) {
+    ResponseEntity<GenericExceptionResponse> onConstraintValidationException(ConstraintViolationException exception) {
         GenericExceptionResponse dto = GenericExceptionResponse.builder()
-                .message(exception.getMessage())
+                .message(
+                        exception.getConstraintViolations()
+                                .stream()
+                                .map(ConstraintViolation::getMessage)
+                                .collect(Collectors.joining())
+                )
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(exception.getClass().getSimpleName())
                 .build();
