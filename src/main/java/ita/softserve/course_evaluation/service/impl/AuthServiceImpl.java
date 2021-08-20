@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
 	public ResponseEntity<?> getLoginCredentials(AuthenticateRequestDto request) {
 		try {
 			User user = userRepository.findUserByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
-			if(!user.isEnabled()){
+			if(!user.isAccountVerified()){
 				throw new EmailNotConfirmedException("Email not confirmed yet");
 			}
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));

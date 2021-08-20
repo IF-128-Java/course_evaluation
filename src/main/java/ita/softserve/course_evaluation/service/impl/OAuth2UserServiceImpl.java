@@ -79,7 +79,7 @@ public class OAuth2UserServiceImpl implements OAuthUserService {
         user.setEmail(signUpRequest.getEmail());
         user.setRoles(Stream.of(Role.ROLE_STUDENT).collect(Collectors.toSet()));
         user.setPassword(signUpRequest.getPassword());
-        user.setEnabled(true);
+        user.setAccountVerified(true);
 
         user = userRepository.save(user);
         userRepository.flush();

@@ -83,7 +83,8 @@ public class UserServiceImpl implements UserService {
 	public String signUp(User user) {
 		Optional<User> userExists = userRepository.findUserByEmail(user.getEmail());
 		if (userExists.isPresent()){
-			if(!user.isEnabled()){
+			if(!userExists.get().isAccountVerified()){
+				System.out.println(userExists.get());
 				String mailToken = UUID.randomUUID().toString();
 				ConfirmationToken confirmationToken = new ConfirmationToken(
 						mailToken,
@@ -95,7 +96,7 @@ public class UserServiceImpl implements UserService {
 //				confirmationTokenService.saveConfirmationToken(confirmationToken);
 				String address = "http://localhost:4200";
 				String message = String.format(
-						"Hello, %s! \n" + "Your activation link: %s/api/v1/auth/confirm?token=%s",
+						"Hello, %s! \n" + "Your activation link: %s/confirm?token=%s",
 						user.getFirstName() + " " + user.getLastName(),
 						address,
 						mailToken

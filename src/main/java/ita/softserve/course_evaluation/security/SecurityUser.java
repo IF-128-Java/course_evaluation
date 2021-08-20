@@ -30,7 +30,7 @@ public class SecurityUser implements UserDetails {
 	public static UserDetails fromUser(User user) {
 
 		return new SecurityUser(user.getId(), user.getEmail(), user.getPassword(),
-				getAuthorities(user.getRoles()), user.isEnabled());
+				getAuthorities(user.getRoles()), user.isAccountVerified());
 	}
 	
 	private static List<SimpleGrantedAuthority> getAuthorities(Set<Role> roles){

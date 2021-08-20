@@ -48,7 +48,7 @@ public class LocalUser extends User implements OidcUser, OAuth2User {
 
     public static LocalUser create(ita.softserve.course_evaluation.entity.User user,
                                    Map<String, Object> attributes, OidcIdToken idToken, OidcUserInfo userInfo) {
-        user.setEnabled(true);
+        user.setAccountVerified(true);
         LocalUser localUser = new LocalUser(user.getEmail(), user.getPassword(), true, true, true, true,
                 SecurityUser.fromUser(user).getAuthorities(), user, idToken, userInfo);
         localUser.setAttributes(attributes);

@@ -7,23 +7,18 @@ import ita.softserve.course_evaluation.exception.JwtAuthenticationException;
 import ita.softserve.course_evaluation.exception.UserAlreadyExistAuthenticationException;
 import ita.softserve.course_evaluation.registration.token.ConfirmationToken;
 import ita.softserve.course_evaluation.registration.token.ConfirmationTokenService;
-import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.MailSender;
 import ita.softserve.course_evaluation.service.UserService;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
-@AllArgsConstructor
 @Slf4j
 public class RegistrationService {
 
@@ -31,9 +26,19 @@ public class RegistrationService {
     private String baseUrl;
 
     private final EmailValidator emailValidator;
+
     private final UserService userService;
+
     private final ConfirmationTokenService confirmationTokenService;
+
     private final MailSender mailSender;
+
+    public RegistrationService(EmailValidator emailValidator, UserService userService, ConfirmationTokenService confirmationTokenService, MailSender mailSender) {
+        this.emailValidator = emailValidator;
+        this.userService = userService;
+        this.confirmationTokenService = confirmationTokenService;
+        this.mailSender = mailSender;
+    }
 
     public ResponseEntity<?> register(SimpleUserDto request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
@@ -48,7 +53,9 @@ public class RegistrationService {
 
         String token = userService.signUp(user);
 
-        sendActivationMessage(user, baseUrl, token);
+        String link = buildVerificationUrl(baseUrl, token);
+
+        sendActivationMessage(user, link);
 
         return ResponseEntity.ok(SimpleUserDtoResponseMapper.toDto(user));
     }
@@ -77,14 +84,16 @@ public class RegistrationService {
         return "confirmed";
     }
 
-    private void sendActivationMessage(User user, String address, String token) {
+    public String buildVerificationUrl(final String baseURL, final String token){
+        return UriComponentsBuilder.fromHttpUrl(baseURL)
+                .path("/confirm").queryParam("token", token).toUriString();
+    }
+
+    private void sendActivationMessage(User user, String link) {
         if (!user.getEmail().isBlank()) {
             String message = String.format(
-                    "Hello, %s! \n" + "Your activation link: %s/api/v1/auth/confirm?token=%s",
-                    user.getFirstName() + " " + user.getLastName(),
-                    address,
-                    token
-            );
+                    "Hello, %s! \n" + "Your activation link: %s",
+                    user.getFirstName() + " " + user.getLastName(), link);
             mailSender.send(user.getEmail(), "Class Evaluation activation", message);
             log.info(message);
         }

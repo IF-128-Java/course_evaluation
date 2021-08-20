@@ -27,7 +27,7 @@ public class ConfirmationToken {
 
     private LocalDateTime confirmedAt;
 
-    @OneToOne(orphanRemoval = true)
+    @ManyToOne
     @JoinColumn(
             nullable = false,
             name = "USER_ID"

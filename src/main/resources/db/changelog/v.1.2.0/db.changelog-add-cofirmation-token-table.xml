@@ -27,12 +27,11 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="1.2.7" author="mykhailo.fedenko">
+    <changeSet id="1.2.10" author="mykhailo.fedenko">
         <addColumn tableName="users">
-            <column name="accountVerified" type="BOOLEAN" defaultValueBoolean="false">
+            <column name="account_verified" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
-
         </addColumn>
     </changeSet>
 
