@@ -7,9 +7,8 @@ import io.swagger.annotations.ApiResponses;
 import ita.softserve.course_evaluation.constants.HttpStatuses;
 import ita.softserve.course_evaluation.dto.AuthenticateRequestDto;
 import ita.softserve.course_evaluation.dto.SimpleUserDto;
-import ita.softserve.course_evaluation.registration.RegistrationService;
+import ita.softserve.course_evaluation.registration.RegistrationServiceImpl;
 import ita.softserve.course_evaluation.service.AuthService;
-import ita.softserve.course_evaluation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,7 @@ public class LoginController {
 	
 	private final AuthService authService;
 	@Autowired
-	private RegistrationService registrationService;
+	private RegistrationServiceImpl registrationService;
 	
 	public LoginController(AuthService authService) {
 		this.authService = authService;
@@ -65,8 +64,8 @@ public class LoginController {
 		return new ResponseEntity<>(registrationService.register(request), HttpStatus.CREATED);
 	}
 
-	@GetMapping(path = "confirm")
-	public ResponseEntity<String> confirm(@RequestParam("token") String token) {
+	@GetMapping(path = "/confirm")
+	public ResponseEntity<?> confirm(@RequestParam("token") String token) {
 		return new ResponseEntity<>(registrationService.confirmToken(token), HttpStatus.OK);
 	}
 }

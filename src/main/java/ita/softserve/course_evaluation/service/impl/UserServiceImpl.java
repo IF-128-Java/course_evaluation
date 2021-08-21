@@ -12,7 +12,6 @@ import ita.softserve.course_evaluation.registration.token.ConfirmationTokenServi
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.MailSender;
 import ita.softserve.course_evaluation.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +25,7 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 
 	private final PasswordEncoder passwordEncoder;
-	@Autowired
-	private ConfirmationTokenService confirmationTokenService;
-	@Autowired
-	private  MailSender mailSender;
+
 
 	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
@@ -76,56 +72,6 @@ public class UserServiceImpl implements UserService {
 	private User getUserByEmail(String email){
 		return userRepository.findUserByEmail(email).orElseThrow(
 				() -> new EntityNotFoundException(String.format("User with email: %s not found!", email)));
-	}
-
-
-	@Override
-	public String signUp(User user) {
-		Optional<User> userExists = userRepository.findUserByEmail(user.getEmail());
-		if (userExists.isPresent()){
-			if(!userExists.get().isAccountVerified()){
-				System.out.println(userExists.get());
-				String mailToken = UUID.randomUUID().toString();
-				ConfirmationToken confirmationToken = new ConfirmationToken(
-						mailToken,
-						LocalDateTime.now(),
-						LocalDateTime.now().plusMinutes(15),
-						userExists.get()
-				);
-				confirmationTokenService.updateConfirmationToken(userExists.get(), confirmationToken);
-//				confirmationTokenService.saveConfirmationToken(confirmationToken);
-				String address = "http://localhost:4200";
-				String message = String.format(
-						"Hello, %s! \n" + "Your activation link: %s/confirm?token=%s",
-						user.getFirstName() + " " + user.getLastName(),
-						address,
-						mailToken
-				);
-				mailSender.send(user.getEmail(),"Activation", message);
-				throw new UserAlreadyExistAuthenticationException("Email already exist. Please activate it");
-			}
-			throw new UserAlreadyExistAuthenticationException("email already exist");
-			}
-		String encodePassword = passwordEncoder.encode(user.getPassword());
-		user.setPassword(encodePassword);
-
-		userRepository.save(user);
-
-		String mailToken = UUID.randomUUID().toString();
-		ConfirmationToken confirmationToken = new ConfirmationToken(
-				mailToken,
-				LocalDateTime.now(),
-				LocalDateTime.now().plusMinutes(15),
-				user
-		);
-
-		confirmationTokenService.saveConfirmationToken(confirmationToken);
-
-		return mailToken;
-	}
-
-	public int enableAppUser(String email) {
-		return userRepository.enableAppUser(email);
 	}
 
 }
