@@ -1,6 +1,9 @@
-package ita.softserve.course_evaluation.registration.token;
+package ita.softserve.course_evaluation.service.impl;
 
+import ita.softserve.course_evaluation.entity.ConfirmationToken;
 import ita.softserve.course_evaluation.entity.User;
+import ita.softserve.course_evaluation.repository.ConfirmationTokenRepository;
+import ita.softserve.course_evaluation.service.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,26 +12,26 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class ConfirmationTokenService {
+public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
     private final ConfirmationTokenRepository confirmationTokenRepository;
 
+    @Override
     public void saveConfirmationToken(ConfirmationToken token) {
         confirmationTokenRepository.save(token);
     }
 
-    public int setConfirmedAt(String token) {
-        return confirmationTokenRepository.updateConfirmedAt(
+    @Override
+    public void setConfirmedAt(String token) {
+        confirmationTokenRepository.updateConfirmedAt(
                 token, LocalDateTime.now());
     }
 
+    @Override
     public Optional<ConfirmationToken> getToken(String token) {
         return confirmationTokenRepository.findByToken(token);
     }
 
-    public void deleteToken(User user) {
-        confirmationTokenRepository.deleteByAppUser(user);
-    };
-
+    @Override
     public void updateConfirmationToken(User user, ConfirmationToken confirmationToken) {
         ConfirmationToken existingToken = confirmationTokenRepository.findByAppUser(user);
         if(existingToken != null){

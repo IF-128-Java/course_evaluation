@@ -1,15 +1,18 @@
-package ita.softserve.course_evaluation.registration;
+package ita.softserve.course_evaluation.service.impl;
 
 import ita.softserve.course_evaluation.dto.SimpleUserDto;
 import ita.softserve.course_evaluation.dto.SimpleUserDtoResponseMapper;
 import ita.softserve.course_evaluation.entity.User;
-import ita.softserve.course_evaluation.exception.JwtAuthenticationException;
+import ita.softserve.course_evaluation.exception.EmailAlreadyConfirmedException;
+import ita.softserve.course_evaluation.exception.EmailNotConfirmedException;
+import ita.softserve.course_evaluation.exception.ConfirmationTokenException;
 import ita.softserve.course_evaluation.exception.UserAlreadyExistAuthenticationException;
-import ita.softserve.course_evaluation.registration.token.ConfirmationToken;
-import ita.softserve.course_evaluation.registration.token.ConfirmationTokenService;
+import ita.softserve.course_evaluation.entity.ConfirmationToken;
+import ita.softserve.course_evaluation.service.ConfirmationTokenService;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.MailSender;
-import ita.softserve.course_evaluation.service.UserService;
+import ita.softserve.course_evaluation.service.RegistrationService;
+import ita.softserve.course_evaluation.validator.EmailValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -25,14 +28,12 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-public class RegistrationServiceImpl implements RegistrationService{
+public class RegistrationServiceImpl implements RegistrationService {
 
     @Value("${site.base.url.https}")
     private String baseUrl;
 
     private final EmailValidator emailValidator;
-
-    private final UserService userService;
 
     private final UserRepository userRepository;
 
@@ -42,9 +43,8 @@ public class RegistrationServiceImpl implements RegistrationService{
 
     private final PasswordEncoder passwordEncoder;
 
-    public RegistrationServiceImpl(EmailValidator emailValidator, UserService userService, UserRepository userRepository, ConfirmationTokenService confirmationTokenService, MailSender mailSender, PasswordEncoder passwordEncoder) {
+    public RegistrationServiceImpl(EmailValidator emailValidator, UserRepository userRepository, ConfirmationTokenService confirmationTokenService, MailSender mailSender, PasswordEncoder passwordEncoder) {
         this.emailValidator = emailValidator;
-        this.userService = userService;
         this.userRepository = userRepository;
         this.confirmationTokenService = confirmationTokenService;
         this.mailSender = mailSender;
@@ -67,7 +67,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 
         String link = buildVerificationUrl(baseUrl, token);
 
-        sendActivationMessage(user, link, "Course Evaluation activation");
+        sendActivationMessage(user, link);
 
         return ResponseEntity.ok(SimpleUserDtoResponseMapper.toDto(user));
     }
@@ -80,9 +80,9 @@ public class RegistrationServiceImpl implements RegistrationService{
 
                 String mailToken = buildConfirmationToken(userExists.get());
                 String link = buildVerificationUrl(baseUrl, mailToken);
-                sendActivationMessage(user, link, "Course Evaluation activation");
+                sendActivationMessage(user, link);
 
-                throw new UserAlreadyExistAuthenticationException("Email already exist. Please activate it");
+                throw new EmailNotConfirmedException("Email already exist. Please confirm it");
             }
             throw new UserAlreadyExistAuthenticationException("User already exist");
         }
@@ -112,14 +112,14 @@ public class RegistrationServiceImpl implements RegistrationService{
                 .path("/confirm").queryParam("token", token).toUriString();
     }
 
-    private void sendActivationMessage(User user, String link, String subject) {
+    private void sendActivationMessage(User user, String link) {
         if (!user.getEmail().isBlank()) {
             String message = String.format(
                     "Hello, %s! \n" + "Your activation link: %s \nThis link will expire in 15 min",
                     user.getFirstName() + " " + user.getLastName(), link);
-            mailSender.send(user.getEmail(), subject, message);
-            log.info(message);
+            mailSender.send(user.getEmail(), "Course Evaluation activation", message);
         }
+        log.info("Activation message was send to user email: " + user.getEmail());
     }
 
     @Transactional
@@ -127,16 +127,16 @@ public class RegistrationServiceImpl implements RegistrationService{
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
                 .orElseThrow(() ->
-                        new IllegalStateException("Token not found"));
+                        new ConfirmationTokenException("Token not found"));
 
         if (confirmationToken.getConfirmedAt() != null) {
-            throw new UserAlreadyExistAuthenticationException("Email already confirmed");
+            throw new EmailAlreadyConfirmedException("Email already confirmed");
         }
 
         LocalDateTime expiredAt = confirmationToken.getExpiredAt();
 
         if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new JwtAuthenticationException("Token expired");
+            throw new ConfirmationTokenException("Token expired");
         }
         confirmationTokenService.setConfirmedAt(token);
 

@@ -1,4 +1,4 @@
-package ita.softserve.course_evaluation.registration;
+package ita.softserve.course_evaluation.service;
 
 import ita.softserve.course_evaluation.entity.User;
 

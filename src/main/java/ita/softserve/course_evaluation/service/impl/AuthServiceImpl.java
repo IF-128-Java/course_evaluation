@@ -5,7 +5,6 @@ import ita.softserve.course_evaluation.dto.SimpleUserDto;
 import ita.softserve.course_evaluation.dto.SimpleUserDtoResponseMapper;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.EmailNotConfirmedException;
-import ita.softserve.course_evaluation.registration.RegistrationServiceImpl;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.security.jwt.JwtTokenProvider;
 import ita.softserve.course_evaluation.service.AuthService;

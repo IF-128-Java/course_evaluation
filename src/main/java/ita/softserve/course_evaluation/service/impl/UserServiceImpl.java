@@ -7,11 +7,7 @@ import ita.softserve.course_evaluation.dto.UserDtoMapper;
 import ita.softserve.course_evaluation.dto.UserProfileDtoResponse;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
-import ita.softserve.course_evaluation.exception.UserAlreadyExistAuthenticationException;
-import ita.softserve.course_evaluation.registration.token.ConfirmationToken;
-import ita.softserve.course_evaluation.registration.token.ConfirmationTokenService;
 import ita.softserve.course_evaluation.repository.UserRepository;
-import ita.softserve.course_evaluation.service.MailSender;
 import ita.softserve.course_evaluation.service.UserService;
 import ita.softserve.course_evaluation.util.S3Utils;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,8 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDateTime;
-import java.util.*;
 import java.util.List;
 import java.util.Objects;
 
