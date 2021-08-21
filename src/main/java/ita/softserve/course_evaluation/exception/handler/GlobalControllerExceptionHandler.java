@@ -15,11 +15,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -153,10 +158,30 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
     }
 
     @ExceptionHandler({InvalidOldPasswordException.class})
-    public ResponseEntity<GenericExceptionResponse> handleInvalidOldPasswordException(Exception exception) {
+    public ResponseEntity<GenericExceptionResponse> handleInvalidOldPasswordException(InvalidOldPasswordException exception) {
 
         GenericExceptionResponse dto = GenericExceptionResponse.builder()
                 .message(exception.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(exception.getClass().getSimpleName())
+                .build();
+
+        log.info("Global Exception Handler invoke: {}", exception.getMessage());
+
+        return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    ResponseEntity<GenericExceptionResponse> onConstraintValidationException(ConstraintViolationException exception) {
+        GenericExceptionResponse dto = GenericExceptionResponse.builder()
+                .message(
+                        exception.getConstraintViolations()
+                                .stream()
+                                .map(ConstraintViolation::getMessage)
+                                .collect(Collectors.joining())
+                )
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(exception.getClass().getSimpleName())
                 .build();
@@ -172,12 +197,18 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
         ValidationExceptionResponse dto = ValidationExceptionResponse.builder()
                 .fields(
                         exception.getBindingResult()
-                        .getAllErrors()
-                        .stream()
-                        .collect(Collectors.toMap(
-                                (error) -> ((FieldError) error).getField(),
-                                DefaultMessageSourceResolvable::getDefaultMessage
-                        ))
+                                .getAllErrors()
+                                .stream()
+                                .collect(Collectors.toMap(
+                                        (error) -> {
+                                            if (error instanceof FieldError) {
+                                                return ((FieldError) error).getField();
+                                            } else {
+                                                return Objects.requireNonNull(error.getDefaultMessage()).substring(0,error.getDefaultMessage().indexOf(" "));
+                                            }
+                                        },
+                                        DefaultMessageSourceResolvable::getDefaultMessage
+                                ))
                 )
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(exception.getClass().getSimpleName())

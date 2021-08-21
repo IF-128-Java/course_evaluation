@@ -19,9 +19,9 @@ public interface CourseService {
 
     List<CourseDto> getAll();
 
-    List<CourseDto> finishedCoursesByGroupId(long id);
+    List<CourseDto> getFinishedCoursesByGroupId(long id);
 
-    List<CourseDto> currentCoursesByGroupId(long id);
+    List<CourseDto> getCurrentCoursesByGroupId(long id);
 
     List <CourseDto> getAvailableCourses();
 }

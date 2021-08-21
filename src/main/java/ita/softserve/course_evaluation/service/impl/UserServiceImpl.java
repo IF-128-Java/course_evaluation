@@ -4,6 +4,7 @@ import ita.softserve.course_evaluation.dto.UpdatePasswordDto;
 import ita.softserve.course_evaluation.dto.UpdateUserDto;
 import ita.softserve.course_evaluation.dto.UserDto;
 import ita.softserve.course_evaluation.dto.UserDtoMapper;
+import ita.softserve.course_evaluation.dto.UserProfileDtoResponse;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
 import ita.softserve.course_evaluation.exception.UserAlreadyExistAuthenticationException;
@@ -12,29 +13,50 @@ import ita.softserve.course_evaluation.registration.token.ConfirmationTokenServi
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.MailSender;
 import ita.softserve.course_evaluation.service.UserService;
+import ita.softserve.course_evaluation.util.S3Utils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+	@Value("${aws.users-folder}")
+	private String USERS_FOLDER;
+
+	@Value("${aws.bucket-name}")
+	private String BUCKET_NAME;
+
 	private final UserRepository userRepository;
 
 	private final PasswordEncoder passwordEncoder;
+	private final S3Utils s3Utils;
 
-
-	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, S3Utils s3Utils) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.s3Utils = s3Utils;
 	}
 
 	@Override
-	public UserDto readById(long id ) {
-		return UserDtoMapper.toDto(getUserById(id));
+	public UserProfileDtoResponse readById(long id ) {
+		User daoUser = getUserById(id);
+
+		return UserProfileDtoResponse.builder()
+				.firstName(daoUser.getFirstName())
+				.lastName(daoUser.getLastName())
+				.email(daoUser.getEmail())
+				.profilePicture(
+						Objects.isNull(daoUser.getProfilePicturePath()) ? null : s3Utils.downloadFile(daoUser.getProfilePicturePath(), BUCKET_NAME, USERS_FOLDER)
+				)
+				.build();
 	}
 
 	@Override
@@ -62,6 +84,29 @@ public class UserServiceImpl implements UserService {
 
 		daoUser.setPassword(passwordEncoder.encode(dto.getNewPassword()));
 		userRepository.save(daoUser);
+	}
+
+	@Override
+	public void updateUserProfilePicture(MultipartFile image, String email) {
+		User daoUser = getUserByEmail(email);
+
+		if(Objects.nonNull(daoUser.getProfilePicturePath()))
+			s3Utils.deleteFile(daoUser.getProfilePicturePath(), BUCKET_NAME, USERS_FOLDER);
+
+		daoUser.setProfilePicturePath(s3Utils.saveFile(image, BUCKET_NAME, USERS_FOLDER));
+		userRepository.save(daoUser);
+
+	}
+
+	@Override
+	public void deleteUserProfilePicture(String email) {
+		User daoUser = getUserByEmail(email);
+
+		if(Objects.nonNull(daoUser.getProfilePicturePath())){
+			s3Utils.deleteFile(daoUser.getProfilePicturePath(), BUCKET_NAME, USERS_FOLDER);
+			daoUser.setProfilePicturePath(null);
+			userRepository.save(daoUser);
+		}
 	}
 
 	private User getUserById(Long id){

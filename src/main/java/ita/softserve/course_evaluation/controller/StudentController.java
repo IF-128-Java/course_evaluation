@@ -38,23 +38,33 @@ public class StudentController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<StudentDto> getStudentById(@PathVariable long id) {
-        return Objects.isNull(studentService.getById(id)) ?
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) :
-                ResponseEntity.status(HttpStatus.OK).body(studentService.getById(id));
+          return ResponseEntity.status(HttpStatus.OK).body(studentService.getById(id));
     }
 
 
-    @ApiOperation(value = "Get All Students from group with ID")
+    @ApiOperation(value = "Get list of Students from group with ID")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
+            @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+    })
+    @GetMapping("/group/{id}")
+    public ResponseEntity<List<StudentDto>> getStudentsByGroupId(@PathVariable long id) {
+          return ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentsByGroupId(id));
+    }
+    
+    @ApiOperation(value = "Get All Students by course id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
             @ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
             @ApiResponse(code = 404, message = HttpStatuses.NOT_FOUND)
     })
-    @GetMapping("/group/{id}")
-    public ResponseEntity<List<StudentDto>> getStudentsByGroupId(@PathVariable long id) {
-        return Objects.isNull(studentService.getStudentsByGroupId(id)) ?
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) :
-                ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentsByGroupId(id));
+    
+    @GetMapping("/course/{id}")
+    public ResponseEntity<List<StudentDto>> getStudentsByCourseId(@PathVariable long id) {
+        return Objects.isNull(studentService.getStudentsByCourseId(id)) ?
+                       ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) :
+                       ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentsByCourseId(id));
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @Api(tags = "Login service REST API")
 @RestController
@@ -60,10 +61,15 @@ public class LoginController {
 			@ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
 	})
 	@PostMapping("/reg")
-	public ResponseEntity<?> registration(@RequestBody SimpleUserDto request) {
-		return new ResponseEntity<>(registrationService.register(request), HttpStatus.CREATED);
+	public ResponseEntity<?> registration(@Valid @RequestBody SimpleUserDto request) {
+		return registrationService.register(request);
 	}
 
+	@ApiOperation(value = "Email verification")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = HttpStatuses.OK),
+			@ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+	})
 	@GetMapping(path = "/confirm")
 	public ResponseEntity<?> confirm(@RequestParam("token") String token) {
 		return new ResponseEntity<>(registrationService.confirmToken(token), HttpStatus.OK);
