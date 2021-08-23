@@ -6,7 +6,6 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,8 +28,9 @@ public class SecurityUser implements UserDetails {
 	}
 
 	public static UserDetails fromUser(User user) {
+
 		return new SecurityUser(user.getId(), user.getEmail(), user.getPassword(),
-				getAuthorities(user.getRoles()), true);
+				getAuthorities(user.getRoles()), user.isAccountVerified());
 	}
 	
 	private static List<SimpleGrantedAuthority> getAuthorities(Set<Role> roles){

@@ -1,10 +1,7 @@
 package ita.softserve.course_evaluation.exception.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import ita.softserve.course_evaluation.exception.CourseAlreadyExistException;
-import ita.softserve.course_evaluation.exception.CourseNotFoundException;
-import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
-import ita.softserve.course_evaluation.exception.JwtAuthenticationException;
+import ita.softserve.course_evaluation.exception.*;
 import ita.softserve.course_evaluation.exception.dto.GenericExceptionResponse;
 import ita.softserve.course_evaluation.exception.dto.ValidationExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -134,6 +131,48 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
 
     @ExceptionHandler({UsernameNotFoundException.class})
     public ResponseEntity<GenericExceptionResponse> handleNotFoundException(UsernameNotFoundException exception) {
+
+        GenericExceptionResponse dto = GenericExceptionResponse.builder()
+                .message(exception.getMessage())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .error(exception.getClass().getSimpleName())
+                .build();
+
+        log.info("Global Exception Handler invoke: {}", exception.getMessage());
+
+        return new ResponseEntity<>(dto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({EmailNotConfirmedException.class})
+    public ResponseEntity<GenericExceptionResponse> handleEmailNotConfirmedException(EmailNotConfirmedException exception) {
+
+        GenericExceptionResponse dto = GenericExceptionResponse.builder()
+                .message(exception.getMessage())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .error(exception.getClass().getSimpleName())
+                .build();
+
+        log.info("Global Exception Handler invoke: {}", exception.getMessage());
+
+        return new ResponseEntity<>(dto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({ConfirmationTokenException.class})
+    public ResponseEntity<GenericExceptionResponse> handleConfirmationTokenException(ConfirmationTokenException exception) {
+
+        GenericExceptionResponse dto = GenericExceptionResponse.builder()
+                .message(exception.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(exception.getClass().getSimpleName())
+                .build();
+
+        log.info("Global Exception Handler invoke: {}", exception.getMessage());
+
+        return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({EmailAlreadyConfirmedException.class})
+    public ResponseEntity<GenericExceptionResponse> handleEmailNotConfirmedException(EmailAlreadyConfirmedException exception) {
 
         GenericExceptionResponse dto = GenericExceptionResponse.builder()
                 .message(exception.getMessage())

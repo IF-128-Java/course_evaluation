@@ -29,6 +29,7 @@ public class UserServiceImpl implements UserService {
 	private String BUCKET_NAME;
 
 	private final UserRepository userRepository;
+
 	private final PasswordEncoder passwordEncoder;
 	private final S3Utils s3Utils;
 
@@ -111,4 +112,5 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findUserByEmail(email).orElseThrow(
 				() -> new EntityNotFoundException(String.format("User with email: %s not found!", email)));
 	}
+
 }

@@ -11,6 +11,7 @@ import ita.softserve.course_evaluation.security.oauth2.users.OAuth2UserInfo;
 import ita.softserve.course_evaluation.security.oauth2.users.OAuth2UserInfoFactory;
 import ita.softserve.course_evaluation.service.OAuthUserService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
@@ -78,6 +79,7 @@ public class OAuth2UserServiceImpl implements OAuthUserService {
         user.setEmail(signUpRequest.getEmail());
         user.setRoles(Stream.of(Role.ROLE_STUDENT).collect(Collectors.toSet()));
         user.setPassword(signUpRequest.getPassword());
+        user.setAccountVerified(true);
 
         user = userRepository.save(user);
         userRepository.flush();

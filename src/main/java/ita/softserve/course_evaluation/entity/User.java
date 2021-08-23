@@ -62,6 +62,9 @@ public class User {
     @JoinColumn(name="group_id")
     private Group group;
 
+    @Column(name = "account_verified")
+    private boolean accountVerified = false;
+
 	public User(Long id, String firstName, String lastName, String email, String password) {
 		this.id = id;
 		this.firstName = firstName;

@@ -58,4 +58,6 @@ jobs:
           AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY}}
           AWS_USERS_FOLDER: ${{secrets.AWS_USERS_FOLDER}}
           AWS_BUCKET_NAME: ${{secrets.AWS_BUCKET_NAME}}
+          MAIL_USERNAME: ${{secrets.MAIL_USERNAME}}
+          MAIL_PASSWORD: ${{secrets.MAIL_PASSWORD}}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
