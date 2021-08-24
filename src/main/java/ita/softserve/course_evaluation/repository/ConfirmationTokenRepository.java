@@ -1,7 +1,7 @@
 package ita.softserve.course_evaluation.repository;
 
-import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.entity.ConfirmationToken;
+import ita.softserve.course_evaluation.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
