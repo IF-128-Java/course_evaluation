@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Objects;
 
 @Api(tags = "FeedbackRequest service REST API")
@@ -43,7 +44,7 @@ public class FeedbackRequestController {
 			@ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
 	})
 	@PostMapping
-	@PreAuthorize("hasAuthority('WRITE')")
+	@PreAuthorize("hasAuthority('UPDATE')")
 	public ResponseEntity<FeedbackRequestDto> createFeedbackRequest(@RequestBody FeedbackRequestDto dto) {
 		return ResponseEntity.status(HttpStatus.OK)
 				       .body(feedbackRequestService.create(dto));
@@ -56,7 +57,6 @@ public class FeedbackRequestController {
 			@ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
 	})
 	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('WRITE')")
 	public ResponseEntity<FeedbackRequestDto> getFeedbackRequest(@PathVariable Long id) {
 		return ResponseEntity.status(HttpStatus.OK)
 				       .body(feedbackRequestService.getFeedbackRequestById(id));
@@ -100,5 +100,19 @@ public class FeedbackRequestController {
 		return Objects.isNull(feedbackRequestService.findAllByCourseId(PageRequest.of(page, size), id)) ?
 				       ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
 				       ResponseEntity.status(HttpStatus.OK).body(feedbackRequestService.findAllByCourseId(PageRequest.of(page, size), id));
+	}
+
+
+	@ApiOperation(value = "Get all feedbackrequests by course id only")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
+			@ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+			@ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+	})
+	@GetMapping("/student/course/{id}")
+	public ResponseEntity<List<FeedbackRequestDto>> getFeedbackRequestByCourseIDOnly(@PathVariable long id) {
+		return Objects.isNull(feedbackRequestService.getFeedbackRequestByCourseIdOnly(id)) ?
+				ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
+				ResponseEntity.status(HttpStatus.OK).body(feedbackRequestService.getFeedbackRequestByCourseIdOnly(id));
 	}
 }

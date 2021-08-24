@@ -4,6 +4,7 @@ import ita.softserve.course_evaluation.dto.AuthenticateRequestDto;
 import ita.softserve.course_evaluation.dto.SimpleUserDto;
 import ita.softserve.course_evaluation.dto.SimpleUserDtoResponseMapper;
 import ita.softserve.course_evaluation.entity.User;
+import ita.softserve.course_evaluation.exception.EmailNotConfirmedException;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.security.jwt.JwtTokenProvider;
 import ita.softserve.course_evaluation.service.AuthService;
@@ -27,18 +28,23 @@ public class AuthServiceImpl implements AuthService {
 	private final PasswordEncoder passwordEncoder;
 	private final UserRepository userRepository;
 	private final JwtTokenProvider jwtTokenProvider;
+	private final RegistrationServiceImpl registrationService;
 	
-	public AuthServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
+	public AuthServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserRepository userRepository, JwtTokenProvider jwtTokenProvider, RegistrationServiceImpl registrationService) {
 		this.authenticationManager = authenticationManager;
 		this.passwordEncoder = passwordEncoder;
 		this.userRepository = userRepository;
 		this.jwtTokenProvider = jwtTokenProvider;
+		this.registrationService = registrationService;
 	}
 	
 	public ResponseEntity<?> getLoginCredentials(AuthenticateRequestDto request) {
 		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 			User user = userRepository.findUserByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
+			if(!user.isAccountVerified()){
+				throw new EmailNotConfirmedException("Email not confirmed yet");
+			}
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 			String [] roles = user.getRoles().stream().map(Enum::name).toArray(String[]::new);
 			String token = jwtTokenProvider.createToken(request.getEmail(), user.getId(), roles);
 			Map<Object, Object> response = new HashMap<>();
