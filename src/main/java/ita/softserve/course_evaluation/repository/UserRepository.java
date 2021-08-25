@@ -12,10 +12,10 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query(value = "SELECT id, first_name, last_name, email, password, group_id, role_id, user_id FROM users u INNER JOIN user_roles ur ON u.id = ur.user_id WHERE ur.role_id = 1", nativeQuery = true)
+    @Query(value = "SELECT id, first_name, last_name, email, password, group_id, profile_picture, role_id, user_id FROM users u INNER JOIN user_roles ur ON u.id = ur.user_id WHERE ur.role_id = 1", nativeQuery = true)
     List<User> getAllTeachersByRole();
 
-    @Query(value = "SELECT id, first_name, last_name, email, password, group_id, role_id, user_id FROM users u INNER JOIN user_roles ur ON u.id = ur.user_id WHERE u.id = :id", nativeQuery = true)
+    @Query(value = "SELECT id, first_name, last_name, email, password, group_id, profile_picture, role_id, user_id FROM users u INNER JOIN user_roles ur ON u.id = ur.user_id WHERE u.id = :id", nativeQuery = true)
     User getTeacherById(@Param("id") long id);
 
     @Query(value = "SELECT id, first_name, last_name, email, password, group_id, profile_picture FROM users u WHERE u.group_id = :id ORDER BY last_name ASC, first_name ASC", nativeQuery = true)
