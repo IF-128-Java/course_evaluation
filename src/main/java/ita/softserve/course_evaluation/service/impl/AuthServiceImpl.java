@@ -28,14 +28,12 @@ public class AuthServiceImpl implements AuthService {
 	private final PasswordEncoder passwordEncoder;
 	private final UserRepository userRepository;
 	private final JwtTokenProvider jwtTokenProvider;
-	private final RegistrationServiceImpl registrationService;
-	
-	public AuthServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserRepository userRepository, JwtTokenProvider jwtTokenProvider, RegistrationServiceImpl registrationService) {
+
+	public AuthServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
 		this.authenticationManager = authenticationManager;
 		this.passwordEncoder = passwordEncoder;
 		this.userRepository = userRepository;
 		this.jwtTokenProvider = jwtTokenProvider;
-		this.registrationService = registrationService;
 	}
 	
 	public ResponseEntity<?> getLoginCredentials(AuthenticateRequestDto request) {
