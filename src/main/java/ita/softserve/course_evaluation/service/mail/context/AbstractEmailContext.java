@@ -23,10 +23,7 @@ public abstract class AbstractEmailContext {
         this.context = new HashMap<>();
     }
 
-    public <T> void init(T context) {
-        //TODO: implement base configuration
-        //setting some base Url and context
-    }
+    public abstract  <T> void init(T context) ;
 
     public Object put(String key, Object value) {
         return key ==null ? null : this.context.put(key.intern(),value);
