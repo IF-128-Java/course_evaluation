@@ -1,5 +1,6 @@
-package ita.softserve.course_evaluation.reset_password;
+package ita.softserve.course_evaluation.dto;
 
+import ita.softserve.course_evaluation.validator.FieldsValueMatch;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +12,10 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldsValueMatch(
+        message = "Passwords don't match!",
+        field = "password",
+        fieldMatch = "confirmPassword")
 public class PasswordRestoreDto {
 
     @NotBlank

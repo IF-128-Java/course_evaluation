@@ -7,8 +7,8 @@ import io.swagger.annotations.ApiResponses;
 import ita.softserve.course_evaluation.constants.HttpStatuses;
 import ita.softserve.course_evaluation.dto.AuthenticateRequestDto;
 import ita.softserve.course_evaluation.dto.SimpleUserDto;
-import ita.softserve.course_evaluation.reset_password.PasswordRestoreDto;
-import ita.softserve.course_evaluation.reset_password.PasswordRecoveryService;
+import ita.softserve.course_evaluation.dto.PasswordRestoreDto;
+import ita.softserve.course_evaluation.service.PasswordRecoveryService;
 import ita.softserve.course_evaluation.service.RegistrationService;
 import ita.softserve.course_evaluation.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -90,7 +90,8 @@ public class LoginController {
 			@ApiResponse(code = 400, message = "USER_NOT_FOUND_BY_EMAIL")
 	})
 	@GetMapping("/restorePassword")
-	public ResponseEntity<?> restore(@RequestParam @Email(message = "INVALID RESTORE EMAIL ADDRESS") String email) {
+	public ResponseEntity<?> restore(@Valid @RequestParam @Email(message = "INVALID RESTORE EMAIL ADDRESS")
+										String email) {
 		passwordRecoveryService.forgottenPassword(email);
 		return ResponseEntity.ok().build();
 	}
@@ -101,7 +102,7 @@ public class LoginController {
 			@ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
 	})
 	@PostMapping(path = "/changePassword")
-	public ResponseEntity<?> resetPassword(@RequestBody PasswordRestoreDto restoreDto) {
+	public ResponseEntity<?> resetPassword(@Valid @RequestBody PasswordRestoreDto restoreDto) {
 		passwordRecoveryService.updatePassword(restoreDto);
 		return new ResponseEntity<>("", HttpStatus.OK);
 	}

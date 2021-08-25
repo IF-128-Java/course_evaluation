@@ -1,6 +1,6 @@
 package ita.softserve.course_evaluation.dto;
 
-import ita.softserve.course_evaluation.validator.PasswordMatches;
+import ita.softserve.course_evaluation.validator.FieldsValueMatch;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +10,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@PasswordMatches
+@FieldsValueMatch(
+        message = "Passwords value don't match!",
+        field = "password",
+        fieldMatch = "confirmPassword")
 public class SimpleUserDto {
 
     private String email;
