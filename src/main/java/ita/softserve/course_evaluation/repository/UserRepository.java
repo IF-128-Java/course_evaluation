@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "FROM users u INNER JOIN user_roles ur ON u.id = ur.user_id WHERE u.id = :id", nativeQuery = true)
     User getTeacherById(@Param("id") long id);
 
-    @Query(value = "SELECT id, first_name, last_name, email, password, group_id, profile_picture FROM users u WHERE u.group_id = :id ORDER BY last_name ASC, first_name ASC", nativeQuery = true)
+    @Query(value = "SELECT id, first_name, last_name, email, password, group_id, profile_picture, account_verified FROM users u WHERE u.group_id = :id ORDER BY last_name ASC, first_name ASC", nativeQuery = true)
     List<User> getStudentsByGroupId(@Param("id") long id);
 
     Optional<User> findUserById(long id);
@@ -31,7 +31,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email);
     
-    @Query(value = "SELECT u.id, u.first_name, u.last_name, u.email, u.password, u.group_id , u.profile_picture\n" +
+    @Query(value = "SELECT u.id, u.first_name, u.last_name, u.email, u.password, u.group_id, u.profile_picture,u.account_verified\n" +
                            "FROM course_group cg\n" +
                            "INNER JOIN users u on u.group_id=cg.group_id\n" +
                            "WHERE cg.course_id = :id", nativeQuery = true)

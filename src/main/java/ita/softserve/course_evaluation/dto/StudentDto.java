@@ -4,7 +4,6 @@ import ita.softserve.course_evaluation.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.Set;
 
 @Data
@@ -18,4 +17,5 @@ public class StudentDto {
     private Set<Role> roles;
     private Long groupId;
     private String groupName;
+    private Long groupChatRoomId;
 }
