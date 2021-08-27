@@ -31,10 +31,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email);
     
-    @Query(value = "SELECT u.id, u.first_name, u.last_name, u.email, u.password, u.group_id , u.profile_picture\n" +
-                           "FROM course_group cg\n" +
-                           "INNER JOIN users u on u.group_id=cg.group_id\n" +
-                           "WHERE cg.course_id = :id", nativeQuery = true)
+    @Query(value = "SELECT u.* FROM course_group cg INNER JOIN users u on u.group_id=cg.group_id WHERE cg.course_id = :id", nativeQuery = true)
 	List<User> getStudentsByCourseId(long id);
 
     @Transactional
@@ -42,4 +39,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "UPDATE users " +
             "SET account_verified = TRUE WHERE email = :email", nativeQuery = true)
     void enableAppUser(String email);
+    
+    @Query(value = "SELECT u.* FROM course_group cg INNER JOIN users u on cg.group_id = u.group_id INNER JOIN course_feedback_request cfr on cg.course_id = cfr.course_id left join course_feedback cf on u.id = cf.student_id where cfr.id = :id and (cfr.id <> cf.feedback_request_id or cf.id is null)", nativeQuery = true)
+    List<User> findAllUserByFeedbackRequestIdWithoutFeedback(long id);
 }

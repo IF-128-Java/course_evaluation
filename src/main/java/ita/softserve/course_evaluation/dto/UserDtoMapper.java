@@ -32,12 +32,10 @@ public class UserDtoMapper {
 	}
 	
 	public static List<UserDto> toDto(List<User> users) {
-		UserDtoMapper userDtoMapper = new UserDtoMapper();
 		return Objects.isNull(users) ? null : users.stream().map(UserDtoMapper::toDto).collect(Collectors.toList());
 	}
 	
 	public static List<User> fromDto(List<UserDto> entities) {
-		UserDtoMapper userDtoMapper = new UserDtoMapper();
 		return Objects.isNull(entities) ? null : entities.stream().map(UserDtoMapper::fromDto).collect(Collectors.toList());
 	}
 	

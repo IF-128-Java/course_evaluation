@@ -3,7 +3,6 @@ package ita.softserve.course_evaluation.service;
 import ita.softserve.course_evaluation.dto.UpdatePasswordDto;
 import ita.softserve.course_evaluation.dto.UserDto;
 import ita.softserve.course_evaluation.dto.UpdateUserDto;
-import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.dto.UserProfileDtoResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,4 +21,6 @@ public interface UserService {
 	void updateUserProfilePicture(MultipartFile image, String email);
 
 	void deleteUserProfilePicture(String email);
+	
+	List<UserDto> getAllStudentsByFeedbackRequestIdWithoutFeedback(long id);
 }
