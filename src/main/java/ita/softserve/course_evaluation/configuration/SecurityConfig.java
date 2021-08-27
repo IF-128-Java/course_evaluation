@@ -40,6 +40,22 @@ import java.util.Arrays;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	public static final String[] PUBLIC_URL = {
+			"/",
+			"/v2/**",
+			"/webjars/**",
+			"/swagger-ui/*",
+			"/swagger-ui.html",
+			"/v2/api-docs",
+			"/configuration/ui",
+			"/swagger-resources/**",
+			"/configuration/security",
+			"/api/v1/auth/restorePassword",
+			"/api/v1/auth/changePassword",
+			"/api/v1/auth/confirm",
+			"/api/v1/auth/reg",
+			"/api/v1/auth/login"
+	};
 	private final JwtConfigurer jwtConfigurer;
 
 	@Autowired
@@ -67,23 +83,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-			.cors().and()
-			.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.cors().and()
+				.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
-			.csrf().disable()
-			.formLogin()
-			.disable()
-			.httpBasic().disable()
-			.exceptionHandling()
-			.authenticationEntryPoint(new RestAuthenticationEntryPoint())
+				.csrf().disable()
+				.formLogin()
+				.disable()
+				.httpBasic().disable()
+				.exceptionHandling()
+				.authenticationEntryPoint(new RestAuthenticationEntryPoint())
 				.and()
-			.authorizeRequests()
-			.antMatchers("/").permitAll()
-			.antMatchers("/api/v1/auth/login").permitAll()
-			.antMatchers("/api/v1/auth/reg").permitAll()
-			.antMatchers("/api/v1/auth/confirm").permitAll()
-			.antMatchers("/v2/**", "/webjars/**","/swagger-ui/*", "/swagger-ui.html", "/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security").permitAll()
+				.authorizeRequests()
+				.antMatchers(PUBLIC_URL).permitAll()
 			.anyRequest()
 			.authenticated()
 				.and()

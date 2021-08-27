@@ -6,20 +6,25 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldsValueMatch(
-        message = "Passwords value don't match!",
+        message = "Passwords don't match!",
         field = "password",
         fieldMatch = "confirmPassword")
-public class SimpleUserDto {
+public class PasswordRestoreDto {
 
-    private String email;
+    @NotBlank
     private String password;
+
+    @NotBlank
     private String confirmPassword;
-    private String firstName;
-    private String lastName;
+
+    @NotBlank
+    private String token;
 
 }

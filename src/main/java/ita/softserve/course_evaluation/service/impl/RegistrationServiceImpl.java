@@ -10,8 +10,9 @@ import ita.softserve.course_evaluation.exception.UserAlreadyExistAuthenticationE
 import ita.softserve.course_evaluation.entity.ConfirmationToken;
 import ita.softserve.course_evaluation.service.ConfirmationTokenService;
 import ita.softserve.course_evaluation.repository.UserRepository;
-import ita.softserve.course_evaluation.service.MailSender;
 import ita.softserve.course_evaluation.service.RegistrationService;
+import ita.softserve.course_evaluation.service.mail.EmailService;
+import ita.softserve.course_evaluation.service.mail.context.AccountVerificationEmailContext;
 import ita.softserve.course_evaluation.validator.EmailValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,19 +41,19 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private final ConfirmationTokenService confirmationTokenService;
 
-    private final MailSender mailSender;
+    private final EmailService emailService;
 
     private final PasswordEncoder passwordEncoder;
 
-    public RegistrationServiceImpl(EmailValidator emailValidator, UserRepository userRepository, ConfirmationTokenService confirmationTokenService, MailSender mailSender, PasswordEncoder passwordEncoder) {
+    public RegistrationServiceImpl(EmailValidator emailValidator, UserRepository userRepository, ConfirmationTokenService confirmationTokenService, EmailService emailService, PasswordEncoder passwordEncoder) {
         this.emailValidator = emailValidator;
         this.userRepository = userRepository;
         this.confirmationTokenService = confirmationTokenService;
-        this.mailSender = mailSender;
+        this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
     }
 
-
+    @Override
     public ResponseEntity<?> register(SimpleUserDto request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if (!isValidEmail) {
@@ -63,24 +65,19 @@ public class RegistrationServiceImpl implements RegistrationService {
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
 
-        String token = signUp(user);
+        signUp(user);
 
-        String link = buildVerificationUrl(baseUrl, token);
-
-        sendActivationMessage(user, link);
+        sendActivationMessage(user);
 
         return ResponseEntity.ok(SimpleUserDtoResponseMapper.toDto(user));
     }
 
-    @Override
-    public String signUp(User user) {
+    public void signUp(User user) {
         Optional<User> userExists = userRepository.findUserByEmail(user.getEmail());
         if (userExists.isPresent()){
             if(!userExists.get().isAccountVerified()){
 
-                String mailToken = buildConfirmationToken(userExists.get());
-                String link = buildVerificationUrl(baseUrl, mailToken);
-                sendActivationMessage(user, link);
+                sendActivationMessage(userExists.get());
 
                 throw new EmailNotConfirmedException("Email already exist. Please confirm it");
             }
@@ -91,8 +88,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         user.setPassword(encodePassword);
 
         userRepository.save(user);
-
-        return buildConfirmationToken(user);
     }
 
     private String buildConfirmationToken(User user2) {
@@ -107,22 +102,23 @@ public class RegistrationServiceImpl implements RegistrationService {
         return mailToken;
     }
 
-    public String buildVerificationUrl(final String baseURL, final String token){
-        return UriComponentsBuilder.fromHttpUrl(baseURL)
-                .path("/confirm").queryParam("token", token).toUriString();
-    }
-
-    private void sendActivationMessage(User user, String link) {
+    private void sendActivationMessage(User user) {
         if (!user.getEmail().isBlank()) {
-            String message = String.format(
-                    "Hello, %s! \n" + "Your activation link: %s \nThis link will expire in 15 min",
-                    user.getFirstName() + " " + user.getLastName(), link);
-            mailSender.send(user.getEmail(), "Course Evaluation activation", message);
+            String token = buildConfirmationToken(user);
+            AccountVerificationEmailContext emailContext = new AccountVerificationEmailContext();
+            emailContext.init(user);
+            emailContext.buildVerificationUrl(baseUrl, token);
+            try {
+                emailService.sendMail(emailContext);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
         }
         log.info("Activation message was send to user email: " + user.getEmail());
     }
 
     @Transactional
+    @Override
     public ResponseEntity<?> confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
