@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -67,4 +69,17 @@ public class StudentController {
                        ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) :
                        ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentsByCourseId(id));
     }
+
+    @PostMapping("/mail")
+    public ResponseEntity<List<StudentDto>> sendMailToSelectedStudents(@RequestBody List<StudentDto> studentdto) {
+
+        for (int i = 0; i<studentdto.size(); i++) {
+            System.out.println(studentdto.get(i).getEmail());
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(studentdto);
+    }
+
+
 }

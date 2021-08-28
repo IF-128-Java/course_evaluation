@@ -33,7 +33,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email);
     
-    @Query(value = "SELECT u.id, u.first_name, u.last_name, u.email, u.password, u.group_id , u.profile_picture\n" +
+    @Query(value = "SELECT u.id, u.first_name, u.last_name, u.email, u.password, u.group_id, u.profile_picture,u.account_verified\n" +
                            "FROM course_group cg\n" +
                            "INNER JOIN users u on u.group_id=cg.group_id\n" +
                            "WHERE cg.course_id = :id", nativeQuery = true)

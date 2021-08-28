@@ -1,7 +1,6 @@
 package ita.softserve.course_evaluation.dto;
 
 import ita.softserve.course_evaluation.entity.User;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -19,6 +18,7 @@ public class StudentDtoMapper {
         if (user.getGroup() != null) {
             studentDto.setGroupId(user.getGroup().getId());
             studentDto.setGroupName(user.getGroup().getGroupName());
+            studentDto.setGroupChatRoomId(user.getGroup().getChatRoom().getId());
         }
         return studentDto;
     }
@@ -27,4 +27,3 @@ public class StudentDtoMapper {
         return Objects.isNull(users) ? Collections.emptyList() : users.stream().map(StudentDtoMapper::toDto).collect(Collectors.toList());
     }
 }
-
