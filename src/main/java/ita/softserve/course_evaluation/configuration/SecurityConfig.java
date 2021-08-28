@@ -54,7 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/api/v1/auth/changePassword",
 			"/api/v1/auth/confirm",
 			"/api/v1/auth/reg",
-			"/api/v1/auth/login"
+			"/api/v1/auth/login",
+			"/api/v1/connect-ws/**",
 	};
 	private final JwtConfigurer jwtConfigurer;
 

@@ -67,7 +67,7 @@ public class UserServiceImplTests {
     public void testReadById(){
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
-        UserProfileDtoResponse actual = userService.readById(anyLong());
+        UserProfileDtoResponse actual = userService.readUserProfileDtoResponseById(anyLong());
 
         assertEquals(user.getEmail(), actual.getEmail());
         verify(userRepository, times(1)).findById(anyLong());

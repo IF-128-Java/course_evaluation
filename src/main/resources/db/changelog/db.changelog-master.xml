@@ -8,4 +8,7 @@
     <include file="classpath:db/changelog/v.1.2.0/db.changelog-add-cofirmation-token-table.xml"/>
     <include file="classpath:db/changelog/v.1.2.0/db.changelog-add-profile-picture-to-users.xml"/>
     <include file="classpath:db/changelog/v.1.3.0/db.changelog-modify-data-type-course-description-text.xml"/>
+    <include file="classpath:db/changelog/v.1.4.0/db.changelog-add-chat-rooms-table.xml"/>
+    <include file="classpath:db/changelog/v.1.4.0/db.changelog-add-chat-room-to-groups.xml"/>
+    <include file="classpath:db/changelog/v.1.4.0/db.changelog-add-chat-messages-table.xml"/>
 </databaseChangeLog>

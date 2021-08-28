@@ -54,7 +54,7 @@ public class UserController {
     @GetMapping("/{id}")
     @PreAuthorize("authentication.principal.id == #id")
     public ResponseEntity<UserProfileDtoResponse> readById(@PathVariable Long id) {
-        return new ResponseEntity<>(userService.readById(id), HttpStatus.OK);
+        return new ResponseEntity<>(userService.readUserProfileDtoResponseById(id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get User by Username")

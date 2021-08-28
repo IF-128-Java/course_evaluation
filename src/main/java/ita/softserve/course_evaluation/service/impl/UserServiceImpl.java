@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserProfileDtoResponse readById(long id ) {
+	public UserProfileDtoResponse readUserProfileDtoResponseById(long id ) {
 		User daoUser = getUserById(id);
 
 		return UserProfileDtoResponse.builder()
@@ -51,6 +51,11 @@ public class UserServiceImpl implements UserService {
 						Objects.isNull(daoUser.getProfilePicturePath()) ? null : s3Utils.downloadFile(daoUser.getProfilePicturePath(), BUCKET_NAME, USERS_FOLDER)
 				)
 				.build();
+	}
+
+	@Override
+	public User readUserById(Long id) {
+		return getUserById(id);
 	}
 
 	@Override
