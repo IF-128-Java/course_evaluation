@@ -11,4 +11,5 @@
     <include file="classpath:db/changelog/v.1.4.0/db.changelog-add-chat-rooms-table.xml"/>
     <include file="classpath:db/changelog/v.1.4.0/db.changelog-add-chat-room-to-groups.xml"/>
     <include file="classpath:db/changelog/v.1.4.0/db.changelog-add-chat-messages-table.xml"/>
+    <include file="classpath:db/changelog/v.1.4.0/db.changelog-add-nullable-false-to-chat-room-column-in-group-table.xml"/>
 </databaseChangeLog>
