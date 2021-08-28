@@ -24,12 +24,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class ChatMessageServiceImpl implements ChatMessageService {
-    private final ObjectMapper mapper = new ObjectMapper();
-
-    {
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-    }
 
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomService chatRoomService;
@@ -68,7 +62,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     private void sendMessage(ChatMessage chatMessage){
         ChatMessageResponse response = ChatMessageResponseMapper.toDto(chatMessage);
 
-        messagingTemplate.convertAndSend("/api/v1/event/chat/" + chatMessage.getChatRoom().getId(), mapper.writeValueAsString(response));
+        messagingTemplate.convertAndSend("/api/v1/event/chat/" + chatMessage.getChatRoom().getId(), response);
         chatMessage.setStatus(MessageStatus.DELIVERED);
         save(chatMessage);
 
