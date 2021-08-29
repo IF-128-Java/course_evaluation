@@ -18,12 +18,8 @@ public class ChatMessageResponseMapper {
                 .id(chatMessage.getId())
                 .content(chatMessage.getContent())
                 .createdAt(chatMessage.getCreatedAt())
-                .sender(
-                        UserProfileDtoResponse.builder()
-                                .firstName(chatMessage.getSender().getFirstName())
-                                .lastName(chatMessage.getSender().getLastName())
-                                .build()
-                )
+                .senderFirstName(chatMessage.getSender().getFirstName())
+                .senderLastName(chatMessage.getSender().getLastName())
                 .build();
     }
 
