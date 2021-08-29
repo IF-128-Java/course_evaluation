@@ -40,6 +40,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "SET account_verified = TRUE WHERE email = :email", nativeQuery = true)
     void enableAppUser(String email);
     
-    @Query(value = "SELECT u.* FROM course_group cg INNER JOIN users u on cg.group_id = u.group_id INNER JOIN course_feedback_request cfr on cg.course_id = cfr.course_id left join course_feedback cf on u.id = cf.student_id where cfr.id = :id and (cfr.id <> cf.feedback_request_id or cf.id is null)", nativeQuery = true)
+    @Query(value = "SELECT u.* FROM course_group cg " +
+                           "INNER JOIN users u on cg.group_id = u.group_id " +
+                           "INNER JOIN course_feedback_request cfr on cg.course_id = cfr.course_id " +
+                           "LEFT JOIN course_feedback cf on u.id = cf.student_id " +
+                           "where cfr.id = :id " +
+                           "and (cfr.id <> cf.feedback_request_id or cf.id is null) " +
+                           "and cfr.status=1 " +
+                           "and (CURRENT_DATE >= cfr.start_date and CURRENT_DATE <= cfr.end_date)", nativeQuery = true)
     List<User> findAllUserByFeedbackRequestIdWithoutFeedback(long id);
 }

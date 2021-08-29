@@ -48,4 +48,7 @@ public class FeedbackRequest {
 			joinColumns = @JoinColumn(name = "feedback_request_id"),
 			inverseJoinColumns = @JoinColumn(name = "question_id"))
 	private List<Question> questions = new ArrayList<>();
+	
+	@Column(name = "status")
+	private FeedbackRequestStatus status;
 }

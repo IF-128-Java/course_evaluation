@@ -43,8 +43,8 @@ public class NotificationController {
 	}
 	
 	@PostMapping("/fbrequest/{id}/students")
-	public ResponseEntity<?> sendNotificationOnEmailToAllStudent(@PathVariable long id, @RequestBody List<String> emails){
-		notificationService.sendNotificationToAvailableUsers(emails, id);
+	public ResponseEntity<?> sendNotificationOnEmailToAllStudent(@PathVariable long id, @RequestBody List<UserDto> users){
+		notificationService.sendNotificationToAvailableUsers(users, id);
 		return new ResponseEntity<>("", HttpStatus.OK);
 	}
 }

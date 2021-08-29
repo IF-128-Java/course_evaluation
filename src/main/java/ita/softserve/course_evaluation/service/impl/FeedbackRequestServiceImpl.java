@@ -3,6 +3,7 @@ package ita.softserve.course_evaluation.service.impl;
 import ita.softserve.course_evaluation.dto.FeedbackRequestDto;
 import ita.softserve.course_evaluation.dto.FeedbackRequestDtoMapper;
 import ita.softserve.course_evaluation.entity.FeedbackRequest;
+import ita.softserve.course_evaluation.entity.FeedbackRequestStatus;
 import ita.softserve.course_evaluation.repository.FeedbackRequestRepository;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
 import org.springframework.data.domain.Page;
@@ -56,5 +57,19 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 		List<FeedbackRequestDto> feedbackRequestDto = FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.getFeedbackRequestByCourseIdOnly(id));
 		return Objects.isNull(feedbackRequestDto) ? Collections.emptyList() : feedbackRequestDto;
 	}
-
+	
+	@Override
+	public List<FeedbackRequestDto> findAllByStatusActiveAndValidDate() {
+		List<FeedbackRequestDto> feedbackRequestDto = FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.findAllByCourseIdAndStatusAndValidDate());
+		return Objects.isNull(feedbackRequestDto) ? Collections.emptyList() : feedbackRequestDto;
+	}
+	
+	@Override
+	public void changeStatus(FeedbackRequestDto dto, int status) {
+		FeedbackRequest feedbackRequest = feedbackRequestRepository.getById(dto.getId());
+		feedbackRequest.setStatus(FeedbackRequestStatus.values()[status]);
+		feedbackRequestRepository.save(feedbackRequest);
+	}
+	
+	
 }

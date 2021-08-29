@@ -1,6 +1,7 @@
 package ita.softserve.course_evaluation.service.impl;
 
 import ita.softserve.course_evaluation.dto.FeedbackRequestDtoMapper;
+import ita.softserve.course_evaluation.dto.UserDto;
 import ita.softserve.course_evaluation.entity.FeedbackRequest;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.repository.UserRepository;
@@ -56,7 +57,7 @@ public class NotificationServiceImpl implements NotificationService {
 	}
 	
 	@Override
-	public void sendNotificationToAvailableUsers(List<String> emails, Long id) {
-		emails.forEach(email -> sendNotificationToUser(email, id));
+	public void sendNotificationToAvailableUsers(List<UserDto> emails, Long id) {
+		emails.forEach(email -> sendNotificationToUser(email.getEmail(), id));
 	}
 }
