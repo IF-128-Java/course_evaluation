@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,5 +53,10 @@ public class NotificationServiceImpl implements NotificationService {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	@Override
+	public void sendNotificationToAvailableUsers(List<String> emails, Long id) {
+		emails.forEach(email -> sendNotificationToUser(email, id));
 	}
 }
