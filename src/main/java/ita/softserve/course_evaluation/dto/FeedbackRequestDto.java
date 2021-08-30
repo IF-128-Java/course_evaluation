@@ -26,6 +26,7 @@ public class  FeedbackRequestDto {
 	@NotBlank
 	private Long course;
 	private int status;
+	private LocalDateTime lastNotification;
 	
 	@Override
 	public boolean equals(Object o) {

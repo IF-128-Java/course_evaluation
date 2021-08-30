@@ -9,6 +9,7 @@
     <include file="classpath:db/changelog/v.1.2.0/db.changelog-add-profile-picture-to-users.xml"/>
     <include file="classpath:db/changelog/v.1.3.0/db.changelog-modify-data-type-course-description-text.xml"/>
     <include file="classpath:db/changelog/v.1.5.0/db.changelog-add-status-feedback-request-table.xml"/>
-    <include file="classpath:db/changelog/v.1.5.0/db.changelog-add-status-column-to-feedback-request.xml"/>
+    <include file="classpath:db/changelog/v.1.5.0/db.changelog-add-column-to-feedback-request.xml"/>
     <include file="classpath:db/changelog/v.1.5.0/db.changelog-insert-status-to-feedback-request-status-table.xml"/>
+    <include file="classpath:db/changelog/v.1.5.0/db.changelog-remove-column-duration.xml"/>
 </databaseChangeLog>

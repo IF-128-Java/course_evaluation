@@ -7,10 +7,10 @@ import ita.softserve.course_evaluation.entity.FeedbackRequestStatus;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
 import ita.softserve.course_evaluation.service.NotificationService;
 import ita.softserve.course_evaluation.service.UserService;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -25,16 +25,24 @@ public class ScheduleUtils {
 		this.userService = userService;
 		this.notificationService = notificationService;
 	}
+	
 	@Transactional
 //	@Scheduled(cron = "0 0 12 * * *")
 	public void sendEmailNotification() {
-		List<FeedbackRequestDto> feedbackRequests = feedbackRequestService.findAllByStatusActiveAndValidDate();
-		feedbackRequests.forEach(this::sendNotificationToAvailableUsers);
+		List<FeedbackRequestDto> feedbackRequests = feedbackRequestService.findAllByStatusActiveAndValidDate(FeedbackRequestStatus.SENT.ordinal());
+		feedbackRequests.forEach(fbr -> {
+			LocalDateTime scheduleDate = fbr.getStartDate().plusDays(3);
+			boolean isFirstNotification = fbr.getLastNotification()==null;
+			boolean isSecondNotification = scheduleDate.isBefore(LocalDateTime.now()) && scheduleDate.isAfter(fbr.getLastNotification());
+			if(isFirstNotification || isSecondNotification){
+				sendNotificationToAvailableUsers(fbr);
+			}
+		});
 	}
 	
 	private void sendNotificationToAvailableUsers(FeedbackRequestDto fbr) {
 		List<UserDto> users = userService.getAllStudentsByFeedbackRequestIdWithoutFeedback(fbr.getId());
 		notificationService.sendNotificationToAvailableUsers(users, fbr.getId());
-		feedbackRequestService.changeStatus(fbr, FeedbackRequestStatus.SENT.ordinal());
+		feedbackRequestService.changeStatusAndLastNotification(fbr, FeedbackRequestStatus.SENT.ordinal());
 	}
 }

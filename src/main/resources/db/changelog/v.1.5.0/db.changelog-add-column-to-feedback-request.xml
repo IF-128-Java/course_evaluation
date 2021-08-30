@@ -9,6 +9,8 @@
                 <constraints foreignKeyName="feedback_request_status_fkey" referencedColumnNames="id" referencedTableName="feedback_request_status"
                              nullable="true"/>
             </column>
+            <column name="last_notification" type="TIMESTAMP">
+            </column>
         </addColumn>
     </changeSet>
 </databaseChangeLog>

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class FeedbackRequestDtoMapper {
 	
 	public static FeedbackRequestDto toDto(FeedbackRequest feedbackRequest) {
-		return new FeedbackRequestDto(feedbackRequest.getId(), feedbackRequest.getFeedbackDescription(), feedbackRequest.getStartDate(), feedbackRequest.getEndDate(), feedbackRequest.getCourse().getId(), feedbackRequest.getStatus().ordinal());
+		return new FeedbackRequestDto(feedbackRequest.getId(), feedbackRequest.getFeedbackDescription(), feedbackRequest.getStartDate(), feedbackRequest.getEndDate(), feedbackRequest.getCourse().getId(), feedbackRequest.getStatus().ordinal(), feedbackRequest.getLastNotification());
 	}
 	
 	public static FeedbackRequest fromDto(FeedbackRequestDto dto) {
@@ -20,7 +20,7 @@ public class FeedbackRequestDtoMapper {
 		if (dto != null) {
 			Course course = new Course();
 			course.setId(dto.getCourse());
-			feedbackRequest = new FeedbackRequest(dto.getId(), dto.getFeedbackDescription(), dto.getStartDate(), dto.getEndDate(), 0L, course, new ArrayList<>(), new ArrayList<>(), FeedbackRequestStatus.values()[dto.getStatus()]);
+			feedbackRequest = new FeedbackRequest(dto.getId(), dto.getFeedbackDescription(), dto.getStartDate(), dto.getEndDate(), course, new ArrayList<>(), new ArrayList<>(), FeedbackRequestStatus.values()[dto.getStatus()], dto.getLastNotification());
 		}
 		return feedbackRequest;
 	}

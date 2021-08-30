@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -59,15 +60,16 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	}
 	
 	@Override
-	public List<FeedbackRequestDto> findAllByStatusActiveAndValidDate() {
-		List<FeedbackRequestDto> feedbackRequestDto = FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.findAllByCourseIdAndStatusAndValidDate());
+	public List<FeedbackRequestDto> findAllByStatusActiveAndValidDate(long id) {
+		List<FeedbackRequestDto> feedbackRequestDto = FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.findAllByStatusAndValidDate(id));
 		return Objects.isNull(feedbackRequestDto) ? Collections.emptyList() : feedbackRequestDto;
 	}
 	
 	@Override
-	public void changeStatus(FeedbackRequestDto dto, int status) {
+	public void changeStatusAndLastNotification(FeedbackRequestDto dto, int status) {
 		FeedbackRequest feedbackRequest = feedbackRequestRepository.getById(dto.getId());
 		feedbackRequest.setStatus(FeedbackRequestStatus.values()[status]);
+		feedbackRequest.setLastNotification(LocalDateTime.now());
 		feedbackRequestRepository.save(feedbackRequest);
 	}
 	
