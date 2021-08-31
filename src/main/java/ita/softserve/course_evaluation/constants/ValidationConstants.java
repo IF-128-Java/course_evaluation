@@ -16,4 +16,6 @@ public final class ValidationConstants {
     public static final String INVALID_IMAGE_TYPE = "Download PNG or JPEG only!";
 
     public static final String INVALID_IMAGE_SIZE = "Max file size: %sMB!";
+
+    public static final String INVALID_MESSAGE_SIZE = "The message size must be between 1 and 255 characters!";
 }
