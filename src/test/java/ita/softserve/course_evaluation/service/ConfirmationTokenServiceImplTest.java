@@ -5,6 +5,7 @@ import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.repository.ConfirmationTokenRepository;
 import ita.softserve.course_evaluation.service.impl.ConfirmationTokenServiceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +19,12 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.any;
 
 /**
  * @author Mykhailo Fedenko on 31.08.2021
@@ -49,6 +55,12 @@ public class ConfirmationTokenServiceImplTest {
         expected.setExpiredAt(LocalDateTime.now().plusMinutes(15));
         expected.setAppUser(user);
     }
+
+    @AfterEach
+    public void afterEach(){
+        verifyNoMoreInteractions(confirmationTokenRepository);
+    }
+
     @Test
     public void testSetConfirmedAt(){
         LocalDateTime confirmedAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -57,7 +69,6 @@ public class ConfirmationTokenServiceImplTest {
         confirmationTokenService.setConfirmedAt(StringUtils.EMPTY);
 
         verify(confirmationTokenRepository).updateConfirmedAt(StringUtils.EMPTY, confirmedAt);
-        verifyNoMoreInteractions(confirmationTokenRepository);
     }
 
     @Test
@@ -67,7 +78,6 @@ public class ConfirmationTokenServiceImplTest {
 
         assertEquals(expected.getToken(), actual.get().getToken());
         verify(confirmationTokenRepository).findByToken(anyString());
-        verifyNoMoreInteractions(confirmationTokenRepository);
     }
 
     @Test
@@ -80,7 +90,6 @@ public class ConfirmationTokenServiceImplTest {
 
         verify(confirmationTokenRepository, times(1)).findByAppUser(any(User.class));
         verify(confirmationTokenRepository, times(1)).save(any(ConfirmationToken.class));
-        verifyNoMoreInteractions(confirmationTokenRepository);
 
     }
 
@@ -94,6 +103,16 @@ public class ConfirmationTokenServiceImplTest {
 
         verify(confirmationTokenRepository, times(1)).findByAppUser(any(User.class));
         verify(confirmationTokenRepository, times(1)).save(any(ConfirmationToken.class));
-        verifyNoMoreInteractions(confirmationTokenRepository);
+    }
+
+    @Test
+    public void testSaveConfirmationToken(){
+
+        when(confirmationTokenRepository.save(expected)).thenReturn(expected);
+        ConfirmationToken confirmationToken = confirmationTokenService.saveConfirmationToken(expected);
+
+        assertEquals(expected, confirmationToken);
+        verify(confirmationTokenRepository, times(1)).save(expected);
+
     }
 }
