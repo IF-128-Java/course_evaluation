@@ -5,6 +5,7 @@ import ita.softserve.course_evaluation.entity.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,12 +17,12 @@ public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationT
     Optional<ConfirmationToken> findByToken(String token);
 
     @Transactional
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value = "UPDATE confirmation_token as c " +
             "SET confirmed_at = :confirmedAt " +
             "WHERE token = :token", nativeQuery = true)
-    void updateConfirmedAt(String token,
-                          LocalDateTime confirmedAt);
+    void updateConfirmedAt(@Param("token") String token,
+                          @Param("confirmedAt") LocalDateTime confirmedAt);
 
 
     ConfirmationToken findByAppUser(User user);
