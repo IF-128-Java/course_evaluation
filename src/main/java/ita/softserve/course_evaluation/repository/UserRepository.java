@@ -44,9 +44,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
                            "INNER JOIN users u on cg.group_id = u.group_id " +
                            "INNER JOIN course_feedback_request cfr on cg.course_id = cfr.course_id " +
                            "LEFT JOIN course_feedback cf on u.id = cf.student_id " +
-                           "where cfr.id = :id " +
-                           "and (cfr.id <> cf.feedback_request_id or cf.id is null) " +
+                           "WHERE cfr.id = :id " +
+                           "and (cfr.id <> cf.feedback_request_id or cf.id is null)" +
                            "and (cfr.status=1 or cfr.status=2)" +
-                           "and (CURRENT_DATE >= cfr.start_date::date and CURRENT_DATE <= cfr.end_date::date)", nativeQuery = true)
+                           "and (CURRENT_DATE >= cast(cfr.start_date as date) and CURRENT_DATE <= cast(cfr.end_date as date))", nativeQuery = true)
     List<User> findAllUserByFeedbackRequestIdWithoutFeedback(long id);
 }

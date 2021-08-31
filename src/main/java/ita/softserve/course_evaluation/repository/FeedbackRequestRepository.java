@@ -13,7 +13,7 @@ public interface FeedbackRequestRepository extends JpaRepository<FeedbackRequest
 	@Query(value = "SELECT * From course_feedback_request where course_id = ?1", nativeQuery = true)
 	Page<FeedbackRequest> findAllByCourseId (Pageable page, Long id);
 	
-	@Query(value = "SELECT * From course_feedback_request cfr where cfr.status = ?1 and (CURRENT_DATE >= cfr.start_date::date and CURRENT_DATE <= cfr.end_date::date)", nativeQuery = true)
+	@Query(value = "SELECT * From course_feedback_request cfr where cfr.status = ?1 and (CURRENT_DATE >= cast(cfr.start_date as date) and CURRENT_DATE <= cast(cfr.end_date as date))", nativeQuery = true)
 	List<FeedbackRequest> findAllByStatusAndValidDate(Long id);
 
 	@Query(value = "SELECT * From course_feedback_request where course_id = ?1 ORDER BY start_date", nativeQuery = true)
