@@ -1,6 +1,9 @@
 package ita.softserve.course_evaluation.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import ita.softserve.course_evaluation.exception.JwtAuthenticationException;
 import ita.softserve.course_evaluation.security.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
@@ -50,7 +53,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         DefaultContentTypeResolver resolver = new DefaultContentTypeResolver();
         resolver.setDefaultMimeType(MimeTypeUtils.APPLICATION_JSON);
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-        converter.setObjectMapper(new ObjectMapper());
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        converter.setObjectMapper(mapper);
         converter.setContentTypeResolver(resolver);
         messageConverters.add(converter);
         return false;
@@ -71,14 +77,20 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                     if (token != null && token.startsWith("Bearer ")) {
                         token = token.substring(7);
 
-                        if (jwtTokenProvider.validateToken(token)) {
-                            Authentication authentication = jwtTokenProvider.getAuthentication(token);
-                            if (authentication != null) {
-                                SecurityContextHolder.getContext().setAuthentication(authentication);
-                                accessor.setUser(authentication);
+                        try {
+                            if (jwtTokenProvider.validateToken(token)) {
+                                Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                                if (authentication != null) {
+                                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                                    accessor.setUser(authentication);
+                                }
                             }
+                        }catch (JwtAuthenticationException e) {
+                            SecurityContextHolder.clearContext();
+                            throw new JwtAuthenticationException("JWT token is expired or invalid");
                         }
-                    }
+                    }else
+                        throw new JwtAuthenticationException("JWT token is expired or invalid");
                 }
 
                 return message;
