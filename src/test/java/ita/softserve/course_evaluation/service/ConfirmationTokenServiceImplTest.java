@@ -52,7 +52,7 @@ public class ConfirmationTokenServiceImplTest {
     @Test
     public void testSetConfirmedAt(){
         LocalDateTime confirmedAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        lenient().when(confirmationTokenRepository.updateConfirmedAt(StringUtils.EMPTY,confirmedAt)).thenReturn(expected);
+        lenient().when(confirmationTokenRepository.updateConfirmedAt(StringUtils.EMPTY,confirmedAt)).thenReturn(1);
 
         confirmationTokenService.setConfirmedAt(StringUtils.EMPTY);
 
@@ -95,6 +95,5 @@ public class ConfirmationTokenServiceImplTest {
         verify(confirmationTokenRepository, times(1)).findByAppUser(any(User.class));
         verify(confirmationTokenRepository, times(1)).save(any(ConfirmationToken.class));
         verifyNoMoreInteractions(confirmationTokenRepository);
-
     }
 }
