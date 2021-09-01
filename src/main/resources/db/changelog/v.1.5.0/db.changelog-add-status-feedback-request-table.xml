@@ -3,7 +3,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet id="1.5.1" author="taras.lutsiuk">
+    <changeSet id="1.5.2" author="taras.lutsiuk">
         <createTable tableName="feedback_request_status">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="feedback_request_status_pkey" nullable="false"/>
