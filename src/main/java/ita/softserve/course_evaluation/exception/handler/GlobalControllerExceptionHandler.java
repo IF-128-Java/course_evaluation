@@ -98,7 +98,7 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
 
         log.info("Global Exception Handler invoke: {}", exception.getMessage());
 
-        return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(dto, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler({JsonProcessingException.class})

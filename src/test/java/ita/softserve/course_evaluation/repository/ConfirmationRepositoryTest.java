@@ -1,7 +1,6 @@
 package ita.softserve.course_evaluation.repository;
 
 import ita.softserve.course_evaluation.entity.ConfirmationToken;
-import ita.softserve.course_evaluation.entity.Role;
 import ita.softserve.course_evaluation.entity.User;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
@@ -15,7 +14,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.UUID;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,8 +38,7 @@ public class ConfirmationRepositoryTest {
         user.setLastName("testToken");
         user.setPassword("test");
         user.setEmail("mail@mail");
-
-
+        
         LocalDateTime createAt = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
         LocalDateTime expiredAt = createAt.plusMinutes(15);
         LocalDateTime confirmedAt = createAt.plusMinutes(10).truncatedTo(ChronoUnit.MILLIS);
@@ -59,7 +58,5 @@ public class ConfirmationRepositoryTest {
         assertEquals(token, confirmationTokens.get(0).getToken());
         assertEquals(confirmedAt, confirmationTokens.get(0).getConfirmedAt());
         assertEquals(user.getId(), confirmationTokens.get(0).getAppUser().getId());
-
     }
-
 }
