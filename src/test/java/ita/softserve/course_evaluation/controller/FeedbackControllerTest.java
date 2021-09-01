@@ -8,7 +8,12 @@ import ita.softserve.course_evaluation.config.WithMockCustomUser;
 import ita.softserve.course_evaluation.dto.AnswerDtoMapper;
 import ita.softserve.course_evaluation.dto.FeedbackDto;
 import ita.softserve.course_evaluation.dto.FeedbackDtoMapper;
-import ita.softserve.course_evaluation.entity.*;
+import ita.softserve.course_evaluation.entity.Feedback;
+import ita.softserve.course_evaluation.entity.Question;
+import ita.softserve.course_evaluation.entity.Role;
+import ita.softserve.course_evaluation.entity.FeedbackRequest;
+import ita.softserve.course_evaluation.entity.AnswerToFeedback;
+import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.handler.GlobalControllerExceptionHandler;
 import ita.softserve.course_evaluation.service.FeedbackService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +42,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.never;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -179,6 +188,25 @@ class FeedbackControllerTest {
 
         assertEquals(mapper.writeValueAsString(feedbackDtoPage), actual);
         verify(feedbackService, times(2)).findAllByFeedbackRequestId(Mockito.any(Pageable.class), Mockito.anyLong());
+        verifyNoMoreInteractions(feedbackService);
+    }
+
+    @Test
+    @WithMockCustomUser(role = Role.ROLE_TEACHER)
+    void testGetAllFeedbackByFeedbackRequestIdWithBadRequestParams() throws Exception {
+        LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+        requestParams.add("page", "1");
+        requestParams.add("size", "1");
+
+        when(feedbackService.findAllByFeedbackRequestId(any(Pageable.class), Mockito.anyLong())).thenReturn(null);
+
+        mockMvc.perform(get(API_FEEDBACK_URL + "/feedback_request/1/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .params(requestParams)
+                )
+                .andExpect(status().isBadRequest()).andDo(print()).andReturn().getResponse().getContentAsString();
+
+        verify(feedbackService, times(1)).findAllByFeedbackRequestId(Mockito.any(Pageable.class), Mockito.anyLong());
         verifyNoMoreInteractions(feedbackService);
     }
 }

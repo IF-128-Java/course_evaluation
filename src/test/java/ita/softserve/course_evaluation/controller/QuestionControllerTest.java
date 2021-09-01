@@ -27,8 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -55,7 +54,8 @@ public class QuestionControllerTest {
     private Question question3;
     private Question question4;
 
-    @MockBean private QuestionService questionService;
+    @MockBean
+    private QuestionService questionService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -124,6 +124,19 @@ public class QuestionControllerTest {
     }
 
     @Test
+    @WithMockCustomUser
+    public void testGetAllQuestionsWithEmptyQuestionTable() throws Exception {
+
+        when(questionService.getAllQuestion()).thenReturn(null);
+
+        mockMvc.perform(get(API_QUESTIONS_URL)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound()).andDo(print()).andReturn().getResponse().getContentAsString();
+
+        verify(questionService, times(1)).getAllQuestion();
+    }
+
+    @Test
     @WithMockCustomUser(role = Role.ROLE_ADMIN)
     public void testGetQuestionById() throws Exception {
 
@@ -140,7 +153,7 @@ public class QuestionControllerTest {
                 .andDo(print()).andReturn().getResponse().getContentAsString();
 
         assertEquals(mapper.writeValueAsString(questionDto), actual);
-        verify(questionService,times(1)).findQuestionById(Mockito.anyLong());
+        verify(questionService, times(1)).findQuestionById(Mockito.anyLong());
     }
 
     @Test
@@ -162,8 +175,8 @@ public class QuestionControllerTest {
 
         String expected = mapper.writeValueAsString(questionDto);
 
-        assertEquals(expected,actual);
-        verify(questionService,times(1)).updateQuestion(any(QuestionDto.class), Mockito.anyLong());
+        assertEquals(expected, actual);
+        verify(questionService, times(1)).updateQuestion(any(QuestionDto.class), Mockito.anyLong());
     }
 
     @Test
@@ -176,7 +189,7 @@ public class QuestionControllerTest {
                 .andExpect(status().isOk()).andDo(print()).andReturn().getResponse().getContentAsString();
 
         assertEquals(expected, actual);
-        verify(questionService,times(1)).deleteQuestionById(Mockito.anyLong());
+        verify(questionService, times(1)).deleteQuestionById(Mockito.anyLong());
 
 
     }
