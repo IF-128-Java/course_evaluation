@@ -99,8 +99,8 @@ public class CourseServiceImplTests {
         when(courseRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(CourseNotFoundException.class, () -> courseService.getById(anyLong()));
-
-        verify(courseRepository, times(1)).findById(anyLong());
+    
+        verify(courseRepository, times(1)).findById(1L);
     }
 
     @Test
