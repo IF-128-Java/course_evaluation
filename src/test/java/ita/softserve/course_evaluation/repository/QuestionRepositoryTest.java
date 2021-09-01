@@ -1,5 +1,6 @@
 package ita.softserve.course_evaluation.repository;
 
+import ita.softserve.course_evaluation.entity.FeedbackRequestStatus;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.entity.Question;
 import ita.softserve.course_evaluation.entity.FeedbackRequest;
@@ -21,6 +22,8 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 
 @DataJpaTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -72,7 +75,7 @@ public class QuestionRepositoryTest {
 
         FeedbackRequest feedbackRequest = new FeedbackRequest(1L, "description",
                 LocalDateTime.now(), LocalDateTime.now().plusDays(10),
-                10L, course, Collections.emptyList(), List.of(question1, question3));
+                 course, Collections.emptyList(), List.of(question1, question3), FeedbackRequestStatus.values()[anyInt()], LocalDateTime.parse(anyString()));
         feedbackRequestRepository.save(feedbackRequest);
 
         List<Question> actual = questionRepository.findAllQuestionsByFeedbackRequest(feedbackRequest.getId());
@@ -88,7 +91,7 @@ public class QuestionRepositoryTest {
 
         FeedbackRequest feedbackRequest = new FeedbackRequest(1L, "description",
                 LocalDateTime.now(), LocalDateTime.now().plusDays(10),
-                10L, course, Collections.emptyList(), List.of(question1, question2, question3));
+                course, Collections.emptyList(), List.of(question1, question2, question3), FeedbackRequestStatus.values()[anyInt()], LocalDateTime.parse(anyString()));
         feedbackRequestRepository.save(feedbackRequest);
         System.out.println(questionRepository.findAll());
         System.out.println(feedbackRequest);

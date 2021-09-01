@@ -4,6 +4,7 @@ import ita.softserve.course_evaluation.dto.UpdatePasswordDto;
 import ita.softserve.course_evaluation.dto.UserDto;
 import ita.softserve.course_evaluation.dto.UpdateUserDto;
 import ita.softserve.course_evaluation.dto.UserProfileDtoResponse;
+import ita.softserve.course_evaluation.entity.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
