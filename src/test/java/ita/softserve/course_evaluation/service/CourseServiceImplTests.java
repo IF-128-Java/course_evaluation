@@ -96,7 +96,7 @@ public class CourseServiceImplTests {
 
     @Test
     public void testExceptionGetById(){
-        when(courseRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(courseRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(CourseNotFoundException.class, () -> courseService.getById(1L));
     
