@@ -1,6 +1,7 @@
 package ita.softserve.course_evaluation.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import javax.persistence.Column;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Question {
 
     @Id
@@ -28,4 +30,5 @@ public class Question {
 
     @Column(name="is_pattern")
     private boolean isPattern;
+
 }

@@ -1,7 +1,6 @@
 package ita.softserve.course_evaluation.entity;
 
 import lombok.Data;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.List;
 
@@ -37,4 +37,8 @@ public class Group {
             joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
     private List<Course> courses;
+
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "chat_room_id", nullable = false)
+    private ChatRoom chatRoom;
 }

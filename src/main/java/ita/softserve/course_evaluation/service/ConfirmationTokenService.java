@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ConfirmationTokenService {
 
-    void saveConfirmationToken(ConfirmationToken token);
+    ConfirmationToken saveConfirmationToken(ConfirmationToken token);
 
     void setConfirmedAt(String token);
 

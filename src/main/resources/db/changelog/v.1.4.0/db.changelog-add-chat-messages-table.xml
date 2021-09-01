@@ -1,0 +1,30 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.4.2" author="arsen.kushnir">
+        <createTable tableName="chat_messages">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="chat_messages_pkey" nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="chat_room_id" type="BIGINT">
+                <constraints foreignKeyName="chat_messages_chat_rooms_fkey" referencedColumnNames="id" referencedTableName="chat_rooms"
+                             nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="chat_messages_users_fkey" referencedColumnNames="id" referencedTableName="users"
+                             nullable="false"/>
+            </column>
+            <column name="content" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

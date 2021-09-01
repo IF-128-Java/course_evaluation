@@ -10,7 +10,9 @@ import java.util.List;
 
 public interface UserService {
 
-	UserProfileDtoResponse readById(long id);
+	UserProfileDtoResponse readUserProfileDtoResponseById(long id);
+
+	User readUserById(Long id);
 
 	List<UserDto> readByFirstName(String firstName);
 

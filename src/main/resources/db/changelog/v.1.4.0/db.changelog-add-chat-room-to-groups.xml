@@ -1,0 +1,14 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.4.1" author="arsen.kushnir">
+        <addColumn tableName="groups">
+            <column name="chat_room_id" type="BIGINT">
+                <constraints foreignKeyName="groups_chat_rooms_fkey" referencedColumnNames="id" referencedTableName="chat_rooms"
+                             nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
