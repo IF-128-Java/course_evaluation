@@ -75,7 +75,7 @@ public class QuestionRepositoryTest {
 
         FeedbackRequest feedbackRequest = new FeedbackRequest(1L, "description",
                 LocalDateTime.now(), LocalDateTime.now().plusDays(10),
-                 course, Collections.emptyList(), List.of(question1, question3), FeedbackRequestStatus.values()[anyInt()], LocalDateTime.parse(anyString()));
+                 course, Collections.emptyList(), List.of(question1, question3), FeedbackRequestStatus.values()[anyInt()], LocalDateTime.now());
         feedbackRequestRepository.save(feedbackRequest);
 
         List<Question> actual = questionRepository.findAllQuestionsByFeedbackRequest(feedbackRequest.getId());
@@ -91,7 +91,7 @@ public class QuestionRepositoryTest {
 
         FeedbackRequest feedbackRequest = new FeedbackRequest(1L, "description",
                 LocalDateTime.now(), LocalDateTime.now().plusDays(10),
-                course, Collections.emptyList(), List.of(question1, question2, question3), FeedbackRequestStatus.values()[anyInt()], LocalDateTime.parse(anyString()));
+                course, Collections.emptyList(), List.of(question1, question2, question3), FeedbackRequestStatus.values()[1], LocalDateTime.now());
         feedbackRequestRepository.save(feedbackRequest);
         System.out.println(questionRepository.findAll());
         System.out.println(feedbackRequest);
