@@ -2,7 +2,7 @@ package ita.softserve.course_evaluation.dto.dtoMapper;
 
 import ita.softserve.course_evaluation.dto.ChatMessageResponse;
 import ita.softserve.course_evaluation.entity.ChatMessage;
-import ita.softserve.course_evaluation.service.impl.AmazonS3FileManager;
+import ita.softserve.course_evaluation.service.FileManager;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 @Component
 public class ChatMessageResponseMapper {
 
-    private final AmazonS3FileManager fileManager;
+    private final FileManager fileManager;
 
-    public ChatMessageResponseMapper(AmazonS3FileManager fileManager) {
+    public ChatMessageResponseMapper(FileManager fileManager) {
         this.fileManager = fileManager;
     }
 

@@ -8,6 +8,7 @@ import ita.softserve.course_evaluation.dto.UserProfileDtoResponse;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
 import ita.softserve.course_evaluation.repository.UserRepository;
+import ita.softserve.course_evaluation.service.FileManager;
 import ita.softserve.course_evaluation.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,9 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final AmazonS3FileManager fileManager;
+	private final FileManager fileManager;
 
-	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, AmazonS3FileManager fileManager) {
+	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, FileManager fileManager) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.fileManager = fileManager;
@@ -105,5 +106,4 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findUserByEmail(email).orElseThrow(
 				() -> new EntityNotFoundException(String.format("User with email: %s not found!", email)));
 	}
-
 }
