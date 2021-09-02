@@ -78,7 +78,7 @@ class QuestionControllerTest {
     }
 
     @Test
-    public void testAddQuestion() throws Exception {
+    void testAddQuestion() throws Exception {
 
         when(questionService.saveQuestion(any(QuestionDto.class))).thenReturn(question1);
 
@@ -124,7 +124,7 @@ class QuestionControllerTest {
     }
 
     @Test
-    public void testGetAllQuestionsWithEmptyQuestionTable() throws Exception {
+    void testGetAllQuestionsWithEmptyQuestionTable() throws Exception {
 
         when(questionService.getAllQuestion()).thenReturn(null);
 
@@ -136,7 +136,7 @@ class QuestionControllerTest {
     }
 
     @Test
-    public void testGetQuestionById() throws Exception {
+    void testGetQuestionById() throws Exception {
 
         QuestionDto questionDto = QuestionDtoMapper.toDto(question1);
         when(questionService.findQuestionById(Mockito.anyLong())).thenReturn(questionDto);
@@ -155,7 +155,7 @@ class QuestionControllerTest {
     }
 
     @Test
-    public void testUpdateQuestion() throws Exception {
+    void testUpdateQuestion() throws Exception {
         QuestionDto questionDto = QuestionDtoMapper.toDto(question3);
 
         when(questionService.updateQuestion(any(QuestionDto.class), Mockito.anyLong())).thenReturn(questionDto);
@@ -178,7 +178,7 @@ class QuestionControllerTest {
     }
 
     @Test
-    public void testDeleteQuestion() throws Exception {
+    void testDeleteQuestion() throws Exception {
         String expected = "Question deleted successfully!.";
         doNothing().when(questionService).deleteQuestionById(Mockito.anyLong());
 

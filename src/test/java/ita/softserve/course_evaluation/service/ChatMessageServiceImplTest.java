@@ -1,4 +1,4 @@
-package ita.softserve.course_evaluation.service.impl;
+package ita.softserve.course_evaluation.service;
 
 import ita.softserve.course_evaluation.dto.ChatMessageRequest;
 import ita.softserve.course_evaluation.dto.ChatMessageResponse;
@@ -12,6 +12,7 @@ import ita.softserve.course_evaluation.repository.ChatMessageRepository;
 import ita.softserve.course_evaluation.security.SecurityUser;
 import ita.softserve.course_evaluation.service.ChatRoomService;
 import ita.softserve.course_evaluation.service.UserService;
+import ita.softserve.course_evaluation.service.impl.ChatMessageServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,7 +49,8 @@ class ChatMessageServiceImplTest {
     @Mock private UserService userService;
     @Mock private SimpMessagingTemplate messagingTemplate;
 
-    @InjectMocks ChatMessageServiceImpl chatMessageService;
+    @InjectMocks
+    ChatMessageServiceImpl chatMessageService;
 
     @BeforeEach
     public void beforeEach(){
