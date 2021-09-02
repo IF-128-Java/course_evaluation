@@ -70,23 +70,23 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    @Disabled
+    @Disabled("Not implemented yet")
     void testRegisterWhenEmailValid() {
 
     }
 
     @Test
-    @Disabled
+    @Disabled("Not implemented yet")
     void testSignUp() {
     }
 
     @Test
-    @Disabled
+    @Disabled("Not implemented yet")
     void testConfirmToken() {
     }
 
     @Test
-    @Disabled
+    @Disabled("Not implemented yet")
     void testEnableUserEmail() {
     }
 }
