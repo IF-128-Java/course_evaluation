@@ -79,7 +79,7 @@ class FeedbackControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);

@@ -47,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 @AutoConfigureMockMvc
 @ContextConfiguration(classes = {QuestionController.class, SpringSecurityTestConfiguration.class})
-public class QuestionControllerTest {
+class QuestionControllerTest {
     public static final String API_QUESTIONS_URL = "/api/v1/questions";
 
     private ObjectMapper mapper;
@@ -63,7 +63,7 @@ public class QuestionControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         mapper = new ObjectMapper();
 
         question1 = Question.builder().questionText("Test question1").isPattern(true).id(1L).build();
@@ -73,7 +73,7 @@ public class QuestionControllerTest {
     }
 
     @AfterEach
-    public void afterEach() {
+    void afterEach() {
         verifyNoMoreInteractions(questionService);
     }
 
@@ -103,8 +103,7 @@ public class QuestionControllerTest {
     }
 
     @Test
-    @WithMockCustomUser
-    public void testGetAllQuestions() throws Exception {
+    void testGetAllQuestions() throws Exception {
 
         List<QuestionDto> questionDTOs = QuestionDtoMapper.toDto(List.of(question1, question2, question3, question4));
         QuestionDto questionDto2 = QuestionDtoMapper.toDto(question2);
@@ -189,7 +188,6 @@ public class QuestionControllerTest {
 
         assertEquals(expected, actual);
         verify(questionService, times(1)).deleteQuestionById(Mockito.anyLong());
-
 
     }
 

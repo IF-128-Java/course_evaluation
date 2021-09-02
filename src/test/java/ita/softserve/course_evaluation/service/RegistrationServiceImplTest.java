@@ -45,7 +45,7 @@ class RegistrationServiceImplTest {
     @InjectMocks private RegistrationServiceImpl registrationService;
 
     @BeforeEach
-    public void beforeEach(){
+    void beforeEach(){
         User user = new User();
         user.setId(1L);
         user.setFirstName("First Name");
@@ -57,7 +57,7 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    public void testRegisterWhenEmailNotValid() {
+    void testRegisterWhenEmailNotValid() {
 
         when(emailValidator.test(Mockito.anyString())).thenReturn(false);
         EmailNotValidException emailNotValidException = assertThrows(EmailNotValidException.class,
@@ -71,22 +71,22 @@ class RegistrationServiceImplTest {
 
     @Test
     @Disabled
-    public void testRegisterWhenEmailValid() {
+    void testRegisterWhenEmailValid() {
 
     }
 
     @Test
     @Disabled
-    public void testSignUp() {
+    void testSignUp() {
     }
 
     @Test
     @Disabled
-    public void testConfirmToken() {
+    void testConfirmToken() {
     }
 
     @Test
     @Disabled
-    public void testEnableUserEmail() {
+    void testEnableUserEmail() {
     }
 }

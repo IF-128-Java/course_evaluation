@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-public class UserRepositoryTests {
+class UserRepositoryTests {
 
     @Autowired
     private UserRepository userRepository;
@@ -25,7 +25,7 @@ public class UserRepositoryTests {
     public static User user;
 
     @BeforeAll
-    public static void afterAll(){
+    static void afterAll(){
         user = new User();
         user.setFirstName("First Name");
         user.setLastName("Last Name");
@@ -35,7 +35,7 @@ public class UserRepositoryTests {
     }
 
     @Test
-    public void testFindUserByFirstNameIfExists(){
+    void testFindUserByFirstNameIfExists(){
         User saved = userRepository.save(user);
         List<User> expected = List.of(saved);
 
@@ -46,14 +46,14 @@ public class UserRepositoryTests {
     }
 
     @Test
-    public void testFindUserByFirstNameIfNotExist(){
+    void testFindUserByFirstNameIfNotExist(){
         List<User> actual = userRepository.findUserByFirstName(StringUtils.EMPTY);
 
         assertTrue(actual.isEmpty());
     }
 
     @Test
-    public void testFindUserByEmailIfExists(){
+    void testFindUserByEmailIfExists(){
         User expected = userRepository.save(user);
         Optional<User> actual = userRepository.findUserByEmail(expected.getEmail());
 
@@ -62,7 +62,7 @@ public class UserRepositoryTests {
     }
 
     @Test
-    public void testFindUserByEmailIfNotExist(){
+    void testFindUserByEmailIfNotExist(){
         Optional<User> actual = userRepository.findUserByEmail(StringUtils.EMPTY);
 
         assertFalse(actual.isPresent());

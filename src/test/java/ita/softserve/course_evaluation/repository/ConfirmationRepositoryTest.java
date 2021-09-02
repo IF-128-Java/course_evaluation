@@ -19,10 +19,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author Mykhailo Fedenko
+ */
 @DataJpaTest
-@Rollback(value = false)
-@Transactional()
-public class ConfirmationRepositoryTest {
+class ConfirmationRepositoryTest {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -31,7 +32,7 @@ public class ConfirmationRepositoryTest {
     @Autowired
     private UserRepository userRepository;
     @Test
-    public void testUpdateConfirmedAt() {
+    void testUpdateConfirmedAt() {
 
         User user = new User();
         user.setFirstName("testToken");
@@ -50,7 +51,6 @@ public class ConfirmationRepositoryTest {
         Session session = entityManager.unwrap(Session.class);
         NativeQuery<ConfirmationToken> query = session.createNativeQuery("select  * from confirmation_token where token = '" + token +"'", ConfirmationToken.class);
         List<ConfirmationToken> confirmationTokens = query.getResultList();
-        System.out.println(confirmationTokens);
 
         assertEquals(1, confirmationTokens.size());
         assertEquals(createAt, confirmationTokens.get(0).getCreatedAt());

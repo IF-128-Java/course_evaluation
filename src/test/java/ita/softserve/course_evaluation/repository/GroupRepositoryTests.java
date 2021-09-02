@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @DataJpaTest
-public class GroupRepositoryTests {
+class GroupRepositoryTests {
 
     @Autowired
     private GroupRepository groupRepository;
@@ -24,7 +24,7 @@ public class GroupRepositoryTests {
     private ChatRoomRepository chatRoomRepository;
 
     @Test
-    public void testFindGroupByGroupNameIfExists(){
+    void testFindGroupByGroupNameIfExists(){
         ChatRoom chatRoom = chatRoomRepository.save(new ChatRoom(1L, ChatType.GROUP, null));
 
         Group group = new Group();
@@ -39,7 +39,7 @@ public class GroupRepositoryTests {
     }
 
     @Test
-    public void testFindGroupByGroupNameIfNotExist(){
+    void testFindGroupByGroupNameIfNotExist(){
         Optional<Group> actual = groupRepository.findGroupByGroupName(StringUtils.EMPTY);
 
         assertFalse(actual.isPresent());

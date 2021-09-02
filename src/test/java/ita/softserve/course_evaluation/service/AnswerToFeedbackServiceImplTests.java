@@ -34,7 +34,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class AnswerToFeedbackServiceImplTests {
+class AnswerToFeedbackServiceImplTests {
 
     @Mock
     private AnswerToFeedbackRepository answerToFeedbackRepository;
@@ -47,7 +47,7 @@ public class AnswerToFeedbackServiceImplTests {
     private static AnswerDto expectedDto1;
 
     @BeforeAll
-    public static void beforeAll(){
+    static void beforeAll(){
         Feedback feedback1 = new Feedback();
         feedback1.setId(1L);
         Feedback feedback2 = new Feedback();
@@ -69,12 +69,12 @@ public class AnswerToFeedbackServiceImplTests {
     }
 
     @AfterEach
-    public void afterEach(){
+    void afterEach(){
         verifyNoMoreInteractions(answerToFeedbackRepository);
     }
 
     @Test
-    public void testGetAllAnswer(){
+    void testGetAllAnswer(){
         when(answerToFeedbackRepository.findAll()).thenReturn(List.of(expected));
 
         List<AnswerDto> actual = answerToFeedbackService.getAllAnswer();
@@ -85,7 +85,7 @@ public class AnswerToFeedbackServiceImplTests {
     }
 
     @Test
-    public void testSaveAnswer(){
+    void testSaveAnswer(){
         when(answerToFeedbackRepository.save(any())).thenReturn(expected);
 
         AnswerDto actual = answerToFeedbackService.saveAnswer(expectedDto1);
@@ -96,7 +96,7 @@ public class AnswerToFeedbackServiceImplTests {
     }
 
     @Test
-    public void testCorrectFindAnswerById(){
+    void testCorrectFindAnswerById(){
         when(answerToFeedbackRepository.findById(anyLong())).thenReturn(Optional.of(expected));
 
         AnswerDto actual = answerToFeedbackService.findAnswerById(anyLong());
@@ -107,7 +107,7 @@ public class AnswerToFeedbackServiceImplTests {
     }
 
     @Test
-    public void testExceptionFindAnswerById(){
+    void testExceptionFindAnswerById(){
         when(answerToFeedbackRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         Throwable exception = assertThrows(EntityNotFoundException.class, () -> answerToFeedbackService.findAnswerById(anyLong()));
@@ -118,7 +118,7 @@ public class AnswerToFeedbackServiceImplTests {
     }
 
     @Test
-    public void testDeleteAnswerById(){
+    void testDeleteAnswerById(){
         when(answerToFeedbackRepository.findById(anyLong())).thenReturn(Optional.of(expected));
         doNothing().when(answerToFeedbackRepository).delete(expected);
 
@@ -129,7 +129,7 @@ public class AnswerToFeedbackServiceImplTests {
     }
 
     @Test
-    public void testUpdateAnswer(){
+    void testUpdateAnswer(){
         when(answerToFeedbackRepository.findById(anyLong())).thenReturn(Optional.of(expected));
         when(answerToFeedbackRepository.save(any())).thenReturn(expected);
 
@@ -142,7 +142,7 @@ public class AnswerToFeedbackServiceImplTests {
     }
 
     @Test
-    public void testGetAllAnswerByFeedbackId(){
+    void testGetAllAnswerByFeedbackId(){
         List<AnswerToFeedback> answerList = Arrays.asList(expected, expected2);
         when(answerToFeedbackRepository.findAll()).thenReturn(answerList);
 

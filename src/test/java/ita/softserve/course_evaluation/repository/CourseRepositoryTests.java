@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-public class CourseRepositoryTests {
+class CourseRepositoryTests {
 
     @Autowired
     private CourseRepository courseRepository;
@@ -24,7 +24,7 @@ public class CourseRepositoryTests {
     private UserRepository userRepository;
 
     @Test
-    public void testFindByCourseNameIfExists(){
+    void testFindByCourseNameIfExists(){
         User user = new User();
 
         Course course = new Course();
@@ -43,7 +43,7 @@ public class CourseRepositoryTests {
     }
 
     @Test
-    public void testFindByCourseNameIfNotExist(){
+    void testFindByCourseNameIfNotExist(){
         List<Course> actual = courseRepository.findCourseByName(StringUtils.EMPTY);
 
         assertTrue(actual.isEmpty());

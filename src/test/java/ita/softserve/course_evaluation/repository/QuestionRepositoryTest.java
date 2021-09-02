@@ -22,9 +22,12 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * @author Mykhailo Fedenko
+ */
 @DataJpaTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class QuestionRepositoryTest {
+class QuestionRepositoryTest {
     private Question question1;
     private Question question2;
     private Question question3;
@@ -42,7 +45,7 @@ public class QuestionRepositoryTest {
     private TestEntityManager entityManager;
 
     @BeforeEach
-    public void beforeEach(){
+    void beforeEach(){
         User teacher = new User();
         teacher.setFirstName("Mike");
         teacher.setLastName("Wood");
@@ -68,7 +71,7 @@ public class QuestionRepositoryTest {
 
     @Test
     @DisplayName("Find list of all questions by feedback id")
-    public void testFindAllQuestionsByFeedbackRequest(){
+    void testFindAllQuestionsByFeedbackRequest(){
 
         FeedbackRequest feedbackRequest = new FeedbackRequest(1L, "description",
                 LocalDateTime.now(), LocalDateTime.now().plusDays(10),
@@ -84,7 +87,7 @@ public class QuestionRepositoryTest {
 
     @Test
     @DisplayName("Find all questions id list by feedback request id")
-    public void testFindAllQuestionIdsByFeedbackRequest(){
+    void testFindAllQuestionIdsByFeedbackRequest(){
 
         FeedbackRequest feedbackRequest = new FeedbackRequest(1L, "description",
                 LocalDateTime.now(), LocalDateTime.now().plusDays(10),

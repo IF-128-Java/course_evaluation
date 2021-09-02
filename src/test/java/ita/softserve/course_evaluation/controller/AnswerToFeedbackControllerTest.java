@@ -55,7 +55,7 @@ class AnswerToFeedbackControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         mapper = new ObjectMapper();
 
         Feedback feedback = new Feedback();
