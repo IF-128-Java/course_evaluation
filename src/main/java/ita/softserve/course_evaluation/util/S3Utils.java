@@ -5,7 +5,6 @@ import ita.softserve.course_evaluation.exception.FileProcessingException;
 import ita.softserve.course_evaluation.service.s3.AmazonS3ClientService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
