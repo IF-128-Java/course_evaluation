@@ -101,6 +101,20 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
         return new ResponseEntity<>(dto, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler({EmailNotValidException.class})
+    public ResponseEntity<GenericExceptionResponse> handleEmailNotValidException(EmailNotValidException exception) {
+
+        GenericExceptionResponse dto = GenericExceptionResponse.builder()
+                .message(exception.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(exception.getClass().getSimpleName())
+                .build();
+
+        log.info("Global Exception Handler invoke: {}", exception.getMessage());
+
+        return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler({JsonProcessingException.class})
     public ResponseEntity<GenericExceptionResponse> handleJsonProcessingException(JsonProcessingException exception) {
 
