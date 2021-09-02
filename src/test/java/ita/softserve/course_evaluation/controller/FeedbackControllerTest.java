@@ -28,6 +28,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
@@ -65,6 +66,7 @@ class FeedbackControllerTest {
     public static final String API_FEEDBACK_URL = "/api/v1/feedback";
     private ObjectMapper mapper;
     private FeedbackDto feedbackDto;
+    private Pageable pageable;
 
     @Autowired
     @Qualifier("withRoleUser")
@@ -96,6 +98,7 @@ class FeedbackControllerTest {
         answer.setRate(5);
 
         feedbackDto = FeedbackDtoMapper.toDto(feedback1, AnswerDtoMapper.toDto(List.of(answer)));
+        pageable = PageRequest.of(0, 5);
     }
 
 
@@ -166,10 +169,11 @@ class FeedbackControllerTest {
     @Test
     @WithMockCustomUser(role = Role.ROLE_TEACHER)
     void testGetAllFeedbackByFeedbackRequestId() throws Exception {
-        Page<FeedbackDto> feedbackDtoPage = new PageImpl<>(List.of(feedbackDto));
+        List<FeedbackDto> feedbackDtoList = List.of(feedbackDto);
+        Page<FeedbackDto> feedbackDtoPage = new PageImpl<>(feedbackDtoList, pageable, feedbackDtoList.size());
         LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
         requestParams.add("page", "1");
-        requestParams.add("size", "1");
+        requestParams.add("size", "5");
 
         when(feedbackService.findAllByFeedbackRequestId(any(Pageable.class), Mockito.anyLong())).thenReturn(feedbackDtoPage);
 
@@ -182,7 +186,7 @@ class FeedbackControllerTest {
                 .andExpect(jsonPath("$.content[0].id").value(feedbackDto.getId()))
                 .andExpect(jsonPath("$.content[0].comment").value(feedbackDto.getComment()))
                 .andExpect(jsonPath("$.totalPages").value(1))
-                .andExpect(jsonPath("$.size").value(1))
+                .andExpect(jsonPath("$.size").value(5))
                 .andExpect(jsonPath("$.numberOfElements").value(1))
                 .andExpect(status().isOk()).andDo(print()).andReturn().getResponse().getContentAsString();
 

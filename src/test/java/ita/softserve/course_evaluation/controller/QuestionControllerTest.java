@@ -1,6 +1,5 @@
 package ita.softserve.course_evaluation.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ita.softserve.course_evaluation.config.SpringSecurityTestConfiguration;
 import ita.softserve.course_evaluation.config.WithMockCustomUser;
@@ -19,7 +18,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,9 +25,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -76,7 +78,6 @@ public class QuestionControllerTest {
     }
 
     @Test
-    @WithMockCustomUser(role = Role.ROLE_ADMIN)
     public void testAddQuestion() throws Exception {
 
         when(questionService.saveQuestion(any(QuestionDto.class))).thenReturn(question1);
@@ -124,7 +125,6 @@ public class QuestionControllerTest {
     }
 
     @Test
-    @WithMockCustomUser
     public void testGetAllQuestionsWithEmptyQuestionTable() throws Exception {
 
         when(questionService.getAllQuestion()).thenReturn(null);
@@ -137,7 +137,6 @@ public class QuestionControllerTest {
     }
 
     @Test
-    @WithMockCustomUser(role = Role.ROLE_ADMIN)
     public void testGetQuestionById() throws Exception {
 
         QuestionDto questionDto = QuestionDtoMapper.toDto(question1);

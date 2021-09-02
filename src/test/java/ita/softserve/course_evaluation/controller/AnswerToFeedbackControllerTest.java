@@ -2,7 +2,6 @@ package ita.softserve.course_evaluation.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ita.softserve.course_evaluation.config.SpringSecurityTestConfiguration;
-import ita.softserve.course_evaluation.config.WithMockCustomUser;
 import ita.softserve.course_evaluation.dto.AnswerDto;
 import ita.softserve.course_evaluation.dto.AnswerDtoMapper;
 import ita.softserve.course_evaluation.entity.AnswerToFeedback;
@@ -72,7 +71,6 @@ class AnswerToFeedbackControllerTest {
     }
 
     @Test
-    @WithMockCustomUser
     void testGetAllAnswers() throws Exception {
 
         when(answerService.getAllAnswer()).thenReturn(List.of(answerDto));
@@ -92,7 +90,6 @@ class AnswerToFeedbackControllerTest {
     }
 
     @Test
-    @WithMockCustomUser
     void testGetAllAnswersWithNoUserExists() throws Exception {
 
         when(answerService.getAllAnswer()).thenReturn(null);

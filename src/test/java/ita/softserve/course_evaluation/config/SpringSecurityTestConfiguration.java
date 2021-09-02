@@ -21,18 +21,10 @@ import java.util.Set;
 @Order(1)
 public class SpringSecurityTestConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Bean("withRoleAdmin")
-    @Primary
-    public User testUserWithRoleAdmin() {
-        User user = new User();
-        user.setId(1L);
-        user.setFirstName("Mike");
-        user.setLastName("Green");
-        user.setPassword("1111");
-        user.setEmail("mike@mail.com");
-        user.setRoles(Set.of(Role.ROLE_ADMIN));
-
-        return user;
+    @Override
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
+        // Disable CSRF
+        httpSecurity.csrf().disable();
     }
 
     @Bean("withRoleUser")
@@ -47,14 +39,6 @@ public class SpringSecurityTestConfiguration extends WebSecurityConfigurerAdapte
         user.setRoles(Set.of(Role.ROLE_STUDENT));
 
         return user;
-    }
-
-    @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        // Disable CSRF
-        httpSecurity.csrf().disable();
-                // Permit all requests without authentication
-//                .authorizeRequests().anyRequest().permitAll();
     }
 
 }
