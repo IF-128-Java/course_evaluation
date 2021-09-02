@@ -2,16 +2,22 @@ package ita.softserve.course_evaluation.dto.dtoMapper;
 
 import ita.softserve.course_evaluation.dto.ChatMessageResponse;
 import ita.softserve.course_evaluation.entity.ChatMessage;
-
+import ita.softserve.course_evaluation.service.impl.AmazonS3FileManager;
+import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Component
 public class ChatMessageResponseMapper {
 
-    private ChatMessageResponseMapper(){}
+    private final AmazonS3FileManager fileManager;
 
-    public static ChatMessageResponse toDto(ChatMessage chatMessage){
+    public ChatMessageResponseMapper(AmazonS3FileManager fileManager) {
+        this.fileManager = fileManager;
+    }
+
+    public ChatMessageResponse toDto(ChatMessage chatMessage){
         if (Objects.isNull(chatMessage)) return null;
 
         return ChatMessageResponse.builder()
@@ -21,10 +27,11 @@ public class ChatMessageResponseMapper {
                 .senderId(chatMessage.getSender().getId())
                 .senderFirstName(chatMessage.getSender().getFirstName())
                 .senderLastName(chatMessage.getSender().getLastName())
+                .senderProfilePicture(fileManager.downloadUserProfilePicture(chatMessage.getSender().getProfilePicturePath()))
                 .build();
     }
 
-    public static List<ChatMessageResponse> toDto(List<ChatMessage> chatMessages){
-        return Objects.isNull(chatMessages) ? null : chatMessages.stream().map(ChatMessageResponseMapper::toDto).collect(Collectors.toList());
+    public List<ChatMessageResponse> toDto(List<ChatMessage> chatMessages){
+        return Objects.isNull(chatMessages) ? null : chatMessages.stream().map(this::toDto).collect(Collectors.toList());
     }
 }

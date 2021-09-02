@@ -9,12 +9,9 @@ import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.UserService;
-import ita.softserve.course_evaluation.util.S3Utils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Objects;
@@ -22,21 +19,14 @@ import java.util.Objects;
 @Service
 public class UserServiceImpl implements UserService {
 
-	@Value("${aws.users-folder}")
-	private String USERS_FOLDER;
-
-	@Value("${aws.bucket-name}")
-	private String BUCKET_NAME;
-
 	private final UserRepository userRepository;
-
 	private final PasswordEncoder passwordEncoder;
-	private final S3Utils s3Utils;
+	private final AmazonS3FileManager fileManager;
 
-	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, S3Utils s3Utils) {
+	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, AmazonS3FileManager fileManager) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
-		this.s3Utils = s3Utils;
+		this.fileManager = fileManager;
 	}
 
 	@Override
@@ -47,9 +37,7 @@ public class UserServiceImpl implements UserService {
 				.firstName(daoUser.getFirstName())
 				.lastName(daoUser.getLastName())
 				.email(daoUser.getEmail())
-				.profilePicture(
-						Objects.isNull(daoUser.getProfilePicturePath()) ? null : s3Utils.downloadFile(daoUser.getProfilePicturePath(), BUCKET_NAME, USERS_FOLDER)
-				)
+				.profilePicture(fileManager.downloadUserProfilePicture(daoUser.getProfilePicturePath()))
 				.build();
 	}
 
@@ -90,9 +78,9 @@ public class UserServiceImpl implements UserService {
 		User daoUser = getUserByEmail(email);
 
 		if(Objects.nonNull(daoUser.getProfilePicturePath()))
-			s3Utils.deleteFile(daoUser.getProfilePicturePath(), BUCKET_NAME, USERS_FOLDER);
+			fileManager.deleteUserProfilePicture(daoUser.getProfilePicturePath());
 
-		daoUser.setProfilePicturePath(s3Utils.saveFile(image, BUCKET_NAME, USERS_FOLDER));
+		daoUser.setProfilePicturePath(fileManager.uploadUserProfilePicture(image));
 		userRepository.save(daoUser);
 
 	}
@@ -102,7 +90,7 @@ public class UserServiceImpl implements UserService {
 		User daoUser = getUserByEmail(email);
 
 		if(Objects.nonNull(daoUser.getProfilePicturePath())){
-			s3Utils.deleteFile(daoUser.getProfilePicturePath(), BUCKET_NAME, USERS_FOLDER);
+			fileManager.deleteUserProfilePicture(daoUser.getProfilePicturePath());
 			daoUser.setProfilePicturePath(null);
 			userRepository.save(daoUser);
 		}

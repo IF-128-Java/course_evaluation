@@ -1,8 +1,5 @@
 package ita.softserve.course_evaluation.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ita.softserve.course_evaluation.dto.ChatMessageRequest;
 import ita.softserve.course_evaluation.dto.ChatMessageResponse;
 import ita.softserve.course_evaluation.dto.dtoMapper.ChatMessageResponseMapper;
@@ -29,15 +26,17 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     private final ChatRoomService chatRoomService;
     private final UserService userService;
     private final SimpMessagingTemplate messagingTemplate;
+    private final ChatMessageResponseMapper chatMessageResponseMapper;
 
     public ChatMessageServiceImpl(ChatMessageRepository chatMessageRepository,
                                   ChatRoomService chatRoomService,
                                   UserService userService,
-                                  SimpMessagingTemplate messagingTemplate) {
+                                  SimpMessagingTemplate messagingTemplate, ChatMessageResponseMapper chatMessageResponseMapper) {
         this.chatMessageRepository = chatMessageRepository;
         this.chatRoomService = chatRoomService;
         this.userService = userService;
         this.messagingTemplate = messagingTemplate;
+        this.chatMessageResponseMapper = chatMessageResponseMapper;
     }
 
     @Transactional
@@ -60,7 +59,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
     @SneakyThrows
     private void sendMessage(ChatMessage chatMessage){
-        ChatMessageResponse response = ChatMessageResponseMapper.toDto(chatMessage);
+        ChatMessageResponse response = chatMessageResponseMapper.toDto(chatMessage);
 
         messagingTemplate.convertAndSend("/api/v1/event/chat/" + chatMessage.getChatRoom().getId(), response);
         chatMessage.setStatus(MessageStatus.DELIVERED);
@@ -77,6 +76,6 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
     @Override
     public List<ChatMessageResponse> findMessagesByChatRoomId(Long chatId) {
-        return ChatMessageResponseMapper.toDto(chatMessageRepository.findAllByChatRoomId(chatId));
+        return chatMessageResponseMapper.toDto(chatMessageRepository.findAllByChatRoomId(chatId));
     }
 }
