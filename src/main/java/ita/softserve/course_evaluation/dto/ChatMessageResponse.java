@@ -23,4 +23,6 @@ public class ChatMessageResponse {
     private String senderFirstName;
 
     private String senderLastName;
+
+    private byte[] senderProfilePicture;
 }
