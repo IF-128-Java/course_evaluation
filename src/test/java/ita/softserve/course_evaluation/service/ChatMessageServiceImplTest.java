@@ -10,8 +10,6 @@ import ita.softserve.course_evaluation.entity.MessageStatus;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.repository.ChatMessageRepository;
 import ita.softserve.course_evaluation.security.SecurityUser;
-import ita.softserve.course_evaluation.service.ChatRoomService;
-import ita.softserve.course_evaluation.service.UserService;
 import ita.softserve.course_evaluation.service.impl.ChatMessageServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,6 +72,7 @@ class ChatMessageServiceImplTest {
                 .sender(user1)
                 .status(MessageStatus.RECEIVED).build();
     }
+
     @Test
     void testProcessMessage() {
         SecurityUser securityUser = new SecurityUser(1L, "Nick", "password", Collections.emptyList(), true);
