@@ -43,9 +43,6 @@ public class UserServiceImplTests {
     @Mock private PasswordEncoder passwordEncoder;
     @Mock private AmazonS3FileManager fileManager;
 
-    @Mock
-    private FileManager fileManager;
-
     @InjectMocks
     private UserServiceImpl userService;
 
