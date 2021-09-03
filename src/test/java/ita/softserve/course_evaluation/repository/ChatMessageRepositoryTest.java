@@ -18,9 +18,11 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
+/**
+ * @author Mykhailo Fedenko
+ */
 @DataJpaTest
-public class ChatMessageRepositoryTest {
+class ChatMessageRepositoryTest {
 
     @Autowired
     private ChatMessageRepository chatMessageRepository;
@@ -30,7 +32,7 @@ public class ChatMessageRepositoryTest {
     private ChatRoomRepository chatRoomRepository;
 
     @Test
-    public void testFindAllByChatRoomId(){
+    void testFindAllByChatRoomId(){
         User user = new User();
         user.setFirstName("Mike");
         user.setLastName("Wood");
@@ -69,7 +71,7 @@ public class ChatMessageRepositoryTest {
     }
 
     @Test
-    public void testFindAllByChatRoomIdWithNotExistsId(){
+    void testFindAllByChatRoomIdWithNotExistsId(){
         List<ChatMessage> actual = chatMessageRepository.findAllByChatRoomId(1L);
         assertEquals(0, actual.size());
     }

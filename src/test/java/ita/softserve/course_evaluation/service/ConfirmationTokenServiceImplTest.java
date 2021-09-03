@@ -30,7 +30,7 @@ import static org.mockito.Mockito.any;
  * @author Mykhailo Fedenko on 31.08.2021
  */
 @ExtendWith(MockitoExtension.class)
-public class ConfirmationTokenServiceImplTest {
+class ConfirmationTokenServiceImplTest {
     private ConfirmationToken expected;
     private User user;
 
@@ -41,7 +41,7 @@ public class ConfirmationTokenServiceImplTest {
     private ConfirmationTokenServiceImpl confirmationTokenService;
 
     @BeforeEach
-    public void beforeEach(){
+    void beforeEach(){
         user = new User();
         user.setId(1L);
         user.setFirstName("First Name");
@@ -57,12 +57,12 @@ public class ConfirmationTokenServiceImplTest {
     }
 
     @AfterEach
-    public void afterEach(){
+    void afterEach(){
         verifyNoMoreInteractions(confirmationTokenRepository);
     }
 
     @Test
-    public void testSetConfirmedAt(){
+    void testSetConfirmedAt(){
         LocalDateTime confirmedAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         lenient().when(confirmationTokenRepository.updateConfirmedAt(StringUtils.EMPTY,confirmedAt)).thenReturn(1);
 
@@ -72,7 +72,7 @@ public class ConfirmationTokenServiceImplTest {
     }
 
     @Test
-    public void testGetToken(){
+    void testGetToken(){
         when(confirmationTokenRepository.findByToken(anyString())).thenReturn(Optional.of(expected));
         Optional<ConfirmationToken> actual = confirmationTokenService.getToken(anyString());
 
@@ -81,7 +81,7 @@ public class ConfirmationTokenServiceImplTest {
     }
 
     @Test
-    public void testUpdateConfirmationTokenWithExistUser(){
+    void testUpdateConfirmationTokenWithExistUser(){
 
         when(confirmationTokenRepository.findByAppUser(any(User.class))).thenReturn(expected);
         when(confirmationTokenRepository.save(any(ConfirmationToken.class))).thenReturn(expected);
@@ -94,7 +94,7 @@ public class ConfirmationTokenServiceImplTest {
     }
 
     @Test
-    public void testUpdateConfirmationTokenWithNullUser(){
+    void testUpdateConfirmationTokenWithNullUser(){
 
         when(confirmationTokenRepository.findByAppUser(any(User.class))).thenReturn(null);
         when(confirmationTokenRepository.save(any(ConfirmationToken.class))).thenReturn(expected);
@@ -106,7 +106,7 @@ public class ConfirmationTokenServiceImplTest {
     }
 
     @Test
-    public void testSaveConfirmationToken(){
+    void testSaveConfirmationToken(){
 
         when(confirmationTokenRepository.save(expected)).thenReturn(expected);
         ConfirmationToken confirmationToken = confirmationTokenService.saveConfirmationToken(expected);

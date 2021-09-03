@@ -16,12 +16,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
@@ -31,7 +34,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class AnswerToFeedbackServiceImplTests {
+class AnswerToFeedbackServiceImplTests {
 
     @Mock
     private AnswerToFeedbackRepository answerToFeedbackRepository;
@@ -40,26 +43,38 @@ public class AnswerToFeedbackServiceImplTests {
     private AnswerToFeedbackServiceImpl answerToFeedbackService;
 
     private static AnswerToFeedback expected;
-    private static AnswerDto expectedDto;
+    private static AnswerToFeedback expected2;
+    private static AnswerDto expectedDto1;
 
     @BeforeAll
-    public static void beforeAll(){
+    static void beforeAll(){
+        Feedback feedback1 = new Feedback();
+        feedback1.setId(1L);
+        Feedback feedback2 = new Feedback();
+        feedback2.setId(2L);
+
         expected = new AnswerToFeedback();
         expected.setId(1L);
         expected.setRate(10);
-        expected.setQuestion(new Question());
-        expected.setFeedback(new Feedback());
+        expected.setQuestion(Question.builder().id(1L).build());
+        expected.setFeedback(feedback1);
 
-        expectedDto = AnswerDtoMapper.toDto(expected);
+        expected2 = new AnswerToFeedback();
+        expected2.setId(1L);
+        expected2.setRate(10);
+        expected2.setQuestion(Question.builder().id(2L).build());
+        expected2.setFeedback(feedback2);
+
+        expectedDto1 = AnswerDtoMapper.toDto(expected);
     }
 
     @AfterEach
-    public void afterEach(){
+    void afterEach(){
         verifyNoMoreInteractions(answerToFeedbackRepository);
     }
 
     @Test
-    public void testGetAllAnswer(){
+    void testGetAllAnswer(){
         when(answerToFeedbackRepository.findAll()).thenReturn(List.of(expected));
 
         List<AnswerDto> actual = answerToFeedbackService.getAllAnswer();
@@ -70,29 +85,29 @@ public class AnswerToFeedbackServiceImplTests {
     }
 
     @Test
-    public void testSaveAnswer(){
+    void testSaveAnswer(){
         when(answerToFeedbackRepository.save(any())).thenReturn(expected);
 
-        AnswerDto actual = answerToFeedbackService.saveAnswer(expectedDto);
+        AnswerDto actual = answerToFeedbackService.saveAnswer(expectedDto1);
 
-        assertEquals(expectedDto, actual);
+        assertEquals(expectedDto1, actual);
 
         verify(answerToFeedbackRepository, times(1)).save(any());
     }
 
     @Test
-    public void testCorrectFindAnswerById(){
+    void testCorrectFindAnswerById(){
         when(answerToFeedbackRepository.findById(anyLong())).thenReturn(Optional.of(expected));
 
         AnswerDto actual = answerToFeedbackService.findAnswerById(anyLong());
 
-        assertEquals(expectedDto.getId(), actual.getId());
+        assertEquals(expectedDto1.getId(), actual.getId());
 
         verify(answerToFeedbackRepository, times(1)).findById(anyLong());
     }
 
     @Test
-    public void testExceptionFindAnswerById(){
+    void testExceptionFindAnswerById(){
         when(answerToFeedbackRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         Throwable exception = assertThrows(EntityNotFoundException.class, () -> answerToFeedbackService.findAnswerById(anyLong()));
@@ -103,7 +118,7 @@ public class AnswerToFeedbackServiceImplTests {
     }
 
     @Test
-    public void testDeleteAnswerById(){
+    void testDeleteAnswerById(){
         when(answerToFeedbackRepository.findById(anyLong())).thenReturn(Optional.of(expected));
         doNothing().when(answerToFeedbackRepository).delete(expected);
 
@@ -114,15 +129,41 @@ public class AnswerToFeedbackServiceImplTests {
     }
 
     @Test
-    public void testUpdateAnswer(){
+    void testUpdateAnswer(){
         when(answerToFeedbackRepository.findById(anyLong())).thenReturn(Optional.of(expected));
         when(answerToFeedbackRepository.save(any())).thenReturn(expected);
 
-        AnswerDto actual = answerToFeedbackService.updateAnswer(expectedDto, anyLong());
+        AnswerDto actual = answerToFeedbackService.updateAnswer(expectedDto1, anyLong());
 
         assertEquals(expected.getId(), actual.getId());
 
         verify(answerToFeedbackRepository, times(1)).findById(anyLong());
         verify(answerToFeedbackRepository, times(1)).save(any());
+    }
+
+    @Test
+    void testGetAllAnswerByFeedbackId(){
+        List<AnswerToFeedback> answerList = Arrays.asList(expected, expected2);
+        when(answerToFeedbackRepository.findAll()).thenReturn(answerList);
+
+        List<AnswerDto> expected = List.of(expectedDto1);
+        List<AnswerDto> actual = answerToFeedbackService.getAllAnswerByFeedbackId(1L);
+
+        assertArrayEquals(expected.toArray(), actual.toArray());
+        verify(answerToFeedbackRepository).findAll();
+        verifyNoMoreInteractions(answerToFeedbackRepository);
+    }
+
+    @Test
+    void testSaveAnswersList() {
+        when(answerToFeedbackRepository.saveAll(any())).thenReturn(List.of(expected,expected2));
+
+        List<AnswerDto> expectedValue = AnswerDtoMapper.toDto(List.of(expected, expected2));
+        List<AnswerDto> actual = answerToFeedbackService.saveAnswers(any());
+
+        assertNotNull(expectedValue);
+        assertArrayEquals(expectedValue.toArray(), actual.toArray());
+        verify(answerToFeedbackRepository, times(1)).saveAll(any());
+        verifyNoMoreInteractions(answerToFeedbackRepository);
     }
 }
