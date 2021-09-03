@@ -55,7 +55,7 @@ public class UserServiceImplTests {
         user.setLastName("Last Name");
         user.setEmail("email@mail.com");
         user.setPassword("password");
-        user.setProfilePicturePath("test-picture-path");
+        user.setProfilePicturePath("default");
     }
 
     @AfterEach
