@@ -31,7 +31,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class QuestionServiceImplTests {
+class QuestionServiceImplTests {
 
     @Mock
     private QuestionRepository questionRepository;
@@ -43,7 +43,7 @@ public class QuestionServiceImplTests {
     private static QuestionDto expectedDto;
 
     @BeforeAll
-    public static void beforeAll(){
+    static void beforeAll(){
         expected = new Question();
         expected.setId(1L);
         expected.setQuestionText("Text");
@@ -53,12 +53,12 @@ public class QuestionServiceImplTests {
     }
 
     @AfterEach
-    public void afterEach(){
+    void afterEach(){
         verifyNoMoreInteractions(questionRepository);
     }
 
     @Test
-    public void testGetAllQuestionIfExist(){
+    void testGetAllQuestionIfExist(){
         when(questionRepository.findAll()).thenReturn(List.of(expected));
 
         List<QuestionDto> actual = questionService.getAllQuestion();
@@ -69,7 +69,7 @@ public class QuestionServiceImplTests {
     }
 
     @Test
-    public void testGetAllQuestionIfNotExist(){
+    void testGetAllQuestionIfNotExist(){
         when(questionRepository.findAll()).thenReturn(Collections.emptyList());
 
         List<QuestionDto> actual = questionService.getAllQuestion();
@@ -80,7 +80,7 @@ public class QuestionServiceImplTests {
     }
 
     @Test
-    public void testSaveQuestion(){
+    void testSaveQuestion(){
         when(questionRepository.save(any())).thenReturn(expected);
 
         Question actual = questionService.saveQuestion(expectedDto);
@@ -91,7 +91,7 @@ public class QuestionServiceImplTests {
     }
 
     @Test
-    public void testCorrectFindQuestionById(){
+    void testCorrectFindQuestionById(){
         when(questionRepository.findById(anyLong())).thenReturn(Optional.of(expected));
 
         QuestionDto actual = questionService.findQuestionById(anyLong());
@@ -102,7 +102,7 @@ public class QuestionServiceImplTests {
     }
 
     @Test
-    public void testExceptionFindQuestionById(){
+    void testExceptionFindQuestionById(){
         when(questionRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         Throwable exception = assertThrows(EntityNotFoundException.class, () -> questionService.findQuestionById(anyLong()));
@@ -113,7 +113,7 @@ public class QuestionServiceImplTests {
     }
 
     @Test
-    public void testDeleteQuestionById(){
+    void testDeleteQuestionById(){
         when(questionRepository.findById(anyLong())).thenReturn(Optional.of(expected));
 
         doNothing().when(questionRepository).delete(expected);
@@ -125,7 +125,7 @@ public class QuestionServiceImplTests {
     }
 
     @Test
-    public void testUpdateQuestion(){
+    void testUpdateQuestion(){
         when(questionRepository.findById(anyLong())).thenReturn(Optional.of(expected));
         when(questionRepository.save(any())).thenReturn(expected);
 
