@@ -96,8 +96,6 @@ class QuestionRepositoryTest {
                 LocalDateTime.now(), LocalDateTime.now().plusDays(10),
                 course, Collections.emptyList(), List.of(question1, question2, question3), FeedbackRequestStatus.values()[1], LocalDateTime.now());
         feedbackRequestRepository.save(feedbackRequest);
-        System.out.println(questionRepository.findAll());
-        System.out.println(feedbackRequest);
 
         List<Long> actual = questionRepository.findAllQuestionIdsByFeedbackRequest(feedbackRequest.getId());
         List<Long> expected = List.of(question1.getId(), question2.getId(), question3.getId());

@@ -12,13 +12,17 @@ import ita.softserve.course_evaluation.service.FeedbackRequestService;
 import ita.softserve.course_evaluation.service.NotificationService;
 import ita.softserve.course_evaluation.service.mail.EmailService;
 import ita.softserve.course_evaluation.service.mail.context.NotificationFeedbackRequestMessageContext;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class NotificationServiceImpl implements NotificationService {
 	@Value("${site.base.url.https}")
@@ -50,10 +54,19 @@ public class NotificationServiceImpl implements NotificationService {
 			emailContext.put("FeedbackRequestDescription", feedbackRequest.getFeedbackDescription());
 			emailContext.put("CourseName", courseName);
 			emailContext.put("siteUrl", siteUrl);
+			LocalDate date = feedbackRequest.getStartDate().toLocalDate();
+			LocalDate now = LocalDate.now();
+			if(now.isAfter(date)){
+				long passDays = ChronoUnit.DAYS.between(date,now);
+				emailContext.put("inform", "let you know that a feedback request is waiting for your response within " + passDays +" days");
+			} else {
+				emailContext.put("inform", "inform you that you have an active feedback request ");
+			}
 			try {
 				emailService.sendMail(emailContext);
 			} catch (MessagingException e) {
 				e.printStackTrace();
+				log.error("Error on send email. Message - {}", e.getMessage());
 			}
 		}
 	}

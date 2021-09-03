@@ -7,10 +7,10 @@ import ita.softserve.course_evaluation.entity.FeedbackRequestStatus;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
 import ita.softserve.course_evaluation.service.NotificationService;
 import ita.softserve.course_evaluation.service.UserService;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -27,17 +27,10 @@ public class ScheduleUtils {
 	}
 	
 	@Transactional
-//	@Scheduled(cron = "0 0 12 * * *")
+	@Scheduled(cron = "0 0 12 * * *")
 	public void sendEmailNotification() {
 		List<FeedbackRequestDto> feedbackRequests = feedbackRequestService.findAllByStatusActiveAndValidDate(FeedbackRequestStatus.SENT.ordinal());
-		feedbackRequests.forEach(fbr -> {
-			LocalDateTime scheduleDate = fbr.getStartDate().plusDays(3);
-			boolean isFirstNotification = fbr.getLastNotification()==null;
-			boolean isSecondNotification = scheduleDate.isBefore(LocalDateTime.now()) && scheduleDate.isAfter(fbr.getLastNotification());
-			if(isFirstNotification || isSecondNotification){
-				sendNotificationToAvailableUsers(fbr);
-			}
-		});
+		feedbackRequests.forEach(this::sendNotificationToAvailableUsers);
 	}
 	
 	private void sendNotificationToAvailableUsers(FeedbackRequestDto fbr) {

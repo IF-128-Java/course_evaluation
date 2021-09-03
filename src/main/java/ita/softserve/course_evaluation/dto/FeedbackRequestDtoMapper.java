@@ -5,6 +5,7 @@ import ita.softserve.course_evaluation.entity.FeedbackRequest;
 import ita.softserve.course_evaluation.entity.FeedbackRequestStatus;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class FeedbackRequestDtoMapper {
 	
 	public static List<FeedbackRequest> fromDto(List<FeedbackRequestDto> dto){
 		return Objects.isNull(dto)
-				? null
+				? Collections.emptyList()
 				: dto.stream()
 						  .map(FeedbackRequestDtoMapper::fromDto)
 						  .collect(Collectors.toList());
@@ -35,7 +36,7 @@ public class FeedbackRequestDtoMapper {
 	
 	public static List<FeedbackRequestDto> toDto(List<FeedbackRequest> feedbackRequests){
 		return Objects.isNull(feedbackRequests)
-				       ? null
+				       ? Collections.emptyList()
 				       : feedbackRequests.stream()
 						         .map(FeedbackRequestDtoMapper::toDto)
 						         .collect(Collectors.toList());
