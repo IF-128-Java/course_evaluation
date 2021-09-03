@@ -7,11 +7,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -25,7 +23,7 @@ class UserRepositoryTests {
     public static User user;
 
     @BeforeAll
-    static void afterAll(){
+    static void beforeAll(){
         user = new User();
         user.setFirstName("First Name");
         user.setLastName("Last Name");
@@ -64,6 +62,22 @@ class UserRepositoryTests {
     @Test
     void testFindUserByEmailIfNotExist(){
         Optional<User> actual = userRepository.findUserByEmail(StringUtils.EMPTY);
+
+        assertFalse(actual.isPresent());
+    }
+
+    @Test
+    void testFindUserByIdIfExists(){
+        User expected = userRepository.save(user);
+        Optional<User> actual = userRepository.findUserById(expected.getId());
+
+        assertTrue(actual.isPresent());
+        assertEquals(expected, actual.get());
+    }
+
+    @Test
+    void testFindUserByIdIfNotExist(){
+        Optional<User> actual = userRepository.findUserById(0L);
 
         assertFalse(actual.isPresent());
     }
