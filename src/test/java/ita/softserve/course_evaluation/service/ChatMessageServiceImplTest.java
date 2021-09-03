@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -43,6 +44,7 @@ class ChatMessageServiceImplTest {
     private ChatMessage chatMessage1;
     private User user1;
     private ChatRoom chatRoom1;
+    private ChatMessageResponse response;
 
     @Mock private ChatMessageRepository chatMessageRepository;
     @Mock private ChatRoomService chatRoomService;
@@ -63,6 +65,8 @@ class ChatMessageServiceImplTest {
         user1.setEmail("mike@mail.com");
         user1.setPassword("password");
 
+        LocalDateTime createdAt = LocalDateTime.now();
+
         chatRoom1 = ChatRoom.builder()
                 .id(1L)
                 .chatType(ChatType.GROUP)
@@ -72,22 +76,30 @@ class ChatMessageServiceImplTest {
         chatMessage1 = ChatMessage.builder()
                 .chatRoom(chatRoom1)
                 .content("Test content1")
-                .createdAt(LocalDateTime.now())
+                .createdAt(createdAt)
                 .sender(user1)
+                .id(1L)
                 .status(MessageStatus.RECEIVED).build();
 
-//        ChatMessageResponse response = ChatMessageResponse.builder();
+        response = new ChatMessageResponse();
+        response.setId(1L);
+        response.setContent("Test content1");
+        response.setCreatedAt(createdAt);
+        response.setSenderId(1L);
+        response.setSenderFirstName("Mike");
+        response.setSenderLastName("Green");
+
     }
 
     @Test
     void testProcessMessage() {
         SecurityUser securityUser = new SecurityUser(1L, "Nick", "password", Collections.emptyList(), true);
         ChatMessageRequest chatMessageRequest = new ChatMessageRequest("Test content1");
-        ChatMessageResponse response = ChatMessageResponseMapper.toDto(chatMessage1);
 
         when(chatRoomService.getById(Mockito.anyLong())).thenReturn(chatRoom1);
         when(userService.readUserById(Mockito.anyLong())).thenReturn(user1);
         when(chatMessageRepository.save(any(ChatMessage.class))).thenReturn(chatMessage1);
+        when(chatMessageResponseMapper.toDto(any(ChatMessage.class))).thenReturn(response);
         lenient().doNothing().when(messagingTemplate).convertAndSend("/api/v1/event/chat/1", response);
 
         chatMessageService.processMessage(chatMessageRequest, securityUser, 1L);
@@ -110,12 +122,12 @@ class ChatMessageServiceImplTest {
     @Test
     void testFindMessagesByChatRoomId() {
         List<ChatMessage> chatMessageList = List.of(chatMessage1);
-        new ChatMessageResponseMapper()
 
         when(chatMessageRepository.findAllByChatRoomId(Mockito.anyLong())).thenReturn(chatMessageList);
+        when(chatMessageResponseMapper.toDto(anyList())).thenReturn(List.of(response));
 
         List<ChatMessageResponse> actual = chatMessageService.findMessagesByChatRoomId(1L);
-        List<ChatMessageResponse> expected = ChatMessageResponseMapper.toDto(chatMessageList);
+        List<ChatMessageResponse> expected = List.of(response);
 
         assertArrayEquals(expected.toArray(), actual.toArray());
 
