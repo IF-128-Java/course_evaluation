@@ -7,6 +7,7 @@ import ita.softserve.course_evaluation.dto.UserProfileDtoResponse;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
 import ita.softserve.course_evaluation.repository.UserRepository;
+import ita.softserve.course_evaluation.service.impl.AmazonS3FileManager;
 import ita.softserve.course_evaluation.service.impl.UserServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -37,11 +38,9 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTests {
 
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private PasswordEncoder passwordEncoder;
+    @Mock private UserRepository userRepository;
+    @Mock private PasswordEncoder passwordEncoder;
+    @Mock private AmazonS3FileManager fileManager;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -56,6 +55,7 @@ public class UserServiceImplTests {
         user.setLastName("Last Name");
         user.setEmail("email@mail.com");
         user.setPassword("password");
+        user.setProfilePicturePath("test-picture-path");
     }
 
     @AfterEach
@@ -65,7 +65,9 @@ public class UserServiceImplTests {
 
     @Test
     public void testReadById(){
+        byte[] pictureByte = new byte[]{1,2,3};
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+        when(fileManager.downloadUserProfilePicture(anyString())).thenReturn(pictureByte);
 
         UserProfileDtoResponse actual = userService.readUserProfileDtoResponseById(anyLong());
 
