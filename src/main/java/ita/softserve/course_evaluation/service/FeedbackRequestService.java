@@ -19,4 +19,8 @@ public interface FeedbackRequestService {
 	Page<FeedbackRequestDto> findAllByCourseId(Pageable pageable, Long id);
 
 	List<FeedbackRequestDto> getFeedbackRequestByCourseIdOnly(long id);
+	
+	List<FeedbackRequestDto> findAllByStatusActiveAndValidDate(long id);
+	
+	void changeStatusAndLastNotification(FeedbackRequestDto dto, int status);
 }

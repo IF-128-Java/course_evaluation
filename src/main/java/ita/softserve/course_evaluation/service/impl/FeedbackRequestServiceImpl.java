@@ -1,10 +1,9 @@
 package ita.softserve.course_evaluation.service.impl;
 
-import ita.softserve.course_evaluation.dto.CourseDto;
 import ita.softserve.course_evaluation.dto.FeedbackRequestDto;
 import ita.softserve.course_evaluation.dto.FeedbackRequestDtoMapper;
-import ita.softserve.course_evaluation.dto.dtoMapper.CourseDtoMapper;
 import ita.softserve.course_evaluation.entity.FeedbackRequest;
+import ita.softserve.course_evaluation.entity.FeedbackRequestStatus;
 import ita.softserve.course_evaluation.repository.FeedbackRequestRepository;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
 import org.springframework.data.domain.Page;
@@ -12,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -58,5 +58,20 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 		List<FeedbackRequestDto> feedbackRequestDto = FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.getFeedbackRequestByCourseIdOnly(id));
 		return Objects.isNull(feedbackRequestDto) ? Collections.emptyList() : feedbackRequestDto;
 	}
-
+	
+	@Override
+	public List<FeedbackRequestDto> findAllByStatusActiveAndValidDate(long id) {
+		List<FeedbackRequestDto> feedbackRequestDto = FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.findAllByStatusAndValidDate(id));
+		return Objects.isNull(feedbackRequestDto) ? Collections.emptyList() : feedbackRequestDto;
+	}
+	
+	@Override
+	public void changeStatusAndLastNotification(FeedbackRequestDto dto, int status) {
+		FeedbackRequest feedbackRequest = feedbackRequestRepository.getById(dto.getId());
+		feedbackRequest.setStatus(FeedbackRequestStatus.values()[status]);
+		feedbackRequest.setLastNotification(LocalDateTime.now());
+		feedbackRequestRepository.save(feedbackRequest);
+	}
+	
+	
 }
