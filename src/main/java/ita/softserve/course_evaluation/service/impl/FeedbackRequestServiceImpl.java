@@ -60,8 +60,8 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	}
 	
 	@Override
-	public List<FeedbackRequestDto> findAllByStatusActiveAndValidDate(long id) {
-		List<FeedbackRequestDto> feedbackRequestDto = FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.findAllByStatusAndValidDate(id));
+	public List<FeedbackRequestDto> findAllByStatusActiveAndValidDate(int status) {
+		List<FeedbackRequestDto> feedbackRequestDto = FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.findAllByStatusAndValidDate(status));
 		return Objects.isNull(feedbackRequestDto) ? Collections.emptyList() : feedbackRequestDto;
 	}
 	
