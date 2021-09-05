@@ -5,6 +5,7 @@ import ita.softserve.course_evaluation.dto.SimpleUserDtoResponseMapper;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.EmailAlreadyConfirmedException;
 import ita.softserve.course_evaluation.exception.EmailNotConfirmedException;
+import ita.softserve.course_evaluation.exception.EmailNotValidException;
 import ita.softserve.course_evaluation.exception.ConfirmationTokenException;
 import ita.softserve.course_evaluation.exception.UserAlreadyExistAuthenticationException;
 import ita.softserve.course_evaluation.entity.ConfirmationToken;
@@ -21,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
@@ -57,7 +57,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     public ResponseEntity<?> register(SimpleUserDto request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if (!isValidEmail) {
-            throw new IllegalStateException("Email not valid");
+            throw new EmailNotValidException("Email not valid");
         }
         User user = new User();
         user.setEmail(request.getEmail());

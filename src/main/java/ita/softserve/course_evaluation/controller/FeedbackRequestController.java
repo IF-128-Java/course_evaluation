@@ -69,10 +69,9 @@ public class FeedbackRequestController {
 			@ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
 			@ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
 	})
-	@PutMapping("/{id}")
+	@PutMapping("/")
 	@PreAuthorize("hasAuthority('UPDATE')")
-	public ResponseEntity<FeedbackRequestDto> editFeedbackRequest(@RequestBody FeedbackRequestDto dto, @PathVariable Long id) {
-		dto.setId(id);
+	public ResponseEntity<FeedbackRequestDto> editFeedbackRequest(@RequestBody FeedbackRequestDto dto) {
 		return ResponseEntity.status(HttpStatus.OK)
 				       .body(feedbackRequestService.update(dto));
 	}

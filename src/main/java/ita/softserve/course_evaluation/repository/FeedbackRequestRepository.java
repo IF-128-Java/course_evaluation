@@ -12,10 +12,13 @@ import java.util.List;
 @Repository
 public interface FeedbackRequestRepository extends JpaRepository<FeedbackRequest, Long> {
 	
-	@Query(value = "SELECT * From course_feedback_request where course_id = ?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM course_feedback_request WHERE course_id = ?1", nativeQuery = true)
 	Page<FeedbackRequest> findAllByCourseId (Pageable page, Long id);
+	
+	@Query(value = "SELECT * FROM course_feedback_request cfr WHERE cfr.status = ?1 and (CURRENT_DATE >= CAST(cfr.start_date AS DATE) AND CURRENT_DATE <= CAST(cfr.end_date AS DATE))", nativeQuery = true)
+	List<FeedbackRequest> findAllByStatusAndValidDate(Long id);
 
-	@Query(value = "SELECT * From course_feedback_request where course_id = ?1 ORDER BY start_date", nativeQuery = true)
+	@Query(value = "SELECT * FROM course_feedback_request WHERE course_id = ?1 ORDER BY start_date", nativeQuery = true)
 	List<FeedbackRequest> getFeedbackRequestByCourseIdOnly (long id);
 	
 }

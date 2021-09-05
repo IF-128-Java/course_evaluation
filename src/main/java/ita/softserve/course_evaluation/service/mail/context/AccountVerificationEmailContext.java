@@ -1,6 +1,5 @@
 package ita.softserve.course_evaluation.service.mail.context;
 
-import ita.softserve.course_evaluation.dto.SimpleUserDto;
 import ita.softserve.course_evaluation.entity.User;
 import org.springframework.web.util.UriComponentsBuilder;
 

@@ -1,7 +1,6 @@
 package ita.softserve.course_evaluation.repository;
 
 import ita.softserve.course_evaluation.entity.ConfirmationToken;
-import ita.softserve.course_evaluation.entity.Role;
 import ita.softserve.course_evaluation.entity.User;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
@@ -15,14 +14,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.UUID;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author Mykhailo Fedenko
+ */
 @DataJpaTest
-@Rollback(value = false)
-@Transactional()
-public class ConfirmationRepositoryTest {
+class ConfirmationRepositoryTest {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -31,15 +32,14 @@ public class ConfirmationRepositoryTest {
     @Autowired
     private UserRepository userRepository;
     @Test
-    public void testUpdateConfirmedAt() {
+    void testUpdateConfirmedAt() {
 
         User user = new User();
         user.setFirstName("testToken");
         user.setLastName("testToken");
         user.setPassword("test");
         user.setEmail("mail@mail");
-
-
+        
         LocalDateTime createAt = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
         LocalDateTime expiredAt = createAt.plusMinutes(15);
         LocalDateTime confirmedAt = createAt.plusMinutes(10).truncatedTo(ChronoUnit.MILLIS);
@@ -51,7 +51,6 @@ public class ConfirmationRepositoryTest {
         Session session = entityManager.unwrap(Session.class);
         NativeQuery<ConfirmationToken> query = session.createNativeQuery("select  * from confirmation_token where token = '" + token +"'", ConfirmationToken.class);
         List<ConfirmationToken> confirmationTokens = query.getResultList();
-        System.out.println(confirmationTokens);
 
         assertEquals(1, confirmationTokens.size());
         assertEquals(createAt, confirmationTokens.get(0).getCreatedAt());
@@ -59,7 +58,5 @@ public class ConfirmationRepositoryTest {
         assertEquals(token, confirmationTokens.get(0).getToken());
         assertEquals(confirmedAt, confirmationTokens.get(0).getConfirmedAt());
         assertEquals(user.getId(), confirmationTokens.get(0).getAppUser().getId());
-
     }
-
 }

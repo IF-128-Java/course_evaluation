@@ -34,7 +34,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CourseServiceImplTests {
+class CourseServiceImplTests {
 
     @Mock
     private CourseRepository courseRepository;
@@ -46,7 +46,7 @@ public class CourseServiceImplTests {
     private static CourseDto expectedDto;
 
     @BeforeAll
-    public static void beforeAll(){
+    static void beforeAll(){
         expected = new Course();
         expected.setId(1L);
         expected.setCourseName("Course Name");
@@ -59,12 +59,12 @@ public class CourseServiceImplTests {
     }
 
     @AfterEach
-    public void afterEach(){
+    void afterEach(){
         verifyNoMoreInteractions(courseRepository);
     }
 
     @Test
-    public void testAddCourse(){
+    void testAddCourse(){
         when(courseRepository.save(any())).thenReturn(expected);
 
         Course actual = courseService.addCourse(expectedDto);
@@ -75,7 +75,7 @@ public class CourseServiceImplTests {
     }
 
     @Test
-    public void testDeleteById(){
+    void testDeleteById(){
         doNothing().when(courseRepository).deleteById(anyLong());
 
         courseService.deleteById(anyLong());
@@ -84,7 +84,7 @@ public class CourseServiceImplTests {
     }
 
     @Test
-    public void testCorrectGetById(){
+    void testCorrectGetById(){
         when(courseRepository.findById(anyLong())).thenReturn(Optional.of(expected));
 
         CourseDto actual = courseService.getById(anyLong());
@@ -95,7 +95,7 @@ public class CourseServiceImplTests {
     }
 
     @Test
-    public void testExceptionGetById(){
+    void testExceptionGetById(){
         when(courseRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(CourseNotFoundException.class, () -> courseService.getById(anyLong()));
@@ -104,7 +104,7 @@ public class CourseServiceImplTests {
     }
 
     @Test
-    public void testGetByName(){
+    void testGetByName(){
         List<CourseDto> expectedList = List.of(expectedDto);
         when(courseRepository.findCourseByName(anyString())).thenReturn(List.of(expected));
 
@@ -115,7 +115,7 @@ public class CourseServiceImplTests {
         verify(courseRepository, times(1)).findCourseByName(anyString());
     }
     @Test
-    public void testCorrectEditCourse(){
+    void testCorrectEditCourse(){
         when(courseRepository.existsById(anyLong())).thenReturn(true);
         when(courseRepository.save(any())).thenReturn(expected);
 
@@ -128,7 +128,7 @@ public class CourseServiceImplTests {
     }
 
     @Test
-    public void testEditCourseIfNotExist(){
+    void testEditCourseIfNotExist(){
         when(courseRepository.existsById(anyLong())).thenReturn(false);
 
         CourseDto actual = courseService.editCourse(expectedDto);
@@ -140,7 +140,7 @@ public class CourseServiceImplTests {
     }
 
     @Test
-    public void testGetAll(){
+    void testGetAll(){
         when(courseRepository.findAllCourses()).thenReturn(List.of(expected));
 
         List<CourseDto> actual = courseService.getAll();

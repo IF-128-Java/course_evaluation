@@ -2,11 +2,16 @@ package ita.softserve.course_evaluation.service.impl;
 
 import ita.softserve.course_evaluation.dto.FeedbackRequestDto;
 import ita.softserve.course_evaluation.dto.FeedbackRequestDtoMapper;
+<<<<<<< HEAD
 import ita.softserve.course_evaluation.dto.StudentFeedbackRequestDto;
 import ita.softserve.course_evaluation.dto.StudentFeedbackRequestDtoMapper;
 import ita.softserve.course_evaluation.entity.Feedback;
 import ita.softserve.course_evaluation.entity.FeedbackRequest;
 import ita.softserve.course_evaluation.repository.FeedbackRepository;
+=======
+import ita.softserve.course_evaluation.entity.FeedbackRequest;
+import ita.softserve.course_evaluation.entity.FeedbackRequestStatus;
+>>>>>>> master
 import ita.softserve.course_evaluation.repository.FeedbackRequestRepository;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
 import org.springframework.data.domain.Page;
@@ -15,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -83,4 +89,18 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 		return Objects.isNull(studentFeedbackRequestDtos) ? Collections.emptyList() : studentFeedbackRequestDtos;
 	}
 
+
+	@Override
+	public List<FeedbackRequestDto> findAllByStatusActiveAndValidDate(long id) {
+		List<FeedbackRequestDto> feedbackRequestDto = FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.findAllByStatusAndValidDate(id));
+		return Objects.isNull(feedbackRequestDto) ? Collections.emptyList() : feedbackRequestDto;
+	}
+	
+	@Override
+	public void changeStatusAndLastNotification(FeedbackRequestDto dto, int status) {
+		FeedbackRequest feedbackRequest = feedbackRequestRepository.getById(dto.getId());
+		feedbackRequest.setStatus(FeedbackRequestStatus.values()[status]);
+		feedbackRequest.setLastNotification(LocalDateTime.now());
+		feedbackRequestRepository.save(feedbackRequest);
+	}
 }
