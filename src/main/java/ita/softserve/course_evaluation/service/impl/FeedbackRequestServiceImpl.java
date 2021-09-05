@@ -9,14 +9,18 @@ import ita.softserve.course_evaluation.entity.FeedbackRequestStatus;
 import ita.softserve.course_evaluation.repository.FeedbackRepository;
 import ita.softserve.course_evaluation.repository.FeedbackRequestRepository;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
+import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -70,18 +74,27 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 
 		List<FeedbackRequest> feedbackRequests = feedbackRequestRepository.getFeedbackRequestByCourseIdOnly(idc);
 		List<StudentFeedbackRequestDto> studentFeedbackRequestDtos = new ArrayList<>();
+		List<StudentFeedbackRequestDto> feedbackRequestDtosSelected = new ArrayList<>();
+
+		LocalDateTime today = LocalDateTime.now();
 
 		if (!feedbackRequests.isEmpty()) {
 			studentFeedbackRequestDtos = StudentFeedbackRequestDtoMapper.toDto(feedbackRequests);
-		}
 
-		for (StudentFeedbackRequestDto studentFeedbackRequestDto :studentFeedbackRequestDtos) {
-			if (!feedbackRepository.getFeedbackByStudentId(studentFeedbackRequestDto.getId(), ids).isEmpty()) {
-				studentFeedbackRequestDto.setStudentId(ids);
+				for (StudentFeedbackRequestDto studentFeedbackRequestDto : studentFeedbackRequestDtos) {
+					if (!feedbackRepository.getFeedbackByStudentId(studentFeedbackRequestDto.getId(), ids).isEmpty()) {
+						studentFeedbackRequestDto.setStudentId(ids);
+						feedbackRequestDtosSelected.add(studentFeedbackRequestDto);
+					}
+					else {
+						if (studentFeedbackRequestDto.getEndDate().isAfter(today)) {
+							feedbackRequestDtosSelected.add(studentFeedbackRequestDto);
+						}
+					}
+				}
 			}
-		}
 
-		return Objects.isNull(studentFeedbackRequestDtos) ? Collections.emptyList() : studentFeedbackRequestDtos;
+		return Objects.isNull(feedbackRequestDtosSelected) ? Collections.emptyList() : feedbackRequestDtosSelected;
 	}
 
 

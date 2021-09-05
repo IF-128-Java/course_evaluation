@@ -119,6 +119,7 @@ public class FeedbackRequestController {
 	@ApiOperation(value = "Get all feedbackrequests by course id with feedbacks of student id")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
+			@ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
 			@ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
 	})
 	@GetMapping("/course/{idc}/{ids}")
