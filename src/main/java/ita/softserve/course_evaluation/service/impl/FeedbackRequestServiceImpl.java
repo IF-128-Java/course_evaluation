@@ -45,7 +45,9 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	
 	@Override
 	public void delete(Long id) {
-		feedbackRequestRepository.deleteById(id);
+		FeedbackRequest feedbackRequest = feedbackRequestRepository.getById(id);
+		feedbackRequest.setStatus(FeedbackRequestStatus.DELETED);
+		feedbackRequestRepository.save(feedbackRequest);
 	}
 	
 	@Override

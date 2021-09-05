@@ -16,18 +16,21 @@ class ScheduledTest {
 	void testCronValidSpecificExpression() {
 		CronExpression expression = CronExpression.parse("0 0 12 * * *");
 		LocalDateTime last = LocalDateTime.now();
-		LocalDateTime expected = last.plusDays(1).withHour(12).withMinute(0).withSecond(0).withNano(0);
+		LocalDateTime expected = last.withHour(12).withMinute(0).withSecond(0).withNano(0);
 		
 		LocalDateTime actual = expression.next(last);
-		assertThat(actual).isEqualTo(expected).isNotNull();
-		
+		assertThat(actual).isNotNull();
+		assertThat(actual).isEqualTo(expected);
+
 		last = actual;
 		expected = expected.plusDays(0).plusHours(24);
 		actual = expression.next(last);
-		assertThat(actual).isEqualTo(expected).isNotNull();
-		
+		assertThat(actual).isNotNull();
+		assertThat(actual).isEqualTo(expected);
+
 		last = actual;
 		expected = expected.plusDays(0).plusHours(24);
+		assertThat(actual).isNotNull();
 		assertThat(expression.next(last)).isEqualTo(expected);
 	}
 	
