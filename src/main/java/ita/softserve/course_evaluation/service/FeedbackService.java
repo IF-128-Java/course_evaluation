@@ -16,6 +16,5 @@ public interface FeedbackService {
 
     Page<FeedbackDto> findAllByFeedbackRequestId(Pageable pageable, Long id);
 
-    List<Feedback> getFeedbackByStudentId(long idc, long ids);
-
+    List<Feedback> getFeedbackByStudentId(long feedbackrequestId, long studentId);
 }

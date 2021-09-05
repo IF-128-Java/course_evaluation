@@ -21,7 +21,7 @@ public interface FeedbackRequestService {
 
 	List<FeedbackRequestDto> getFeedbackRequestByCourseIdOnly(long id);
 
-	List<StudentFeedbackRequestDto> getFeedbackRequestByCourseIdAndStudentId(long idf, long ids);
+	List<StudentFeedbackRequestDto> getFeedbackRequestByCourseIdAndStudentId(long courseId, long studentId);
 
 	List<FeedbackRequestDto> findAllByStatusActiveAndValidDate(long id);
 	

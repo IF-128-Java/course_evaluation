@@ -25,4 +25,5 @@ public class StudentFeedbackRequestDto {
     @NotBlank
     private Long course;
     private Long studentId;
+    private Long feedbackId;
 }

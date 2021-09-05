@@ -116,18 +116,14 @@ public class FeedbackRequestController {
 				ResponseEntity.status(HttpStatus.OK).body(feedbackRequestService.getFeedbackRequestByCourseIdOnly(id));
 	}
 
-	@ApiOperation(value = "Get all feedbackrequests by course id with feedbacks of student id")
+	@ApiOperation(value = "Get all feedback requests with student id by course id")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
-			@ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
 			@ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
 	})
-	@GetMapping("/course/{idc}/{ids}")
+	@GetMapping("/course/{idc}/student/{ids}")
 	public ResponseEntity<List<StudentFeedbackRequestDto>> getFeedbackRequestByCourseIdAndStudentId(@PathVariable long idc, @PathVariable long ids) {
-
-		return Objects.isNull(feedbackRequestService.getFeedbackRequestByCourseIdAndStudentId(idc, ids)) ?
-				ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
-				ResponseEntity.status(HttpStatus.OK).body(feedbackRequestService.getFeedbackRequestByCourseIdAndStudentId(idc, ids));
+		return ResponseEntity.status(HttpStatus.OK).body(feedbackRequestService.getFeedbackRequestByCourseIdAndStudentId(idc, ids));
 	}
 
 }

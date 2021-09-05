@@ -70,31 +70,30 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	}
 
 	@Override
-	public List<StudentFeedbackRequestDto> getFeedbackRequestByCourseIdAndStudentId(long idc, long ids) {
+	public List<StudentFeedbackRequestDto> getFeedbackRequestByCourseIdAndStudentId(long courseId, long studentId) {
 
-		List<FeedbackRequest> feedbackRequests = feedbackRequestRepository.getFeedbackRequestByCourseIdOnly(idc);
+		List<FeedbackRequest> feedbackRequests = feedbackRequestRepository.getFeedbackRequestByCourseIdOnly(courseId);
 		List<StudentFeedbackRequestDto> studentFeedbackRequestDtos = new ArrayList<>();
 		List<StudentFeedbackRequestDto> feedbackRequestDtosSelected = new ArrayList<>();
-
 		LocalDateTime today = LocalDateTime.now();
 
-		if (!feedbackRequests.isEmpty()) {
-			studentFeedbackRequestDtos = StudentFeedbackRequestDtoMapper.toDto(feedbackRequests);
+		studentFeedbackRequestDtos = StudentFeedbackRequestDtoMapper.toDto(feedbackRequests);
 
-				for (StudentFeedbackRequestDto studentFeedbackRequestDto : studentFeedbackRequestDtos) {
-					if (!feedbackRepository.getFeedbackByStudentId(studentFeedbackRequestDto.getId(), ids).isEmpty()) {
-						studentFeedbackRequestDto.setStudentId(ids);
-						feedbackRequestDtosSelected.add(studentFeedbackRequestDto);
-					}
-					else {
-						if (studentFeedbackRequestDto.getEndDate().isAfter(today)) {
-							feedbackRequestDtosSelected.add(studentFeedbackRequestDto);
-						}
-					}
+		for (StudentFeedbackRequestDto studentFeedbackRequestDto : studentFeedbackRequestDtos) {
+			if (!feedbackRepository.getFeedbackByStudentId(studentFeedbackRequestDto.getId(), studentId).isEmpty()) {
+				studentFeedbackRequestDto.setStudentId(studentId);
+				studentFeedbackRequestDto.setFeedbackId(feedbackRepository
+						.getFeedbackByStudentId(studentFeedbackRequestDto.getId(), studentId).get(0).getId());
+				feedbackRequestDtosSelected.add(studentFeedbackRequestDto);
+			}
+			else {
+				if (studentFeedbackRequestDto.getEndDate().isAfter(today)) {
+					feedbackRequestDtosSelected.add(studentFeedbackRequestDto);
 				}
 			}
+		}
 
-		return Objects.isNull(feedbackRequestDtosSelected) ? Collections.emptyList() : feedbackRequestDtosSelected;
+		return feedbackRequestDtosSelected;
 	}
 
 
