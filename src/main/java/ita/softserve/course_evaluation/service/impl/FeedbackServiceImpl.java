@@ -86,4 +86,9 @@ public class FeedbackServiceImpl implements FeedbackService {
 	public Page<FeedbackDto> findAllByFeedbackRequestId(Pageable pageable, Long id) {
 		return feedbackRepository.findAllFeedbackByFeedbackRequestId(pageable, id).map(f -> FeedbackDtoMapper.toDto(f, answerToFeedbackService.getAllAnswerByFeedbackId(f.getId())));
 	}
+
+	@Override
+	public List<Feedback> getFeedbackByStudentId(long idf, long ids) {
+		return feedbackRepository.getFeedbackByStudentId(idf, ids);
+	}
 }
