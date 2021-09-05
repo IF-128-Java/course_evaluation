@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import ita.softserve.course_evaluation.constants.HttpStatuses;
 import ita.softserve.course_evaluation.dto.FeedbackRequestDto;
+import ita.softserve.course_evaluation.dto.StudentFeedbackRequestDto;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -114,4 +115,15 @@ public class FeedbackRequestController {
 				ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
 				ResponseEntity.status(HttpStatus.OK).body(feedbackRequestService.getFeedbackRequestByCourseIdOnly(id));
 	}
+
+	@ApiOperation(value = "Get all feedback requests with student id by course id")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
+			@ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+	})
+	@GetMapping("/course/{idc}/student/{ids}")
+	public ResponseEntity<List<StudentFeedbackRequestDto>> getFeedbackRequestByCourseIdAndStudentId(@PathVariable long idc, @PathVariable long ids) {
+		return ResponseEntity.status(HttpStatus.OK).body(feedbackRequestService.getFeedbackRequestByCourseIdAndStudentId(idc, ids));
+	}
+
 }

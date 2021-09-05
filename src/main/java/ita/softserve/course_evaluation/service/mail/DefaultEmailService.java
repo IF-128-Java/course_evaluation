@@ -14,7 +14,6 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
 

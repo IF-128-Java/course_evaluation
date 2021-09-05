@@ -55,7 +55,7 @@ public class FeedbackController {
 			@ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
 	})
 	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('WRITE')")
+	@PreAuthorize("hasAuthority('READ')")
 	public ResponseEntity<FeedbackDto> getFeedback(@ApiParam(value = "Feedback id. Cannot be empty")
 													   @PathVariable Long id) {
 		return ResponseEntity.status(HttpStatus.OK)
