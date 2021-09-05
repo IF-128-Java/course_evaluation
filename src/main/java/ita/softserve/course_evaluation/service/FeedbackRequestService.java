@@ -20,7 +20,9 @@ public interface FeedbackRequestService {
 
 	List<FeedbackRequestDto> getFeedbackRequestByCourseIdOnly(long id);
 	
-	List<FeedbackRequestDto> findAllByStatusActiveAndValidDate(int status);
+	List<FeedbackRequestDto> findAllByStatusAndValidDate(int status);
 	
 	void changeStatusAndLastNotification(FeedbackRequestDto dto, int status);
+	
+	void findAllByExpiredDateAndSetStatusToArchive(int status);
 }

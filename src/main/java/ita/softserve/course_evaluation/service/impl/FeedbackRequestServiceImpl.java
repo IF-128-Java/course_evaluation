@@ -39,7 +39,9 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	
 	@Override
 	public void delete(Long id) {
-		feedbackRequestRepository.deleteById(id);
+		FeedbackRequest feedbackRequest = feedbackRequestRepository.getById(id);
+		feedbackRequest.setStatus(FeedbackRequestStatus.DELETED);
+		feedbackRequestRepository.save(feedbackRequest);
 	}
 	
 	@Override
@@ -60,7 +62,7 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	}
 	
 	@Override
-	public List<FeedbackRequestDto> findAllByStatusActiveAndValidDate(int status) {
+	public List<FeedbackRequestDto> findAllByStatusAndValidDate(int status) {
 		List<FeedbackRequestDto> feedbackRequestDto = FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.findAllByStatusAndValidDate(status));
 		return Objects.isNull(feedbackRequestDto) ? Collections.emptyList() : feedbackRequestDto;
 	}
@@ -71,6 +73,15 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 		feedbackRequest.setStatus(FeedbackRequestStatus.values()[status]);
 		feedbackRequest.setLastNotification(LocalDateTime.now());
 		feedbackRequestRepository.save(feedbackRequest);
+	}
+	
+	@Override
+	public void findAllByExpiredDateAndSetStatusToArchive(int status) {
+		List<FeedbackRequest> feedbackRequest = feedbackRequestRepository.findAllByStatusAndExpireDate(status);
+		feedbackRequest.forEach(fbr->{
+			fbr.setStatus(FeedbackRequestStatus.ARCHIVE);
+			feedbackRequestRepository.save(fbr);
+		});
 	}
 	
 	

@@ -1,6 +1,8 @@
 package ita.softserve.course_evaluation.repository;
 
 import ita.softserve.course_evaluation.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -50,5 +52,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
                            "AND (cfr.id <> cf.feedback_request_id OR cf.id IS NULL)" +
                            "AND (cfr.status=1 OR cfr.status=2)" +
                            "AND (CURRENT_DATE >= CAST(cfr.start_date AS DATE) AND CURRENT_DATE <= CAST(cfr.end_date AS DATE))", nativeQuery = true)
-    List<User> findAllUserByFeedbackRequestIdWithoutFeedback(long id);
+    Page<User> findAllUserByFeedbackRequestIdWithoutFeedback(Pageable pageable, long id);
 }

@@ -29,10 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class FeedbackRequestRepositoryTest {
     private FeedbackRequest feedbackRequestStatusActiveAndValidDate;
-    private FeedbackRequest feedbackRequestStatusActiveAndInvalidDate;
     private FeedbackRequest feedbackRequestStatusDraft;
     private FeedbackRequest feedbackRequestStatusSent;
-    private Course course;
     private Pageable pageable;
 
     @Autowired
@@ -51,15 +49,15 @@ class FeedbackRequestRepositoryTest {
         teacher.setRoles(Set.of(Role.ROLE_TEACHER));
         teacher.setPassword("password");
         userRepository.save(teacher);
-
-        course = Course.builder()
-                .courseName("TestCourse")
-                .description("Description")
-                .startDate(new Date())
-                .endDate(new Date())
-                .groups(Collections.emptySet())
-                .teacher(teacher)
-                .build();
+    
+        Course course = Course.builder()
+                                .courseName("TestCourse")
+                                .description("Description")
+                                .startDate(new Date())
+                                .endDate(new Date())
+                                .groups(Collections.emptySet())
+                                .teacher(teacher)
+                                .build();
         courseRepository.save(course);
 
         feedbackRequestStatusDraft = FeedbackRequest.builder()
@@ -76,13 +74,6 @@ class FeedbackRequestRepositoryTest {
                 .status(FeedbackRequestStatus.ACTIVE)
                 .course(course).build();
 
-        feedbackRequestStatusActiveAndInvalidDate = FeedbackRequest.builder()
-                .feedbackDescription("description")
-                .startDate(LocalDateTime.now().minusDays(10))
-                .endDate(LocalDateTime.now().minusDays(5))
-                .status(FeedbackRequestStatus.ACTIVE)
-                .course(course).build();
-
         feedbackRequestStatusSent = FeedbackRequest.builder()
                 .feedbackDescription("description")
                 .startDate(LocalDateTime.now())
@@ -91,14 +82,13 @@ class FeedbackRequestRepositoryTest {
                 .course(course).build();
 
         feedbackRequestRepository.save(feedbackRequestStatusActiveAndValidDate);
-        feedbackRequestRepository.save(feedbackRequestStatusActiveAndInvalidDate);
         feedbackRequestRepository.save(feedbackRequestStatusDraft);
         feedbackRequestRepository.save(feedbackRequestStatusSent);
         pageable = PageRequest.of(0, 25);
     }
 
     @Test
-    @DisplayName("Find all feedback request by valid valid date and active status")
+    @DisplayName("Find all feedback request by valid date and active status")
     void testFindAllFeedbackRequestByActiveStatusAndValidDate(){
         List<FeedbackRequest> actual  = feedbackRequestRepository.findAllByStatusAndValidDate(FeedbackRequestStatus.ACTIVE.ordinal());
         List<FeedbackRequest> expected = List.of(feedbackRequestStatusActiveAndValidDate);
@@ -111,7 +101,7 @@ class FeedbackRequestRepositoryTest {
     void testFindAllFeedbackRequestByCourseId(){
         Page<FeedbackRequest> feedbackRequestPage = feedbackRequestRepository.findAllByCourseId(pageable,1L);
         List<FeedbackRequest> feedbackRequestsActual = feedbackRequestPage.getContent();
-        List<FeedbackRequest> feedbackRequestsExpected = List.of(feedbackRequestStatusActiveAndValidDate,feedbackRequestStatusActiveAndInvalidDate,feedbackRequestStatusDraft,feedbackRequestStatusSent);
+        List<FeedbackRequest> feedbackRequestsExpected = List.of(feedbackRequestStatusActiveAndValidDate,feedbackRequestStatusDraft,feedbackRequestStatusSent);
         assertEquals(feedbackRequestsExpected.size(),feedbackRequestsActual.size());
     }
 }
