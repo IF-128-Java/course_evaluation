@@ -12,4 +12,9 @@
     <include file="classpath:db/changelog/v.1.4.0/db.changelog-add-chat-room-to-groups.xml"/>
     <include file="classpath:db/changelog/v.1.4.0/db.changelog-add-chat-messages-table.xml"/>
     <include file="classpath:db/changelog/v.1.4.0/db.changelog-add-nullable-false-to-chat-room-column-in-group-table.xml"/>
-</databaseChangeLog>
+    <include file="classpath:db/changelog/v.1.5.0/db.changelog-add-column-to-feedback-request.xml"/>
+    <include file="classpath:db/changelog/v.1.5.0/db.changelog-add-status-feedback-request-table.xml"/>
+    <include file="classpath:db/changelog/v.1.5.0/db.changelog-insert-status-to-feedback-request-status-table.xml"/>
+    <include file="classpath:db/changelog/v.1.5.0/db.changelog-remove-column-duration.xml"/>
+    <include file="classpath:db/changelog/v.1.5.0/db.changelog-add-constraint-to-status-in-feedback-request-column.xml"/>
+ </databaseChangeLog>

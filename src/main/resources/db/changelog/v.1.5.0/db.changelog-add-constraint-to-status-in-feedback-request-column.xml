@@ -1,0 +1,14 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.5.5" author="taras.lutsiuk">
+        <addForeignKeyConstraint baseColumnNames="status"
+                                 baseTableName="course_feedback_request"
+                                 constraintName="feedback_request_status_fkey"
+                                 referencedColumnNames="id"
+                                 referencedTableName="feedback_request_status"
+        />
+    </changeSet>
+</databaseChangeLog>

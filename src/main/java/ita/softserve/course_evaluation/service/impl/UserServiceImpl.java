@@ -96,7 +96,12 @@ public class UserServiceImpl implements UserService {
 			userRepository.save(daoUser);
 		}
 	}
-
+	
+	@Override
+	public List<UserDto> getAllStudentsByFeedbackRequestIdWithoutFeedback(long id) {
+		return UserDtoMapper.toDto(userRepository.findAllUserByFeedbackRequestIdWithoutFeedback(id));
+	}
+	
 	private User getUserById(Long id){
 		return userRepository.findById(id).orElseThrow(
 				() -> new EntityNotFoundException(String.format("User with id: %d not found!", id)));
