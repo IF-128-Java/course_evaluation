@@ -16,7 +16,9 @@ class ScheduledTest {
 	void testCronValidSpecificExpression() {
 		CronExpression expression = CronExpression.parse("0 0 12 * * *");
 		LocalDateTime last = LocalDateTime.now();
-		LocalDateTime expected = last.withHour(12).withMinute(0).withSecond(0).withNano(0);
+		LocalDateTime expected = last.getHour()<12 ?
+				                         last.withHour(12).withMinute(0).withSecond(0).withNano(0):
+				                         last.plusDays(1).withHour(12).withMinute(0).withSecond(0).withNano(0);
 		
 		LocalDateTime actual = expression.next(last);
 		assertThat(actual).isNotNull();
