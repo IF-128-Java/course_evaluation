@@ -8,6 +8,7 @@ import ita.softserve.course_evaluation.exception.EmailNotConfirmedException;
 import ita.softserve.course_evaluation.exception.EmailNotValidException;
 import ita.softserve.course_evaluation.exception.ConfirmationTokenException;
 import ita.softserve.course_evaluation.exception.UserAlreadyExistAuthenticationException;
+import ita.softserve.course_evaluation.exception.EmailMessagingException;
 import ita.softserve.course_evaluation.entity.ConfirmationToken;
 import ita.softserve.course_evaluation.service.ConfirmationTokenService;
 import ita.softserve.course_evaluation.repository.UserRepository;
@@ -111,7 +112,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             try {
                 emailService.sendMail(emailContext);
             } catch (MessagingException e) {
-                e.printStackTrace();
+                throw new EmailMessagingException(String.format("Message to %s was not send", user.getEmail()));
             }
         }
         log.info("Activation message was send to user email: " + user.getEmail());

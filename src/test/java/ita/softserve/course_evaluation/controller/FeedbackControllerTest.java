@@ -128,7 +128,7 @@ class FeedbackControllerTest {
     }
 
     @Test
-    @WithMockCustomUser(role = Role.ROLE_TEACHER)
+    @WithMockCustomUser(role = Role.ROLE_STUDENT)
     void testGetFeedback() throws Exception {
         when(feedbackService.getFeedbackById(Mockito.anyLong())).thenReturn(feedbackDto);
 
@@ -148,7 +148,7 @@ class FeedbackControllerTest {
     }
 
     @Test
-    @WithMockCustomUser(role = Role.ROLE_STUDENT)
+    @WithMockCustomUser(role = Role.ROLE_TEACHER)
     void testGetFeedbackWithNotPermitedRole() throws Exception {
         when(feedbackService.getFeedbackById(Mockito.anyLong())).thenReturn(feedbackDto);
 
