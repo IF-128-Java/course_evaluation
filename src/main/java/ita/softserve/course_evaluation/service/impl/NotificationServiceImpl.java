@@ -14,6 +14,7 @@ import ita.softserve.course_evaluation.service.mail.EmailService;
 import ita.softserve.course_evaluation.service.mail.context.NotificationFeedbackRequestMessageContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -68,6 +69,10 @@ public class NotificationServiceImpl implements NotificationService {
 				e.printStackTrace();
 				log.error("Error on send email. Message - {}", e.getMessage());
 			}
+			
+		}
+		else{
+			throw new UsernameNotFoundException("User doesn't exists");
 		}
 	}
 	
