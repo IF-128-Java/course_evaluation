@@ -39,7 +39,6 @@ import static org.mockito.Mockito.lenient;
  */
 
 @ExtendWith(MockitoExtension.class)
-@Disabled
 class ChatMessageServiceImplTest {
     private ChatMessage chatMessage1;
     private User user1;

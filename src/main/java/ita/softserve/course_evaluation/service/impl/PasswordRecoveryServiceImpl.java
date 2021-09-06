@@ -4,6 +4,7 @@ import ita.softserve.course_evaluation.dto.PasswordRestoreDto;
 import ita.softserve.course_evaluation.entity.ConfirmationToken;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.ConfirmationTokenException;
+import ita.softserve.course_evaluation.exception.EmailMessagingException;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.ConfirmationTokenService;
 import ita.softserve.course_evaluation.service.PasswordRecoveryService;
@@ -61,7 +62,7 @@ public class PasswordRecoveryServiceImpl implements PasswordRecoveryService {
             try {
                 emailService.sendMail(emailContext);
             } catch (MessagingException e) {
-                e.printStackTrace();
+                throw new EmailMessagingException(String.format("Message to %s was not send", user.getEmail()));
             }
         }
         log.info("Reset Password message was send to email: " + user.getEmail());

@@ -5,8 +5,10 @@ import ita.softserve.course_evaluation.dto.SimpleUserDtoMapper;
 import ita.softserve.course_evaluation.dto.SimpleUserDtoResponseMapper;
 import ita.softserve.course_evaluation.entity.ConfirmationToken;
 import ita.softserve.course_evaluation.entity.User;
+import ita.softserve.course_evaluation.exception.EmailAlreadyConfirmedException;
 import ita.softserve.course_evaluation.exception.EmailNotConfirmedException;
 import ita.softserve.course_evaluation.exception.EmailNotValidException;
+import ita.softserve.course_evaluation.exception.ConfirmationTokenException;
 import ita.softserve.course_evaluation.exception.UserAlreadyExistAuthenticationException;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.impl.RegistrationServiceImpl;
@@ -14,14 +16,12 @@ import ita.softserve.course_evaluation.service.mail.DefaultEmailService;
 import ita.softserve.course_evaluation.service.mail.context.AbstractEmailContext;
 import ita.softserve.course_evaluation.validator.EmailValidator;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,18 +35,21 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 /**
  * @author Mykhailo Fedenko on 02.09.2021
  */
 
 @ExtendWith({MockitoExtension.class})
-@Disabled("Not implemented yet")
 @ContextConfiguration(classes = ConfigDataApplicationContextInitializer.class)
 class RegistrationServiceImplTest {
-    @Value("${site.base.url.https}")
-    private String baseUrl;
 
     private SimpleUserDto simpleUserDto;
     private SimpleUserDto simpleUserDto2;
@@ -68,6 +71,8 @@ class RegistrationServiceImplTest {
 
     @BeforeEach
     void beforeEach() {
+        ReflectionTestUtils.setField(registrationService, "baseUrl", "http://localhost:4200", String.class);
+
         userMike = new User();
         userMike.setId(1L);
         userMike.setFirstName("Mike");
@@ -103,7 +108,6 @@ class RegistrationServiceImplTest {
 
     @Test
     void testRegisterWhenEmailValidAndNotRegisteredUser() throws MessagingException {
-        ReflectionTestUtils.setField(registrationService, "baseUrl", "http://localhost:4200", String.class);
 
         ConfirmationToken confirmationToken = new ConfirmationToken(UUID.randomUUID().toString(),
                 LocalDateTime.now(),
@@ -134,7 +138,6 @@ class RegistrationServiceImplTest {
 
     @Test
     void testRegisterWhenEmailValidAndAlreadyRegisteredUserWithNotVerifiedAccount() throws MessagingException {
-        ReflectionTestUtils.setField(registrationService, "baseUrl", "http://localhost:4200", String.class);
 
         ConfirmationToken confirmationToken = new ConfirmationToken(UUID.randomUUID().toString(),
                 LocalDateTime.now(),
@@ -159,8 +162,7 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void testRegisterWhenEmailValidAndAlreadyRegisteredUserWithVerifiedAccount() throws MessagingException {
-        ReflectionTestUtils.setField(registrationService, "baseUrl", "http://localhost:4200", String.class);
+    void testRegisterWhenEmailValidAndAlreadyRegisteredUserWithVerifiedAccount() {
 
         when(emailValidator.test(Mockito.anyString())).thenReturn(true);
         when(userRepository.findUserByEmail(Mockito.anyString())).thenReturn(Optional.of(userNick));
@@ -176,17 +178,68 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    @Disabled("Not implemented yet")
     void testSignUp() {
+
+        //test when user not registered
+        when(userRepository.findUserByEmail(Mockito.anyString())).thenReturn(Optional.empty());
+        when(userRepository.save(Mockito.any(User.class))).thenReturn(userMike);
+
+        registrationService.signUp(userMike);
+        verify(userRepository).save(Mockito.any(User.class));
+        verify(userRepository).findUserByEmail(Mockito.anyString());
+        verifyNoMoreInteractions(userRepository);
+
+        //test signUp when user has not activate account
+        when(userRepository.findUserByEmail(Mockito.anyString())).thenReturn(Optional.of(userMike));
+        assertThrows(EmailNotConfirmedException.class, () -> registrationService.signUp(userMike));
+        verifyNoMoreInteractions(userRepository);
+
+        //test signUp when user has activated account
+        when(userRepository.findUserByEmail(Mockito.anyString())).thenReturn(Optional.of(userNick));
+        assertThrows(UserAlreadyExistAuthenticationException.class, () -> registrationService.signUp(userMike));
+        verifyNoMoreInteractions(userRepository);
+
     }
 
     @Test
-    @Disabled("Not implemented yet")
     void testConfirmToken() {
+        //test when given token is wrong
+        when(confirmationTokenService.getToken(anyString())).thenReturn(Optional.empty());
+        assertThrows(ConfirmationTokenException.class, () -> registrationService.confirmToken(anyString()));
+
+        //test when token already confirmed
+        ConfirmationToken confirmationToken1 = new ConfirmationToken();
+        confirmationToken1.setConfirmedAt(LocalDateTime.now().plusMinutes(5));
+        when(confirmationTokenService.getToken(Mockito.anyString())).thenReturn(Optional.of(confirmationToken1));
+        assertThrows(EmailAlreadyConfirmedException.class, () -> registrationService.confirmToken(anyString()));
+
+        //test when token expired
+        ConfirmationToken confirmationToken2 = new ConfirmationToken();
+        confirmationToken2.setExpiredAt(LocalDateTime.now());
+        when(confirmationTokenService.getToken(Mockito.anyString())).thenReturn(Optional.of(confirmationToken2));
+        assertThrows(ConfirmationTokenException.class, () -> registrationService.confirmToken("token"));
+
+        //test when token valid and not confirmed
+        String token = UUID.randomUUID().toString();
+        ConfirmationToken confirmationToken3 = new ConfirmationToken();
+        confirmationToken3.setExpiredAt(LocalDateTime.now().plusMinutes(15));
+        confirmationToken3.setToken(token);
+        confirmationToken3.setAppUser(userMike);
+        when(confirmationTokenService.getToken(Mockito.anyString())).thenReturn(Optional.of(confirmationToken3));
+        doNothing().when(confirmationTokenService).setConfirmedAt(anyString());
+
+        ResponseEntity<?> responseEntity = registrationService.confirmToken(token);
+        assertEquals("Email was confirmed", responseEntity.getBody());
+        assertEquals(200, responseEntity.getStatusCodeValue());
+        verify(confirmationTokenService, times(1)).getToken(token);
+        verify(confirmationTokenService, times(1)).setConfirmedAt(token);
+        verifyNoMoreInteractions(confirmationTokenService);
     }
 
     @Test
-    @Disabled("Not implemented yet")
     void testEnableUserEmail() {
+        doNothing().when(userRepository).enableAppUser(Mockito.anyString());
+        registrationService.enableUserEmail("mail@mail.com");
+        verify(userRepository).enableAppUser("mail@mail.com");
     }
 }
