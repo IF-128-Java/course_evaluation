@@ -10,11 +10,12 @@ import java.util.List;
 
 @Service
 public interface FeedbackService {
+
     FeedbackDto create(FeedbackDto dto);
 
     FeedbackDto getFeedbackById(Long id);
 
     Page<FeedbackDto> findAllByFeedbackRequestId(Pageable pageable, Long id);
 
-    List<Feedback> getFeedbackByStudentId(long feedbackrequestId, long studentId);
+    List<Feedback> getFeedbackByRequestIdAndStudentId(long requestId, long studentId);
 }
