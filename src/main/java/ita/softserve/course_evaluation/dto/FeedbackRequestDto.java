@@ -1,10 +1,10 @@
 package ita.softserve.course_evaluation.dto;
 
+import ita.softserve.course_evaluation.annotation.StartDateBeforeEndDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -12,18 +12,16 @@ import java.util.Objects;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class  FeedbackRequestDto {
+@StartDateBeforeEndDate(startDateTime = "startDate", endDateTime = "endDate")
+public class FeedbackRequestDto {
 	
 	private Long id;
 	private String feedbackDescription;
 	@NotNull
-	@NotBlank
 	private LocalDateTime startDate;
 	@NotNull
-	@NotBlank
 	private LocalDateTime endDate;
 	@NotNull
-	@NotBlank
 	private Long course;
 	private int status;
 	private LocalDateTime lastNotification;

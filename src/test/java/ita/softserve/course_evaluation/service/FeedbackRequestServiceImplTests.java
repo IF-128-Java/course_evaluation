@@ -15,6 +15,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -32,7 +36,9 @@ import static org.mockito.Mockito.when;
 class FeedbackRequestServiceImplTests {
 	
 	private static FeedbackRequest expected;
+	private static FeedbackRequest feedbackRequest2;
 	private static FeedbackRequestDto expectedDto;
+	private static Pageable pageable;
 	
 	@Mock
 	private FeedbackRequestRepository feedbackRequestRepository;
@@ -51,6 +57,16 @@ class FeedbackRequestServiceImplTests {
 		expected.setQuestions(List.of(Question.builder().id(1L).build()));
 		expected.setCourse(new Course(1L, "Desc", "Desc", new Date(), new Date(), user, null));
 		
+		feedbackRequest2 = new FeedbackRequest();
+		feedbackRequest2.setId(1L);
+		feedbackRequest2.setFeedbackDescription("FeedbackDescription");
+		feedbackRequest2.setStartDate(LocalDateTime.now());
+		feedbackRequest2.setEndDate(LocalDateTime.now().plusDays(5));
+		feedbackRequest2.setStatus(FeedbackRequestStatus.ACTIVE);
+		feedbackRequest2.setQuestions(List.of(Question.builder().id(1L).build()));
+		feedbackRequest2.setCourse(new Course(1L, "Desc", "Desc", new Date(), new Date(), user, null));
+		
+		pageable = PageRequest.of(0, 10);
 		expectedDto = FeedbackRequestDtoMapper.toDto(expected);
 	}
 	
@@ -91,5 +107,15 @@ class FeedbackRequestServiceImplTests {
 		feedbackRequestService.changeStatusAndLastNotification(expectedDto, 1);
 		assertEquals(expected.getStatus(), FeedbackRequestStatus.ACTIVE);
 		verify(feedbackRequestRepository, times(1)).getById(anyLong());
+	}
+	
+	@Test
+	void testFindAllByCourseId(){
+		List<FeedbackRequest> feedbackRequests = List.of(expected);
+		Page<FeedbackRequest> feedbackRequestPage = new PageImpl<>(feedbackRequests, pageable, feedbackRequests.size());
+		when(feedbackRequestRepository.findAllByCourseId(pageable, 1L))
+				.thenReturn(feedbackRequestPage);
+		feedbackRequestService.findAllByCourseId(pageable,1L);
+		verify(feedbackRequestRepository).findAllByCourseId(pageable,1L);
 	}
 }
