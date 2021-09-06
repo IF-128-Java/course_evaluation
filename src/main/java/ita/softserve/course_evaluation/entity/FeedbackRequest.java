@@ -29,9 +29,6 @@ public class FeedbackRequest {
 	@Column(name = "end_date", nullable = false)
 	private LocalDateTime endDate;
 
-	@Column(name = "duration", nullable = false)
-	private Long duration;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "course_id", nullable = false)
 	private Course course;
@@ -48,4 +45,10 @@ public class FeedbackRequest {
 			joinColumns = @JoinColumn(name = "feedback_request_id"),
 			inverseJoinColumns = @JoinColumn(name = "question_id"))
 	private List<Question> questions = new ArrayList<>();
+	
+	@Column(name = "status")
+	private FeedbackRequestStatus status;
+	
+	@Column(name = "last_notification")
+	private LocalDateTime lastNotification;
 }

@@ -1,6 +1,7 @@
 package ita.softserve.course_evaluation.service;
 
 import ita.softserve.course_evaluation.dto.FeedbackRequestDto;
+import ita.softserve.course_evaluation.dto.StudentFeedbackRequestDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,4 +20,10 @@ public interface FeedbackRequestService {
 	Page<FeedbackRequestDto> findAllByCourseId(Pageable pageable, Long id);
 
 	List<FeedbackRequestDto> getFeedbackRequestByCourseIdOnly(long id);
+
+	List<StudentFeedbackRequestDto> getFeedbackRequestByCourseIdAndStudentId(long courseId, long studentId);
+
+	List<FeedbackRequestDto> findAllByStatusActiveAndValidDate(long id);
+	
+	void changeStatusAndLastNotification(FeedbackRequestDto dto, int status);
 }

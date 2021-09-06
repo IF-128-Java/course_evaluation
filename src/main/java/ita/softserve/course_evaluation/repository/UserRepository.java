@@ -32,11 +32,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findUserByEmail (String email);
 
     boolean existsByEmail(String email);
-    
-    @Query(value = "SELECT u.id, u.first_name, u.last_name, u.email, u.password, u.group_id, u.profile_picture,u.account_verified\n" +
-                           "FROM course_group cg\n" +
-                           "INNER JOIN users u on u.group_id=cg.group_id\n" +
-                           "WHERE cg.course_id = :id", nativeQuery = true)
+
+    @Query(value = "SELECT u.* FROM course_group cg INNER JOIN users u on u.group_id=cg.group_id WHERE cg.course_id = :id", nativeQuery = true)
 	List<User> getStudentsByCourseId(long id);
 
     @Transactional
@@ -44,4 +41,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "UPDATE users " +
             "SET account_verified = TRUE WHERE email = :email", nativeQuery = true)
     void enableAppUser(String email);
+
+    @Query(value = "SELECT u.* FROM course_group cg " +
+                           "INNER JOIN users u ON cg.group_id = u.group_id " +
+                           "INNER JOIN course_feedback_request cfr ON cg.course_id = cfr.course_id " +
+                           "LEFT JOIN course_feedback cf ON u.id = cf.student_id " +
+                           "WHERE cfr.id = :id " +
+                           "AND (cfr.id <> cf.feedback_request_id OR cf.id IS NULL)" +
+                           "AND (cfr.status=1 OR cfr.status=2)" +
+                           "AND (CURRENT_DATE >= CAST(cfr.start_date AS DATE) AND CURRENT_DATE <= CAST(cfr.end_date AS DATE))", nativeQuery = true)
+    List<User> findAllUserByFeedbackRequestIdWithoutFeedback(long id);
 }

@@ -2,6 +2,7 @@ package ita.softserve.course_evaluation.dto;
 
 import ita.softserve.course_evaluation.entity.User;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -32,13 +33,11 @@ public class UserDtoMapper {
 	}
 	
 	public static List<UserDto> toDto(List<User> users) {
-		UserDtoMapper userDtoMapper = new UserDtoMapper();
-		return Objects.isNull(users) ? null : users.stream().map(UserDtoMapper::toDto).collect(Collectors.toList());
+		return Objects.isNull(users) ? Collections.emptyList() : users.stream().map(UserDtoMapper::toDto).collect(Collectors.toList());
 	}
 	
 	public static List<User> fromDto(List<UserDto> entities) {
-		UserDtoMapper userDtoMapper = new UserDtoMapper();
-		return Objects.isNull(entities) ? null : entities.stream().map(UserDtoMapper::fromDto).collect(Collectors.toList());
+		return Objects.isNull(entities) ? Collections.emptyList() : entities.stream().map(UserDtoMapper::fromDto).collect(Collectors.toList());
 	}
 	
 	
