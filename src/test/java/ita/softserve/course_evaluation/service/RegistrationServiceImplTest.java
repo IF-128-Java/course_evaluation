@@ -217,7 +217,7 @@ class RegistrationServiceImplTest {
         ConfirmationToken confirmationToken2 = new ConfirmationToken();
         confirmationToken2.setExpiredAt(LocalDateTime.now());
         when(confirmationTokenService.getToken(Mockito.anyString())).thenReturn(Optional.of(confirmationToken2));
-        assertThrows(ConfirmationTokenException.class, () -> registrationService.confirmToken(anyString()));
+        assertThrows(ConfirmationTokenException.class, () -> registrationService.confirmToken("token"));
 
         //test when token valid and not confirmed
         String token = UUID.randomUUID().toString();
