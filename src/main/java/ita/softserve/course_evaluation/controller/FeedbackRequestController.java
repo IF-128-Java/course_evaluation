@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,7 +47,7 @@ public class FeedbackRequestController {
 	})
 	@PostMapping
 	@PreAuthorize("hasAuthority('UPDATE')")
-	public ResponseEntity<FeedbackRequestDto> createFeedbackRequest(@RequestBody FeedbackRequestDto dto) {
+	public ResponseEntity<FeedbackRequestDto> createFeedbackRequest(@Valid @RequestBody FeedbackRequestDto dto) {
 		return ResponseEntity.status(HttpStatus.OK)
 				       .body(feedbackRequestService.create(dto));
 	}
@@ -71,7 +72,7 @@ public class FeedbackRequestController {
 	})
 	@PutMapping("/")
 	@PreAuthorize("hasAuthority('UPDATE')")
-	public ResponseEntity<FeedbackRequestDto> editFeedbackRequest(@RequestBody FeedbackRequestDto dto) {
+	public ResponseEntity<FeedbackRequestDto> editFeedbackRequest(@Valid @RequestBody FeedbackRequestDto dto) {
 		return ResponseEntity.status(HttpStatus.OK)
 				       .body(feedbackRequestService.update(dto));
 	}

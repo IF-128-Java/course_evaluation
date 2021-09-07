@@ -1,6 +1,7 @@
 package ita.softserve.course_evaluation.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "course_feedback_request")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class FeedbackRequest {
