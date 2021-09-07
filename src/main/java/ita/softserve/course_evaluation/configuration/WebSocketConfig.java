@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ita.softserve.course_evaluation.exception.JwtAuthenticationException;
 import ita.softserve.course_evaluation.security.jwt.JwtTokenProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -28,6 +29,10 @@ import java.util.List;
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Value("${site.base.url.https}")
+    private String baseUrl;
+
     private final JwtTokenProvider jwtTokenProvider;
 
     public WebSocketConfig(JwtTokenProvider jwtTokenProvider) {
@@ -38,14 +43,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry
                 .addEndpoint("/api/v1/connect-ws")
-                .setAllowedOrigins("http://localhost:4200")
+                .setAllowedOrigins(baseUrl)
                 .withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes("/api/v1/chat");
-        registry.enableSimpleBroker("/api/v1/event/chat");
+        registry.setApplicationDestinationPrefixes("/api/v1/chats");
+        registry.enableSimpleBroker("/api/v1/event/chats");
     }
 
     @Override
