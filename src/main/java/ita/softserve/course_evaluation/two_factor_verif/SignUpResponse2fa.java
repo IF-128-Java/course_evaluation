@@ -4,6 +4,6 @@ import lombok.Value;
 
 @Value
 public class SignUpResponse2fa {
-	private boolean using2FA;
-	private String qrCodeImage;
+	boolean using2FA;
+	String qrCodeImage;
 }

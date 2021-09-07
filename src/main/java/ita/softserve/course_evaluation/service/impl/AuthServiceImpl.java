@@ -3,6 +3,7 @@ package ita.softserve.course_evaluation.service.impl;
 import ita.softserve.course_evaluation.dto.AuthenticateRequestDto;
 import ita.softserve.course_evaluation.dto.SimpleUserDto;
 import ita.softserve.course_evaluation.dto.SimpleUserDtoResponseMapper;
+import ita.softserve.course_evaluation.entity.Role;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.EmailNotConfirmedException;
 import ita.softserve.course_evaluation.repository.UserRepository;
@@ -45,6 +46,9 @@ public class AuthServiceImpl implements AuthService {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
             String[] roles = user.getRoles().stream().map(Enum::name).toArray(String[]::new);
             boolean authenticated = !user.isActive2FA();
+            if (!authenticated){
+                roles = new String[]{Role.ROLE_PRE_VERIFICATION.name()};
+            }
             Map<Object, Object> response = new HashMap<>();
             String token = jwtTokenProvider.createToken(request.getEmail(), user.getId(), roles, authenticated); //add user.isActive2FA()
             response.put("token", token);
