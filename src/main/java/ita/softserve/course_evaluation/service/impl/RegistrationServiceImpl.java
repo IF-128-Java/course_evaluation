@@ -1,22 +1,23 @@
 package ita.softserve.course_evaluation.service.impl;
 
+import dev.samstevens.totp.exceptions.QrGenerationException;
+import dev.samstevens.totp.qr.QrData;
+import dev.samstevens.totp.secret.SecretGenerator;
 import ita.softserve.course_evaluation.dto.SimpleUserDto;
 import ita.softserve.course_evaluation.dto.SimpleUserDtoResponseMapper;
 import ita.softserve.course_evaluation.entity.User;
-import ita.softserve.course_evaluation.exception.EmailAlreadyConfirmedException;
-import ita.softserve.course_evaluation.exception.EmailNotConfirmedException;
-import ita.softserve.course_evaluation.exception.EmailNotValidException;
-import ita.softserve.course_evaluation.exception.ConfirmationTokenException;
-import ita.softserve.course_evaluation.exception.UserAlreadyExistAuthenticationException;
-import ita.softserve.course_evaluation.exception.EmailMessagingException;
+import ita.softserve.course_evaluation.exception.*;
 import ita.softserve.course_evaluation.entity.ConfirmationToken;
 import ita.softserve.course_evaluation.service.ConfirmationTokenService;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.RegistrationService;
 import ita.softserve.course_evaluation.service.mail.EmailService;
 import ita.softserve.course_evaluation.service.mail.context.AccountVerificationEmailContext;
+import ita.softserve.course_evaluation.two_factor_verif.SignUpResponse2fa;
+import ita.softserve.course_evaluation.two_factor_verif.TotpManager;
 import ita.softserve.course_evaluation.validator.EmailValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +30,16 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+
 @Service
 @Slf4j
 public class RegistrationServiceImpl implements RegistrationService {
 
     @Value("${site.base.url.https}")
     private String baseUrl;
+
+    @Autowired
+    private TotpManager totpManager;
 
     private final EmailValidator emailValidator;
 
@@ -66,9 +71,16 @@ public class RegistrationServiceImpl implements RegistrationService {
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
 
+        if (request.isActive_2fa()){
+            user.setActive2FA(true);
+            user.setSecret(totpManager.generateSecret());
+        }
+
         signUp(user);
 
         sendActivationMessage(user);
+
+
 
         return ResponseEntity.ok(SimpleUserDtoResponseMapper.toDto(user));
     }

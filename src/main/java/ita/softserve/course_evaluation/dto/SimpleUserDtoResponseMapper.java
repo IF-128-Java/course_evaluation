@@ -11,6 +11,7 @@ public class SimpleUserDtoResponseMapper {
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .secret(user.getSecret())
                 .build();
     }
 }

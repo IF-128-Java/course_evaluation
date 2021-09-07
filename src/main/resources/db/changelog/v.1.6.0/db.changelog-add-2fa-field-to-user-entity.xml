@@ -1,0 +1,21 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+
+    <changeSet id="1.6.0" author="mykhailo.fedenko">
+        <addColumn tableName="users">
+            <column name="active_2fa" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1.6.1" author="mykhailo.fedenko">
+        <addColumn tableName="users">
+            <column name="secret" type="VARCHAR(100)" >
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

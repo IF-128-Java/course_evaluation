@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import ita.softserve.course_evaluation.entity.Role;
 import ita.softserve.course_evaluation.exception.JwtAuthenticationException;
 import ita.softserve.course_evaluation.security.oauth2.LocalUser;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -19,7 +22,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -33,6 +38,8 @@ public class JwtTokenProvider {
 	private String authorizationHeader;
 	@Value("${jwt.expiration}")
 	private long validity;
+	private static final String AUTHENTICATED = "authenticated"; //add
+	public static final long TEMP_VALIDITY_IN_MILLIS = 300000; //add
 	
 	public JwtTokenProvider(UserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
@@ -43,16 +50,18 @@ public class JwtTokenProvider {
 		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
 	}
 	
-	public String createToken(String username, Long userId, String[] role) {
+	public String createToken(String username, Long userId, String[] role, boolean authenticated) { //add
 		Claims claims = Jwts.claims().setSubject(username);
 		claims.put("role", role);
 		claims.put("id", userId);
+		claims.put(AUTHENTICATED, authenticated); //add
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + this.validity * 1000);
+		Date expireDate = authenticated ? validity : new Date(now.getTime() + TEMP_VALIDITY_IN_MILLIS); //add
 		return Jwts.builder()
 				       .setClaims(claims)
 				       .setIssuedAt(now)
-				       .setExpiration(validity)
+				       .setExpiration(expireDate)
 				       .signWith(SignatureAlgorithm.HS256, secretKey)
 				       .compact();
 	}
@@ -62,7 +71,12 @@ public class JwtTokenProvider {
 		log.info("Token with Authentication parameter was created");
 		return createToken(userPrincipal.getUser().getEmail()
 				,userPrincipal.getUser().getId()
-				, userPrincipal.getUser().getRoles().stream().map(Enum::name).toArray(String[]::new));
+				, userPrincipal.getUser().getRoles().stream().map(Enum::name).toArray(String[]::new), true);
+	}
+
+	public Boolean isAuthenticated(String token){
+		Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+		return claims.get(AUTHENTICATED, Boolean.class);
 	}
 	
 	public boolean validateToken(String token) {
@@ -76,7 +90,12 @@ public class JwtTokenProvider {
 	
 	public Authentication getAuthentication(String token) {
 		UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
-		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+
+		Collection<? extends GrantedAuthority> authorities = isAuthenticated(token)
+				? userDetails.getAuthorities()
+				: List.of(new SimpleGrantedAuthority(Role.ROLE_PRE_VERIFICATION.name()));
+
+		return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
 	}
 	
 	public String getUsername(String token) {
