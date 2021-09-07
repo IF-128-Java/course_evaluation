@@ -22,8 +22,10 @@ public interface FeedbackRequestService {
 	List<FeedbackRequestDto> getFeedbackRequestByCourseIdOnly(long id);
 
 	List<StudentFeedbackRequestDto> getFeedbackRequestByCourseIdAndStudentId(long courseId, long studentId);
-
-	List<FeedbackRequestDto> findAllByStatusActiveAndValidDate(long id);
+	
+	List<FeedbackRequestDto> findAllByStatusAndValidDate(int status);
 	
 	void changeStatusAndLastNotification(FeedbackRequestDto dto, int status);
+	
+	void findAllByExpiredDateAndSetStatusToArchive(int status);
 }
