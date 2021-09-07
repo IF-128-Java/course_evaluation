@@ -4,6 +4,8 @@ import io.swagger.annotations.Api;
 import ita.softserve.course_evaluation.dto.UserDto;
 import ita.softserve.course_evaluation.service.NotificationService;
 import ita.softserve.course_evaluation.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -30,10 +33,10 @@ public class NotificationController {
 	}
 	
 	@GetMapping("/fbrequest/{id}/students")
-	public ResponseEntity<List<UserDto>> getAllStudentsByFeedbackRequestId(@PathVariable long id) {
-		return Objects.isNull(userService.getAllStudentsByFeedbackRequestIdWithoutFeedback(id)) ?
+	public ResponseEntity<Page<UserDto>> getAllStudentsByFeedbackRequestId(@RequestParam int page, @RequestParam int size, @PathVariable long id) {
+		return Objects.isNull(userService.getAllStudentsByFeedbackRequestIdWithoutFeedback(PageRequest.of(page, size),id)) ?
 				       ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
-				       ResponseEntity.status(HttpStatus.OK).body(userService.getAllStudentsByFeedbackRequestIdWithoutFeedback(id));
+				       ResponseEntity.status(HttpStatus.OK).body(userService.getAllStudentsByFeedbackRequestIdWithoutFeedback(PageRequest.of(page, size),id));
 	}
 	
 	@PostMapping("/fbrequest/{id}/student")

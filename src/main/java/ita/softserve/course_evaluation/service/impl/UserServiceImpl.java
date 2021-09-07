@@ -10,6 +10,8 @@ import ita.softserve.course_evaluation.exception.InvalidOldPasswordException;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.FileManager;
 import ita.softserve.course_evaluation.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -98,8 +100,8 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public List<UserDto> getAllStudentsByFeedbackRequestIdWithoutFeedback(long id) {
-		return UserDtoMapper.toDto(userRepository.findAllUserByFeedbackRequestIdWithoutFeedback(id));
+	public Page<UserDto> getAllStudentsByFeedbackRequestIdWithoutFeedback(Pageable pageable, long id) {
+		return userRepository.findAllUserByFeedbackRequestIdWithoutFeedback(pageable,id).map(UserDtoMapper::toDto);
 	}
 	
 	private User getUserById(Long id){

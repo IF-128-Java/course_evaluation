@@ -4,7 +4,6 @@ import ita.softserve.course_evaluation.dto.ChatMessageRequest;
 import ita.softserve.course_evaluation.dto.ChatMessageResponse;
 import ita.softserve.course_evaluation.security.SecurityUser;
 import ita.softserve.course_evaluation.service.ChatMessageService;
-import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/chat")
+@RequestMapping("/api/v1/chats")
 public class ChatController {
 
     private final ChatMessageService chatMessageService;
@@ -30,7 +29,6 @@ public class ChatController {
         this.chatMessageService = chatMessageService;
     }
 
-    @SneakyThrows
     @MessageMapping("/{chatId}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("@accessManager.isAllowedToGroupChat(#user, #chatId)")
@@ -39,10 +37,21 @@ public class ChatController {
             @DestinationVariable Long chatId,
             @AuthenticationPrincipal SecurityUser user){
 
-        chatMessageService.processMessage(chatMessageRequest, user, chatId);
+        chatMessageService.processCreateMessage(chatMessageRequest, user, chatId);
     }
 
-    @GetMapping("/{chatId}/all")
+    @MessageMapping("/{chatId}/messages/{messageId}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("@accessManager.isAllowedToUpdateGroupChatMessage(authentication.principal, #chatId, #messageId)")
+    public void processMessage(
+            @Payload @Validated ChatMessageRequest chatMessageRequest,
+            @DestinationVariable Long chatId,
+            @DestinationVariable Long messageId){
+
+        chatMessageService.processUpdateMessage(chatMessageRequest, messageId);
+    }
+
+    @GetMapping("/{chatId}")
     @PreAuthorize("@accessManager.isAllowedToGroupChat(authentication.principal, #chatId)")
     public ResponseEntity<List<ChatMessageResponse>> getMessages(
             @PathVariable Long chatId){

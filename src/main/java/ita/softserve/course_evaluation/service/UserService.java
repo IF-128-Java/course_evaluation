@@ -5,6 +5,8 @@ import ita.softserve.course_evaluation.dto.UserDto;
 import ita.softserve.course_evaluation.dto.UpdateUserDto;
 import ita.softserve.course_evaluation.dto.UserProfileDtoResponse;
 import ita.softserve.course_evaluation.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -25,5 +27,5 @@ public interface UserService {
 
 	void deleteUserProfilePicture(String email);
 	
-	List<UserDto> getAllStudentsByFeedbackRequestIdWithoutFeedback(long id);
+	Page<UserDto> getAllStudentsByFeedbackRequestIdWithoutFeedback(Pageable pageable, long id);
 }
