@@ -9,5 +9,6 @@ public class UserProfileDtoResponse {
     private String firstName;
     private String lastName;
     private String email;
+    private boolean active2fa;
     private byte[] profilePicture;
 }

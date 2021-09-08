@@ -82,11 +82,6 @@ public class TotpManagerImpl implements TotpManager{
     }
 
     public void switch2faStatus(String email, boolean status){
-        Optional<User> userByEmail = userRepository.findUserByEmail(email);
-        if (userByEmail.isPresent()){
-            User user = userByEmail.get();
-            user.setActive2FA(status);
-            userRepository.save(user);
-        }
+        userRepository.updateStatus2FA(email, status);
     }
 }

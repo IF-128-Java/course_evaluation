@@ -53,4 +53,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
                            "AND (cfr.status=1 OR cfr.status=2)" +
                            "AND (CURRENT_DATE >= CAST(cfr.start_date AS DATE) AND CURRENT_DATE <= CAST(cfr.end_date AS DATE))", nativeQuery = true)
     Page<User> findAllUserByFeedbackRequestIdWithoutFeedback(Pageable pageable, long id);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE users " +
+            "SET active_2fa = :status WHERE email = :email", nativeQuery = true)
+    void updateStatus2FA(@Param("email") String email, @Param("status") boolean status);
 }
