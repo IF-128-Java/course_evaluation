@@ -88,7 +88,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	}
 
 	@Override
-	public List<Feedback> getFeedbackByStudentId(long feedbackrequestId, long studentId) {
-		return feedbackRepository.getFeedbackByStudentId(feedbackrequestId, studentId);
+	public List<Feedback> getFeedbackByRequestIdAndStudentId(long requestId, long studentId) {
+		return feedbackRepository.getFeedbackByRequestIdAndStudentId(requestId, studentId);
 	}
 }

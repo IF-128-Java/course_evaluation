@@ -9,6 +9,7 @@ import ita.softserve.course_evaluation.entity.FeedbackRequestStatus;
 import ita.softserve.course_evaluation.repository.FeedbackRepository;
 import ita.softserve.course_evaluation.repository.FeedbackRequestRepository;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
+import ita.softserve.course_evaluation.service.FeedbackService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,11 +25,11 @@ import java.util.Objects;
 public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	
 	private final FeedbackRequestRepository feedbackRequestRepository;
-	private final FeedbackRepository feedbackRepository;
+	private final FeedbackService feedbackService;
 	
-	public FeedbackRequestServiceImpl(FeedbackRequestRepository feedbackRequestRepository, FeedbackRepository feedbackRepository) {
+	public FeedbackRequestServiceImpl(FeedbackRequestRepository feedbackRequestRepository, FeedbackService feedbackService) {
 		this.feedbackRequestRepository = feedbackRequestRepository;
-		this.feedbackRepository = feedbackRepository;
+		this.feedbackService = feedbackService;
 	}
 	
 	@Override
@@ -78,19 +79,17 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 		studentFeedbackRequestDtos = StudentFeedbackRequestDtoMapper.toDto(feedbackRequests);
 
 		for (StudentFeedbackRequestDto studentFeedbackRequestDto : studentFeedbackRequestDtos) {
-			if (!feedbackRepository.getFeedbackByStudentId(studentFeedbackRequestDto.getId(), studentId).isEmpty()) {
+			if (!feedbackService.getFeedbackByRequestIdAndStudentId(studentFeedbackRequestDto.getId(), studentId).isEmpty()) {
 				studentFeedbackRequestDto.setStudentId(studentId);
-				studentFeedbackRequestDto.setFeedbackId(feedbackRepository
-						.getFeedbackByStudentId(studentFeedbackRequestDto.getId(), studentId).get(0).getId());
+				studentFeedbackRequestDto.setFeedbackId(feedbackService
+						.getFeedbackByRequestIdAndStudentId(studentFeedbackRequestDto.getId(), studentId).get(0).getId());
 				feedbackRequestDtosSelected.add(studentFeedbackRequestDto);
-			}
-			else {
+			} else {
 				if (studentFeedbackRequestDto.getEndDate().isAfter(today)) {
 					feedbackRequestDtosSelected.add(studentFeedbackRequestDto);
 				}
 			}
 		}
-
 		return feedbackRequestDtosSelected;
 	}
 

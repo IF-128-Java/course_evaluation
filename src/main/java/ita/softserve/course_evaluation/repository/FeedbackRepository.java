@@ -16,5 +16,5 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     Page<Feedback> findAllFeedbackByFeedbackRequestId (Pageable pageable, Long id);
 
     @Query(value = "SELECT * From course_feedback WHERE feedback_request_id = ?1 AND student_id = ?2", nativeQuery = true)
-    List<Feedback> getFeedbackByStudentId(long feedbackrequestId, long studentId);
+    List<Feedback> getFeedbackByRequestIdAndStudentId(long requestId, long studentId);
 }

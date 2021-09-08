@@ -111,7 +111,7 @@ public class CourseController {
             @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
     })
     @GetMapping("/group/{id}")
-    public ResponseEntity<List<CourseDto>> finisheCoursesByGroupId(@PathVariable long id) {
+    public ResponseEntity<List<CourseDto>> finishedCoursesByGroupId(@PathVariable long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(courseService.getFinishedCoursesByGroupId(id));
     }
