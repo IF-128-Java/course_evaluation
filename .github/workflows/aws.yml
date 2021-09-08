@@ -37,6 +37,28 @@ jobs:
     environment: production
 
     steps:
+    - name: pass multiple environment
+      uses: appleboy/ssh-action@master
+      env:
+        GOOGLE_CLIENT_ID: ${{ GOOGLE_CLIENT_ID }}
+        GOOGLE_CLIENT_SECRET: ${{ GOOGLE_CLIENT_SECRET }}
+        AWS_ACCESS_KEY: ${{ AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_KEY: ${{ AWS_SECRET_ACCESS_KEY }}
+        FACEBOOK_CLIENT_ID: ${{ FACEBOOK_CLIENT_ID }}
+        FACEBOOK_CLIENT_SECRET: ${{ FACEBOOK_CLIENT_SECRET }}
+        GIT_HUB_CLIENT_ID: ${{ GIT_HUB_CLIENT_ID }}
+        GIT_HUB_CLIENT_SECRET: ${{ GIT_HUB_CLIENT_SECRET }}
+        AWS_USERS_FOLDER: "user-profile-picture"
+        AWS_BUCKET_NAME: "course-evaluation-storage"
+        MAIL_USERNAME: ${{ MAIL_USERNAME }}
+        MAIL_PASSWORD: ${{ MAIL_PASSWORD }}
+      with:
+        host: ${{ secrets.AWS_ECS_HOST }}
+        username: ${{ secrets.AWS_EC2_USERNAME }}
+        key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        port: ${{ secrets.AWS_PORT }}
+        envs: GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,AWS_ACCESS_KEY,AWS_SECRET_KEY,FACEBOOK_CLIENT_ID,FACEBOOK_CLIENT_SECRET,GIT_HUB_CLIENT_ID,GIT_HUB_CLIENT_SECRET,AWS_USERS_FOLDER,AWS_BUCKET_NAME,MAIL_USERNAME,MAIL_PASSWORD      
+          
     - name: Checkout
       uses: actions/checkout@v1
 
@@ -57,7 +79,7 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-
+    
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
@@ -71,7 +93,8 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
+        
+       
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
@@ -79,6 +102,8 @@ jobs:
         task-definition: task-definition.json
         container-name: courseevaluation
         image: ${{ steps.build-image.outputs.image }}
+        
+        
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
@@ -87,3 +112,5 @@ jobs:
         service: courseevaluation-service
         cluster: courseevaluation-cluster
         wait-for-service-stability: true
+        
+        
