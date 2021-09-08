@@ -23,7 +23,7 @@ import java.util.Optional;
 import static dev.samstevens.totp.util.Utils.getDataUriForImage;
 
 /**
- * @author Mykhailo Fedenko on 06.09.2021
+ * @author Mykhailo Fedenko
  */
 @Service
 @Slf4j
@@ -68,7 +68,7 @@ public class TotpManagerImpl implements TotpManager{
     public ResponseEntity<?> verifyCode(String code, String email) {
 
         Optional<User> existUser = userRepository.findUserByEmail(email);
-        User user = existUser.orElseThrow();
+        User user = existUser.orElseThrow(()-> new UsernameNotFoundException("User not found"));
         if (!codeVerifier.isValidCode(user.getSecret(), code)) {
             return new ResponseEntity<>("Invalid Code!", HttpStatus.BAD_REQUEST);
         }
