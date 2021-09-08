@@ -1,4 +1,4 @@
-package ita.softserve.course_evaluation.two_factor_verif;
+package ita.softserve.course_evaluation.service.two_factor_verif;
 
 import lombok.Value;
 

@@ -1,15 +1,12 @@
 package ita.softserve.course_evaluation.controller;
 
-import ita.softserve.course_evaluation.repository.UserRepository;
-import ita.softserve.course_evaluation.two_factor_verif.SignUpResponse2fa;
-import ita.softserve.course_evaluation.two_factor_verif.TotpManager;
-import ita.softserve.course_evaluation.two_factor_verif.TotpRequest;
+import ita.softserve.course_evaluation.service.two_factor_verif.SignUpResponse2fa;
+import ita.softserve.course_evaluation.service.two_factor_verif.TotpManager;
+import ita.softserve.course_evaluation.service.two_factor_verif.TotpRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 /**
  * @author Mykhailo Fedenko
@@ -26,7 +23,7 @@ public class TotpController {
     }
 
     @PostMapping("/change2faStatus")
-    public ResponseEntity<?> updateStatus2FA(@RequestBody TotpRequest totpRequest){
+    public ResponseEntity<?> updateStatus2FA(@RequestBody TotpRequestDto totpRequest){
         totpManager.switch2faStatus(totpRequest.getEmail(), totpRequest.isActive2fa());
         if (totpRequest.isActive2fa()) {
             log.info("active 2fa");

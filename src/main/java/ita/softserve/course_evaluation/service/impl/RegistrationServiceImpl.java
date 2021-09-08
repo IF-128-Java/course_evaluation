@@ -1,8 +1,5 @@
 package ita.softserve.course_evaluation.service.impl;
 
-import dev.samstevens.totp.exceptions.QrGenerationException;
-import dev.samstevens.totp.qr.QrData;
-import dev.samstevens.totp.secret.SecretGenerator;
 import ita.softserve.course_evaluation.dto.SimpleUserDto;
 import ita.softserve.course_evaluation.dto.SimpleUserDtoResponseMapper;
 import ita.softserve.course_evaluation.entity.User;
@@ -13,8 +10,7 @@ import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.RegistrationService;
 import ita.softserve.course_evaluation.service.mail.EmailService;
 import ita.softserve.course_evaluation.service.mail.context.AccountVerificationEmailContext;
-import ita.softserve.course_evaluation.two_factor_verif.SignUpResponse2fa;
-import ita.softserve.course_evaluation.two_factor_verif.TotpManager;
+import ita.softserve.course_evaluation.service.two_factor_verif.TotpManager;
 import ita.softserve.course_evaluation.validator.EmailValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

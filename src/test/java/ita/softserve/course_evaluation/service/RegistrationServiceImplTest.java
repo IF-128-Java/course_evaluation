@@ -48,7 +48,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
  */
 
 @ExtendWith({MockitoExtension.class})
-@ContextConfiguration(classes = ConfigDataApplicationContextInitializer.class)
 class RegistrationServiceImplTest {
 
     private SimpleUserDto simpleUserDto;
