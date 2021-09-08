@@ -38,8 +38,8 @@ public class JwtTokenProvider {
 	private String authorizationHeader;
 	@Value("${jwt.expiration}")
 	private long validity;
-	private static final String AUTHENTICATED = "authenticated"; //add
-	public static final long TEMP_VALIDITY_IN_MILLIS = 300000; //add
+	private static final String AUTHENTICATED = "authenticated";
+	public static final long TEMP_VALIDITY_IN_MILLIS = 300000;
 	
 	public JwtTokenProvider(UserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
@@ -50,14 +50,14 @@ public class JwtTokenProvider {
 		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
 	}
 	
-	public String createToken(String username, Long userId, String[] role, boolean authenticated) { //add
+	public String createToken(String username, Long userId, String[] role, boolean authenticated) {
 		Claims claims = Jwts.claims().setSubject(username);
 		claims.put("role", role);
 		claims.put("id", userId);
-		claims.put(AUTHENTICATED, authenticated); //add
+		claims.put(AUTHENTICATED, authenticated);
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + this.validity * 1000);
-		Date expireDate = authenticated ? validity : new Date(now.getTime() + TEMP_VALIDITY_IN_MILLIS); //add
+		Date expireDate = authenticated ? validity : new Date(now.getTime() + TEMP_VALIDITY_IN_MILLIS);
 		return Jwts.builder()
 				       .setClaims(claims)
 				       .setIssuedAt(now)
