@@ -17,4 +17,5 @@
     <include file="classpath:db/changelog/v.1.5.0/db.changelog-insert-status-to-feedback-request-status-table.xml"/>
     <include file="classpath:db/changelog/v.1.5.0/db.changelog-remove-column-duration.xml"/>
     <include file="classpath:db/changelog/v.1.5.0/db.changelog-add-constraint-to-status-in-feedback-request-column.xml"/>
+    <include file="classpath:db/changelog/v.1.6.0/db.changelog-add-2fa-field-to-user-entity.xml"/>
  </databaseChangeLog>

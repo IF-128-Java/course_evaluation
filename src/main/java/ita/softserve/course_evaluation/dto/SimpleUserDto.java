@@ -22,4 +22,6 @@ public class SimpleUserDto {
     private String firstName;
     private String lastName;
 
+    private boolean active_2fa;
+
 }
