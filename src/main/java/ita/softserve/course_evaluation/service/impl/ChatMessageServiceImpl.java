@@ -10,11 +10,10 @@ import ita.softserve.course_evaluation.security.SecurityUser;
 import ita.softserve.course_evaluation.service.ChatMessageService;
 import ita.softserve.course_evaluation.service.ChatRoomService;
 import ita.softserve.course_evaluation.service.UserService;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,12 +37,11 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         this.messagingTemplate = messagingTemplate;
         this.chatMessageResponseMapper = chatMessageResponseMapper;
     }
-
-    @Transactional
+    
     @Override
-    public void processMessage(ChatMessageRequest chatMessageRequest, SecurityUser user, Long chatId) {
+    public void processCreateMessage(ChatMessageRequest chatMessageRequest, SecurityUser user, Long chatId) {
 
-        log.info("Received new message with for chat id:{} from user id:{}!", chatId, user.getId());
+        log.info("Received new message with chat id:{} from user id:{}!", chatId, user.getId());
 
         ChatMessage chatMessage = ChatMessage.builder()
                 .createdAt(LocalDateTime.now())
@@ -57,11 +55,25 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         sendMessage(chatMessage);
     }
 
-    @SneakyThrows
+    @Override
+    public void processUpdateMessage(ChatMessageRequest chatMessageRequest, Long messageId) {
+
+        log.info("Received updated message with id:{}!", messageId);
+
+        ChatMessage foundMessage = getById(messageId);
+
+        foundMessage.setContent(chatMessageRequest.getContent());
+        foundMessage.setStatus(MessageStatus.UPDATED);
+
+        save(foundMessage);
+        sendMessage(foundMessage);
+    }
+
+
     private void sendMessage(ChatMessage chatMessage){
         ChatMessageResponse response = chatMessageResponseMapper.toDto(chatMessage);
 
-        messagingTemplate.convertAndSend("/api/v1/event/chat/" + chatMessage.getChatRoom().getId(), response);
+        messagingTemplate.convertAndSend("/api/v1/event/chats/" + chatMessage.getChatRoom().getId(), response);
         chatMessage.setStatus(MessageStatus.DELIVERED);
         save(chatMessage);
 
@@ -72,6 +84,13 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     public void save(ChatMessage chatMessage) {
         chatMessage = chatMessageRepository.save(chatMessage);
         log.info("Saved message with id {}!", chatMessage.getId());
+    }
+
+    @Override
+    public ChatMessage getById(Long id){
+        return chatMessageRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Message with id: %d not found!", id))
+        );
     }
 
     @Override
