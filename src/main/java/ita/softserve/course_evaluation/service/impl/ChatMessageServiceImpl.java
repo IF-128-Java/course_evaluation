@@ -52,7 +52,10 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 .build();
 
         save(chatMessage);
-        sendMessage(chatMessage);
+        sendMessage(chatMessageResponseMapper.toDto(chatMessage), chatId);
+
+        chatMessage.setStatus(MessageStatus.DELIVERED);
+        save(chatMessage);
     }
 
     @Override
@@ -63,21 +66,15 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         ChatMessage foundMessage = getById(messageId);
 
         foundMessage.setContent(chatMessageRequest.getContent());
-        foundMessage.setStatus(MessageStatus.UPDATED);
+        foundMessage.setEdited(true);
 
         save(foundMessage);
-        sendMessage(foundMessage);
+        sendMessage(chatMessageResponseMapper.toDto(foundMessage), foundMessage.getChatRoom().getId());
     }
 
-
-    private void sendMessage(ChatMessage chatMessage){
-        ChatMessageResponse response = chatMessageResponseMapper.toDto(chatMessage);
-
-        messagingTemplate.convertAndSend("/api/v1/event/chats/" + chatMessage.getChatRoom().getId(), response);
-        chatMessage.setStatus(MessageStatus.DELIVERED);
-        save(chatMessage);
-
-        log.info("Broadcast message with id {}!", chatMessage.getId());
+    private void sendMessage(ChatMessageResponse response, Long chatRoomId){
+        messagingTemplate.convertAndSend("/api/v1/event/chats/" + chatRoomId, response);
+        log.info("Broadcast message with id {}!", response.getId());
     }
 
     @Override

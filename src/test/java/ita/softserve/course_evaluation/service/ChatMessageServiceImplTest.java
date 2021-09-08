@@ -124,7 +124,7 @@ class ChatMessageServiceImplTest {
         chatMessageService.processUpdateMessage(chatMessageRequest, anyLong());
 
         verify(chatMessageRepository, times(1)).findById(anyLong());
-        verify(chatMessageRepository, times(2)).save(any(ChatMessage.class));
+        verify(chatMessageRepository, times(1)).save(any(ChatMessage.class));
         verify(chatMessageResponseMapper, times(1)).toDto(any(ChatMessage.class));
         verify(messagingTemplate).convertAndSend(Mockito.anyString(), Mockito.any(ChatMessageResponse.class));
     }

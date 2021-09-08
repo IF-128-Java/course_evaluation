@@ -18,4 +18,5 @@
     <include file="classpath:db/changelog/v.1.5.0/db.changelog-remove-column-duration.xml"/>
     <include file="classpath:db/changelog/v.1.5.0/db.changelog-add-constraint-to-status-in-feedback-request-column.xml"/>
     <include file="classpath:db/changelog/v.1.6.0/db.changelog-add-2fa-field-to-user-entity.xml"/>
+    <include file="classpath:db/changelog/v.1.7.0/db.changelog-add-edited-to-chat-messages.xml"/>
  </databaseChangeLog>

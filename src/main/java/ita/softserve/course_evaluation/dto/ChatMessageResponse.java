@@ -18,6 +18,8 @@ public class ChatMessageResponse {
 
     private LocalDateTime createdAt;
 
+    private boolean edited;
+
     private Long senderId;
 
     private String senderFirstName;

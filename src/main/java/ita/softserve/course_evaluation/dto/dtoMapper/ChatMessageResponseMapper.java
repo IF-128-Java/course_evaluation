@@ -24,6 +24,7 @@ public class ChatMessageResponseMapper {
                 .id(chatMessage.getId())
                 .content(chatMessage.getContent())
                 .createdAt(chatMessage.getCreatedAt())
+                .edited(chatMessage.isEdited())
                 .senderId(chatMessage.getSender().getId())
                 .senderFirstName(chatMessage.getSender().getFirstName())
                 .senderLastName(chatMessage.getSender().getLastName())

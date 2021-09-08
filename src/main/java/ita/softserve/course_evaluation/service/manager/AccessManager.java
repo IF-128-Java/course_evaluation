@@ -32,11 +32,4 @@ public class AccessManager {
 
         return false;
     }
-
-    public boolean isAllowedToUpdateGroupChatMessage(Object user, Long chatId, Long messageId){
-       if(!isAllowedToGroupChat(user, chatId))
-           return false;
-
-        return ((SecurityUser)user).getId().equals(chatMessageService.getById(messageId).getSender().getId());
-    }
 }

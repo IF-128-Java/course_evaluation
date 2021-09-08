@@ -45,4 +45,7 @@ public class ChatMessage {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private MessageStatus status;
+
+    @Column(name = "edited", nullable = false)
+    private boolean edited = false;
 }

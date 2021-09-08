@@ -32,7 +32,7 @@ public class ChatController {
     @MessageMapping("/{chatId}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("@accessManager.isAllowedToGroupChat(#user, #chatId)")
-    public void processMessage(
+    public void processCreateMessage(
             @Payload @Validated ChatMessageRequest chatMessageRequest,
             @DestinationVariable Long chatId,
             @AuthenticationPrincipal SecurityUser user){
@@ -42,8 +42,8 @@ public class ChatController {
 
     @MessageMapping("/{chatId}/messages/{messageId}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("@accessManager.isAllowedToUpdateGroupChatMessage(authentication.principal, #chatId, #messageId)")
-    public void processMessage(
+    @PreAuthorize("@accessManager.isAllowedToGroupChat(authentication.principal, #chatId)")
+    public void processUpdateMessage(
             @Payload @Validated ChatMessageRequest chatMessageRequest,
             @DestinationVariable Long chatId,
             @DestinationVariable Long messageId){
