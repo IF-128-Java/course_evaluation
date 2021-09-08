@@ -40,6 +40,7 @@ public class UserServiceImpl implements UserService {
 				.firstName(daoUser.getFirstName())
 				.lastName(daoUser.getLastName())
 				.email(daoUser.getEmail())
+				.active2fa(daoUser.isActive2FA())
 				.profilePicture(fileManager.downloadUserProfilePicture(daoUser.getProfilePicturePath()))
 				.build();
 	}

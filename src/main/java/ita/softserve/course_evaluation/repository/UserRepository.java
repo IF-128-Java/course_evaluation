@@ -16,15 +16,15 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query(value = "SELECT id, first_name, last_name, email, password, group_id, profile_picture, account_verified, role_id, user_id " +
+    @Query(value = "SELECT id, first_name, last_name, email, password, group_id, profile_picture, account_verified, role_id, user_id, active_2fa, secret " +
             "FROM users u INNER JOIN user_roles ur ON u.id = ur.user_id WHERE ur.role_id = 1", nativeQuery = true)
     List<User> getAllTeachersByRole();
 
-    @Query(value = "SELECT id, first_name, last_name, email, password, group_id, profile_picture, account_verified, role_id, user_id " +
+    @Query(value = "SELECT id, first_name, last_name, email, password, group_id, profile_picture, account_verified, role_id, user_id, active_2fa, secret " +
             "FROM users u INNER JOIN user_roles ur ON u.id = ur.user_id WHERE u.id = :id", nativeQuery = true)
     User getTeacherById(@Param("id") long id);
 
-    @Query(value = "SELECT id, first_name, last_name, email, password, group_id, profile_picture, account_verified FROM users u WHERE u.group_id = :id ORDER BY last_name ASC, first_name ASC", nativeQuery = true)
+    @Query(value = "SELECT id, first_name, last_name, email, password, group_id, profile_picture, account_verified, active_2fa, secret FROM users u WHERE u.group_id = :id ORDER BY last_name ASC, first_name ASC", nativeQuery = true)
     List<User> getStudentsByGroupId(@Param("id") long id);
 
     Optional<User> findUserById(long id);
@@ -53,4 +53,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
                            "AND (cfr.status=1 OR cfr.status=2)" +
                            "AND (CURRENT_DATE >= CAST(cfr.start_date AS DATE) AND CURRENT_DATE <= CAST(cfr.end_date AS DATE))", nativeQuery = true)
     Page<User> findAllUserByFeedbackRequestIdWithoutFeedback(Pageable pageable, long id);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE users " +
+            "SET active_2fa = :status WHERE email = :email", nativeQuery = true)
+    void updateStatus2FA(@Param("email") String email, @Param("status") boolean status);
 }
