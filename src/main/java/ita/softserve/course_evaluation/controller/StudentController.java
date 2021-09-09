@@ -70,9 +70,7 @@ public class StudentController {
     
     @GetMapping("/course/{id}")
     public ResponseEntity<List<StudentDto>> getStudentsByCourseId(@PathVariable long id) {
-        return Objects.isNull(studentService.getStudentsByCourseId(id)) ?
-                       ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) :
-                       ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentsByCourseId(id));
+        return ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentsByCourseId(id));
     }
 
 
