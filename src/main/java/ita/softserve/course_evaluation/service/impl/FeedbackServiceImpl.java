@@ -3,6 +3,7 @@ package ita.softserve.course_evaluation.service.impl;
 import ita.softserve.course_evaluation.dto.AnswerDto;
 import ita.softserve.course_evaluation.dto.FeedbackDto;
 import ita.softserve.course_evaluation.dto.FeedbackDtoMapper;
+import ita.softserve.course_evaluation.entity.AnswerToFeedback;
 import ita.softserve.course_evaluation.entity.Feedback;
 import ita.softserve.course_evaluation.repository.FeedbackRepository;
 import ita.softserve.course_evaluation.repository.QuestionRepository;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -90,5 +92,23 @@ public class FeedbackServiceImpl implements FeedbackService {
 	@Override
 	public List<Feedback> getFeedbackByRequestIdAndStudentId(long requestId, long studentId) {
 		return feedbackRepository.getFeedbackByRequestIdAndStudentId(requestId, studentId);
+	}
+
+	@Override
+	@Transactional
+	public FeedbackDto addFeedback(FeedbackDto feedbackDto) {
+
+		feedbackDto.setDate(LocalDateTime.now());
+		List<AnswerDto> answers = feedbackDto.getAnswers();
+		Feedback feedbackFromDb = feedbackRepository.save(FeedbackDtoMapper.fromDto(feedbackDto));
+
+		for (AnswerDto answerDto : answers ) {
+				answerDto.setFeedbackId(feedbackFromDb.getId());
+		}
+
+		List<AnswerDto> answersFromDb = answerToFeedbackService.saveAnswers(answers);
+
+		return FeedbackDtoMapper.toDto(feedbackFromDb, answersFromDb);
+
 	}
 }

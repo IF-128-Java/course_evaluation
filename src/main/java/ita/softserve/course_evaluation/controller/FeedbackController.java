@@ -70,4 +70,19 @@ public class FeedbackController {
 			ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
 			ResponseEntity.status(HttpStatus.OK).body(feedbackService.findAllByFeedbackRequestId(PageRequest.of(page, size),id));
 	}
+
+	@ApiOperation(value = "Create new Feedback")
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = HttpStatuses.CREATED),
+			@ApiResponse(code = 400, message = HttpStatuses.BAD_REQUEST),
+			@ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN),
+	})
+	@PostMapping("/student/")
+	@PreAuthorize("hasAuthority('READ')")
+	public ResponseEntity<FeedbackDto> addFeedback(@ApiParam(value = "FeedbackDto")
+													  @RequestBody FeedbackDto dto) {
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(feedbackService.addFeedback(dto));
+	}
+
 }

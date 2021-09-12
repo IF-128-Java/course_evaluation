@@ -18,4 +18,6 @@ public interface FeedbackService {
     Page<FeedbackDto> findAllByFeedbackRequestId(Pageable pageable, Long id);
 
     List<Feedback> getFeedbackByRequestIdAndStudentId(long requestId, long studentId);
+
+    FeedbackDto addFeedback(FeedbackDto feedbackDto);
 }
