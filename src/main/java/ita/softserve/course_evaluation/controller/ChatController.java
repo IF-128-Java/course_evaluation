@@ -4,6 +4,7 @@ import ita.softserve.course_evaluation.dto.ChatMessageRequest;
 import ita.softserve.course_evaluation.dto.ChatMessageResponse;
 import ita.softserve.course_evaluation.security.SecurityUser;
 import ita.softserve.course_evaluation.service.ChatMessageService;
+import ita.softserve.course_evaluation.service.ChatRoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -24,14 +25,16 @@ import java.util.List;
 public class ChatController {
 
     private final ChatMessageService chatMessageService;
+    private final ChatRoomService chatRoomService;
 
-    public ChatController(ChatMessageService chatMessageService) {
+    public ChatController(ChatMessageService chatMessageService, ChatRoomService chatRoomService) {
         this.chatMessageService = chatMessageService;
+        this.chatRoomService = chatRoomService;
     }
 
     @MessageMapping("/{chatId}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("@accessManager.isAllowedToGroupChat(#user, #chatId)")
+    @PreAuthorize("@accessManager.isAllowedToGroupChat(#user, #chatId) or @accessManager.isAllowedToTeacherChat(#user, #chatId)")
     public void processCreateMessage(
             @Payload @Validated ChatMessageRequest chatMessageRequest,
             @DestinationVariable Long chatId,
@@ -42,7 +45,7 @@ public class ChatController {
 
     @MessageMapping("/{chatId}/messages/{messageId}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("@accessManager.isAllowedToGroupChat(authentication.principal, #chatId)")
+    @PreAuthorize("@accessManager.isAllowedToGroupChat(authentication.principal, #chatId) or @accessManager.isAllowedToTeacherChat(authentication.principal, #chatId)")
     public void processUpdateMessage(
             @Payload @Validated ChatMessageRequest chatMessageRequest,
             @DestinationVariable Long chatId,
@@ -52,10 +55,16 @@ public class ChatController {
     }
 
     @GetMapping("/{chatId}")
-    @PreAuthorize("@accessManager.isAllowedToGroupChat(authentication.principal, #chatId)")
+    @PreAuthorize("@accessManager.isAllowedToGroupChat(authentication.principal, #chatId) or @accessManager.isAllowedToTeacherChat(authentication.principal, #chatId)")
     public ResponseEntity<List<ChatMessageResponse>> getMessages(
             @PathVariable Long chatId){
 
         return new ResponseEntity<>(chatMessageService.findMessagesByChatRoomId(chatId), HttpStatus.OK);
+    }
+
+    @GetMapping("/teacher")
+    @PreAuthorize("hasAuthority('WRITE')")
+    public ResponseEntity<Long> getTeacherChatRoomId(){
+        return new ResponseEntity<>(chatRoomService.getTeacherChatRoomId(), HttpStatus.OK);
     }
 }
