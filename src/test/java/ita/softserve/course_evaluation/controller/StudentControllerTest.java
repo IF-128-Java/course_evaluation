@@ -37,6 +37,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author Mykhailo Fedenko
+ */
 @WebMvcTest
 @AutoConfigureMockMvc
 @ContextConfiguration(classes = {StudentController.class, SpringSecurityTestConfiguration.class})
