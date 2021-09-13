@@ -1,5 +1,5 @@
 package ita.softserve.course_evaluation.entity;
 
 public enum ChatType {
-    GROUP
+    GROUP, TEACHER
 }

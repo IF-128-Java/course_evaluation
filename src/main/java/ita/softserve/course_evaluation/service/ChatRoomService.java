@@ -5,4 +5,6 @@ import ita.softserve.course_evaluation.entity.ChatRoom;
 public interface ChatRoomService {
 
     ChatRoom getById(Long id);
+
+    Long getTeacherChatRoomId();
 }
