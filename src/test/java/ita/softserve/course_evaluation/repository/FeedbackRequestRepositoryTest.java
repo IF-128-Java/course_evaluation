@@ -23,6 +23,8 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 
 @DataJpaTest
@@ -104,4 +106,16 @@ class FeedbackRequestRepositoryTest {
         List<FeedbackRequest> feedbackRequestsExpected = List.of(feedbackRequestStatusActiveAndValidDate,feedbackRequestStatusDraft,feedbackRequestStatusSent);
         assertEquals(feedbackRequestsExpected.size(),feedbackRequestsActual.size());
     }
+
+    @Test
+    @DisplayName("Find all by course id and with status ACTIVE, SENT, ARCHIVE")
+    void testFindAllFeedbackRequestByCourseIdOnly(){
+        List<FeedbackRequest> feedbackRequestsActual = feedbackRequestRepository.getFeedbackRequestByCourseIdOnly(1l);
+        List<FeedbackRequest> feedbackRequestsExpected = List.of(feedbackRequestStatusActiveAndValidDate,feedbackRequestStatusDraft,feedbackRequestStatusSent);
+        assertFalse(feedbackRequestsActual.isEmpty());
+        assertEquals(2, feedbackRequestsActual.size());
+        assertNotEquals(feedbackRequestsExpected.size(),feedbackRequestsActual.size());
+
+    }
+
 }

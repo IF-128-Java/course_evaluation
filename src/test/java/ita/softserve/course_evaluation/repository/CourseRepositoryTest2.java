@@ -84,10 +84,7 @@ class CourseRepositoryTest2 {
         group.setCourses(List.of(course));
 
         List<Course> expected = List.of(course);
-        System.out.println(expected.size());
-
         List<Course> actual = courseRepository.finishedCoursesOfGroup(group.getId());
-        System.out.println(actual.size());
 
         assertFalse(actual.isEmpty());
         assertEquals(expected, actual);
@@ -109,10 +106,7 @@ class CourseRepositoryTest2 {
         group.setCourses(List.of(course));
 
         List<Course> expected = List.of(course);
-        System.out.println(expected.size());
-
         List<Course> actual = courseRepository.currentCoursesOfGroup(group.getId());
-        System.out.println(actual.size());
 
         assertFalse(actual.isEmpty());
         assertEquals(expected, actual);
@@ -133,10 +127,7 @@ class CourseRepositoryTest2 {
         group.setCourses(List.of(course));
 
         List<Course> expected = List.of(course);
-        System.out.println(expected.size());
-
         List<Course> actual = courseRepository.getAvailableCourses();
-        System.out.println(actual.size());
 
         assertFalse(actual.isEmpty());
         assertEquals(expected, actual);
