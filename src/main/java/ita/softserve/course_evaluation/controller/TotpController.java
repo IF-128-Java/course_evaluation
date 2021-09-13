@@ -26,7 +26,7 @@ public class TotpController {
     public ResponseEntity<?> updateStatus2FA(@RequestBody TotpRequestDto totpRequest){
         totpManager.switch2faStatus(totpRequest.getEmail(), totpRequest.isActive2fa());
         if (totpRequest.isActive2fa()) {
-            log.info("active 2fa");
+
             String qrCodeImage = totpManager.getUriForImage(totpRequest.getEmail());
             return new ResponseEntity<>(new SignUpResponse2fa(true, qrCodeImage), HttpStatus.OK);
         }
