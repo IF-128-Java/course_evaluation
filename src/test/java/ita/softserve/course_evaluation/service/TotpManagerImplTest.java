@@ -141,13 +141,26 @@ class TotpManagerImplTest {
     }
 
     @Test
-    void testSwitch2faStatus() {
-
+    void testSwitch2faStatusToFalse() {
         doNothing().when(userRepository).updateStatus2FA(Mockito.anyString(), Mockito.anyBoolean());
+
+        totpManager.switch2faStatus(userMike.getEmail(), false);
+
+        verify(userRepository, times(1)).updateStatus2FA(Mockito.anyString(), Mockito.anyBoolean());
+    }
+
+    @Test
+    void testSwitch2faStatusToTrue() {
+        userMike.setSecret(null);
+        doNothing().when(userRepository).updateStatus2FA(Mockito.anyString(), Mockito.anyBoolean());
+        when(userRepository.findUserByEmail(Mockito.anyString())).thenReturn(Optional.of(userMike));
+        when(userRepository.save(Mockito.any(User.class))).thenReturn(userMike);
 
         totpManager.switch2faStatus(userMike.getEmail(), true);
 
         verify(userRepository, times(1)).updateStatus2FA(Mockito.anyString(), Mockito.anyBoolean());
-
+        verify(userRepository, times(1)).findUserByEmail(Mockito.anyString());
+        verify(userRepository, times(1)).save(Mockito.any(User.class));
+        verify(secretGenerator, times(1)).generate();
     }
 }

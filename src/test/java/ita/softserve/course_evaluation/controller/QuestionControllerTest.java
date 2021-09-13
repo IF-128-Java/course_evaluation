@@ -2,11 +2,9 @@ package ita.softserve.course_evaluation.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ita.softserve.course_evaluation.config.SpringSecurityTestConfiguration;
-import ita.softserve.course_evaluation.config.WithMockCustomUser;
 import ita.softserve.course_evaluation.dto.QuestionDto;
 import ita.softserve.course_evaluation.dto.QuestionDtoMapper;
 import ita.softserve.course_evaluation.entity.Question;
-import ita.softserve.course_evaluation.entity.Role;
 import ita.softserve.course_evaluation.service.QuestionService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
