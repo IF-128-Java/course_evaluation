@@ -14,6 +14,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -57,5 +58,34 @@ public class ChatRoomServiceImplTest {
 
         assertEquals(String.format("ChatRoom with id: %d not found!", 0), exception.getMessage());
         verify(chatRoomRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void testGetTeacherChatRoomIdIfExists(){
+        Long expected = 1L;
+
+        when(chatRoomRepository.getTeacherChatRoomId()).thenReturn(expected);
+
+        Long actual = chatRoomService.getTeacherChatRoomId();
+
+        assertEquals(expected, actual);
+        verify(chatRoomRepository, times(1)).getTeacherChatRoomId();
+    }
+
+    @Test
+    void testGetTeacherChatRoomIdIfNotExist(){
+        ChatRoom expected = ChatRoom.builder()
+                .id(1L)
+                .chatType(ChatType.TEACHER)
+                .build();
+
+        when(chatRoomRepository.getTeacherChatRoomId()).thenReturn(null);
+        when(chatRoomRepository.save(any(ChatRoom.class))).thenReturn(expected);
+
+        Long actual = chatRoomService.getTeacherChatRoomId();
+
+        assertEquals(expected.getId(), actual);
+        verify(chatRoomRepository, times(1)).getTeacherChatRoomId();
+        verify(chatRoomRepository, times(1)).save(any(ChatRoom.class));
     }
 }
