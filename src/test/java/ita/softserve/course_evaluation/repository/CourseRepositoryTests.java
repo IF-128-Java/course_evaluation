@@ -1,6 +1,10 @@
 package ita.softserve.course_evaluation.repository;
 
+import ita.softserve.course_evaluation.entity.ChatRoom;
+import ita.softserve.course_evaluation.entity.ChatType;
 import ita.softserve.course_evaluation.entity.Course;
+import ita.softserve.course_evaluation.entity.Group;
+import ita.softserve.course_evaluation.entity.Role;
 import ita.softserve.course_evaluation.entity.User;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
@@ -9,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -22,6 +27,12 @@ class CourseRepositoryTests {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private GroupRepository groupRepository;
+
+    @Autowired
+    private ChatRoomRepository chatRoomRepository;
 
     @Test
     void testFindByCourseNameIfExists(){

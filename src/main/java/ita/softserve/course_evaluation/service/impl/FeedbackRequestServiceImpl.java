@@ -4,9 +4,9 @@ import ita.softserve.course_evaluation.dto.FeedbackRequestDto;
 import ita.softserve.course_evaluation.dto.FeedbackRequestDtoMapper;
 import ita.softserve.course_evaluation.dto.StudentFeedbackRequestDto;
 import ita.softserve.course_evaluation.dto.StudentFeedbackRequestDtoMapper;
+import ita.softserve.course_evaluation.entity.Feedback;
 import ita.softserve.course_evaluation.entity.FeedbackRequest;
 import ita.softserve.course_evaluation.entity.FeedbackRequestStatus;
-import ita.softserve.course_evaluation.repository.FeedbackRepository;
 import ita.softserve.course_evaluation.repository.FeedbackRequestRepository;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
 import ita.softserve.course_evaluation.service.FeedbackService;
@@ -64,33 +64,31 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 
 	@Override
 	public List<FeedbackRequestDto> getFeedbackRequestByCourseIdOnly(long id) {
-		List<FeedbackRequestDto> feedbackRequestDto = FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.getFeedbackRequestByCourseIdOnly(id));
-		return Objects.isNull(feedbackRequestDto) ? Collections.emptyList() : feedbackRequestDto;
+		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.getFeedbackRequestByCourseIdOnly(id));
 	}
 
 	@Override
 	public List<StudentFeedbackRequestDto> getFeedbackRequestByCourseIdAndStudentId(long courseId, long studentId) {
 
 		List<FeedbackRequest> feedbackRequests = feedbackRequestRepository.getFeedbackRequestByCourseIdOnly(courseId);
-		List<StudentFeedbackRequestDto> studentFeedbackRequestDtos = new ArrayList<>();
-		List<StudentFeedbackRequestDto> feedbackRequestDtosSelected = new ArrayList<>();
+		List<StudentFeedbackRequestDto> studentsFeedbackRequestDto = StudentFeedbackRequestDtoMapper.toDto(feedbackRequests); ;
+		List<StudentFeedbackRequestDto> feedbackRequestsDtoSelected = new ArrayList<>();
 		LocalDateTime today = LocalDateTime.now();
 
-		studentFeedbackRequestDtos = StudentFeedbackRequestDtoMapper.toDto(feedbackRequests);
+		for (StudentFeedbackRequestDto studentFeedbackRequestDto : studentsFeedbackRequestDto) {
 
-		for (StudentFeedbackRequestDto studentFeedbackRequestDto : studentFeedbackRequestDtos) {
-			if (!feedbackService.getFeedbackByRequestIdAndStudentId(studentFeedbackRequestDto.getId(), studentId).isEmpty()) {
+			List<Feedback> feedbacks = feedbackService.getFeedbackByRequestIdAndStudentId(studentFeedbackRequestDto.getId(), studentId);
+			if (!feedbacks.isEmpty()) {
 				studentFeedbackRequestDto.setStudentId(studentId);
-				studentFeedbackRequestDto.setFeedbackId(feedbackService
-						.getFeedbackByRequestIdAndStudentId(studentFeedbackRequestDto.getId(), studentId).get(0).getId());
-				feedbackRequestDtosSelected.add(studentFeedbackRequestDto);
+				studentFeedbackRequestDto.setFeedbackId(feedbacks.get(0).getId());
+				feedbackRequestsDtoSelected.add(studentFeedbackRequestDto);
 			} else {
 				if (studentFeedbackRequestDto.getEndDate().isAfter(today)) {
-					feedbackRequestDtosSelected.add(studentFeedbackRequestDto);
+					feedbackRequestsDtoSelected.add(studentFeedbackRequestDto);
 				}
 			}
 		}
-		return feedbackRequestDtosSelected;
+		return feedbackRequestsDtoSelected;
 	}
 
 

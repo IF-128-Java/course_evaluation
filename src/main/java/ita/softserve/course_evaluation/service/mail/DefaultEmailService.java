@@ -52,9 +52,10 @@ public class DefaultEmailService implements EmailService {
     }
 
     @Override
-    public void sendSimpleEmail (MailDto maildto) throws AddressException {
+    public void sendSimpleEmail (MailDto maildto) {
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+
         simpleMailMessage.setTo(maildto.getTo().split(","));
         simpleMailMessage.setSubject(maildto.getSubject());
         simpleMailMessage.setText(maildto.getMessage());
