@@ -22,10 +22,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.mail.MessagingException;
@@ -36,12 +34,13 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.reset;
 
 /**
  * @author Mykhailo Fedenko on 02.09.2021
@@ -203,22 +202,26 @@ class RegistrationServiceImplTest {
     @Test
     void testConfirmToken() {
         //test when given token is wrong
+        reset(confirmationTokenService);
         when(confirmationTokenService.getToken(anyString())).thenReturn(Optional.empty());
         assertThrows(ConfirmationTokenException.class, () -> registrationService.confirmToken(anyString()));
 
         //test when token already confirmed
+        reset(confirmationTokenService);
         ConfirmationToken confirmationToken1 = new ConfirmationToken();
         confirmationToken1.setConfirmedAt(LocalDateTime.now().plusMinutes(5));
         when(confirmationTokenService.getToken(Mockito.anyString())).thenReturn(Optional.of(confirmationToken1));
         assertThrows(EmailAlreadyConfirmedException.class, () -> registrationService.confirmToken(anyString()));
 
         //test when token expired
+        reset(confirmationTokenService);
         ConfirmationToken confirmationToken2 = new ConfirmationToken();
         confirmationToken2.setExpiredAt(LocalDateTime.now());
         when(confirmationTokenService.getToken(Mockito.anyString())).thenReturn(Optional.of(confirmationToken2));
         assertThrows(ConfirmationTokenException.class, () -> registrationService.confirmToken("token"));
 
         //test when token valid and not confirmed
+        reset(confirmationTokenService);
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken3 = new ConfirmationToken();
         confirmationToken3.setExpiredAt(LocalDateTime.now().plusMinutes(15));
