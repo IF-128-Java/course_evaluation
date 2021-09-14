@@ -40,18 +40,18 @@ jobs:
     - name: pass multiple environment
       uses: appleboy/ssh-action@master
       env:
-        GOOGLE_CLIENT_ID: ${{ GGOGLE_CLIENT_ID }}
-        GOOGLE_CLIENT_SECRET: ${{ GOOGLE_CLIENT_SECRET }}
-        AWS_ACCESS_KEY: ${{ AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_KEY: ${{ AWS_SECRET_ACCESS_KEY }}
-        FACEBOOK_CLIENT_ID: ${{ FACEBOOK_CLIENT_ID }}
-        FACEBOOK_CLIENT_SECRET: ${{ FACEBOOK_CLIENT_SECRET }}
-        GIT_HUB_CLIENT_ID: ${{ GIT_HUB_CLIENT_ID }}
-        GIT_HUB_CLIENT_SECRET: ${{ GIT_HUB_CLIENT_SECRET }}
+        GOOGLE_CLIENT_ID: ${{ secrets.GGOGLE_CLIENT_ID }}
+        GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+        AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        FACEBOOK_CLIENT_ID: ${{ secrets.FACEBOOK_CLIENT_ID }}
+        FACEBOOK_CLIENT_SECRET: ${{ secrets.FACEBOOK_CLIENT_SECRET }}
+        GIT_HUB_CLIENT_ID: ${{ secrets.GIT_HUB_CLIENT_ID }}
+        GIT_HUB_CLIENT_SECRET: ${{ secrets.GIT_HUB_CLIENT_SECRET }}
         AWS_USERS_FOLDER: "user-profile-picture"
         AWS_BUCKET_NAME: "course-evaluation-storage"
-        MAIL_USERNAME: ${{ MAIL_USERNAME }}
-        MAIL_PASSWORD: ${{ MAIL_PASSWORD }}
+        MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+        MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
       with:
         host: ${{ secrets.AWS_ECS_HOST }}
         username: ${{ secrets.AWS_EC2_USERNAME }}
