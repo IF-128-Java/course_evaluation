@@ -1,5 +1,10 @@
 package ita.softserve.course_evaluation.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import ita.softserve.course_evaluation.constants.HttpStatuses;
 import ita.softserve.course_evaluation.dto.ChatMessageRequest;
 import ita.softserve.course_evaluation.dto.ChatMessageResponse;
 import ita.softserve.course_evaluation.security.SecurityUser;
@@ -20,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
+@Api(tags = "Chat service REST API")
 @RestController
 @RequestMapping("/api/v1/chats")
 public class ChatController {
@@ -34,7 +40,8 @@ public class ChatController {
 
     @MessageMapping("/{chatId}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("@accessManager.isAllowedToGroupChat(#user, #chatId) or @accessManager.isAllowedToTeacherChat(#user, #chatId)")
+    @PreAuthorize("@accessManager.isAllowedToGroupChat(#user, #chatId) or " +
+            "@accessManager.isAllowedToTeacherChat(#user, #chatId)")
     public void processCreateMessage(
             @Payload @Validated ChatMessageRequest chatMessageRequest,
             @DestinationVariable Long chatId,
@@ -45,7 +52,8 @@ public class ChatController {
 
     @MessageMapping("/{chatId}/messages/{messageId}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("@accessManager.isAllowedToGroupChat(authentication.principal, #chatId) or @accessManager.isAllowedToTeacherChat(authentication.principal, #chatId)")
+    @PreAuthorize("@accessManager.isAllowedToGroupChat(authentication.principal, #chatId) or " +
+            "@accessManager.isAllowedToTeacherChat(authentication.principal, #chatId)")
     public void processUpdateMessage(
             @Payload @Validated ChatMessageRequest chatMessageRequest,
             @DestinationVariable Long chatId,
@@ -54,14 +62,23 @@ public class ChatController {
         chatMessageService.processUpdateMessage(chatMessageRequest, messageId);
     }
 
+    @ApiOperation(value = "Get messages for chat")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
     @GetMapping("/{chatId}")
-    @PreAuthorize("@accessManager.isAllowedToGroupChat(authentication.principal, #chatId) or @accessManager.isAllowedToTeacherChat(authentication.principal, #chatId)")
-    public ResponseEntity<List<ChatMessageResponse>> getMessages(
-            @PathVariable Long chatId){
-
+    @PreAuthorize("@accessManager.isAllowedToGroupChat(authentication.principal, #chatId) or " +
+            "@accessManager.isAllowedToTeacherChat(authentication.principal, #chatId)")
+    public ResponseEntity<List<ChatMessageResponse>> getMessages(@PathVariable Long chatId){
         return new ResponseEntity<>(chatMessageService.findMessagesByChatRoomId(chatId), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Get id of a teacher chat")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = Long.class),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
     @GetMapping("/teacher")
     @PreAuthorize("hasAuthority('WRITE')")
     public ResponseEntity<Long> getTeacherChatRoomId(){

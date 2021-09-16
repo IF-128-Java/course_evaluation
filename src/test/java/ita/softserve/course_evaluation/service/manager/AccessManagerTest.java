@@ -11,6 +11,7 @@ import ita.softserve.course_evaluation.service.GroupService;
 import ita.softserve.course_evaluation.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -46,9 +48,12 @@ public class AccessManagerTest {
 
     private static ChatRoom chatRoom1;
     private static ChatRoom chatRoom2;
+    private static ChatRoom teacherChatRoom;
     private static Group group1;
     private static Group group2;
     private static User user;
+    private static User userWithoutGroup;
+    private static User userTeacher;
     private static SecurityUser securityUser;
 
     @BeforeAll
@@ -61,6 +66,11 @@ public class AccessManagerTest {
         chatRoom2 = ChatRoom.builder()
                 .id(2L)
                 .chatType(ChatType.GROUP)
+                .build();
+
+        teacherChatRoom = ChatRoom.builder()
+                .id(3L)
+                .chatType(ChatType.TEACHER)
                 .build();
 
         group1 = new Group();
@@ -79,6 +89,22 @@ public class AccessManagerTest {
         user.setPassword("1111");
         user.setRoles(Set.of(Role.ROLE_STUDENT));
         user.setGroup(group1);
+
+        userWithoutGroup = new User();
+        userWithoutGroup.setId(2L);
+        userWithoutGroup.setFirstName("FirstNameTwo");
+        userWithoutGroup.setLastName("LastNameTwo");
+        userWithoutGroup.setEmail("emai2l@mail.com");
+        userWithoutGroup.setPassword("2222");
+        userWithoutGroup.setRoles(Set.of(Role.ROLE_STUDENT));
+
+        userTeacher = new User();
+        userTeacher.setId(3L);
+        userTeacher.setFirstName("FirstNameTeacher");
+        userTeacher.setLastName("LastNameTeacher");
+        userTeacher.setEmail("emaiteacherl@mail.com");
+        userTeacher.setPassword("3333");
+        userTeacher.setRoles(Set.of(Role.ROLE_TEACHER));
 
         securityUser = new SecurityUser(
                 user.getId(),
@@ -125,6 +151,47 @@ public class AccessManagerTest {
 
         verify(chatRoomService, times(1)).getById(anyLong());
         verify(groupService, times(1)).getByChatRoomId(anyLong());
+        verify(userService, times(1)).readUserById(anyLong());
+    }
+
+    @Test()
+    @DisplayName("Test isAllowedToGroupChat if the user does not belong to any group")
+    void testIsAllowedToGroupChatIfGroupNull(){
+        when(chatRoomService.getById(anyLong())).thenReturn(chatRoom1);
+        when(userService.readUserById(anyLong())).thenReturn(userWithoutGroup);
+
+        boolean actual = accessManager.isAllowedToGroupChat(securityUser, anyLong());
+
+        assertFalse(actual);
+
+        verify(chatRoomService, times(1)).getById(anyLong());
+        verify(userService, times(1)).readUserById(anyLong());
+        verify(groupService, never()).getByChatRoomId(anyLong());
+    }
+
+    @Test()
+    void testIsAllowedToTeacherChatSuccess() {
+        when(chatRoomService.getById(anyLong())).thenReturn(teacherChatRoom);
+        when(userService.readUserById(anyLong())).thenReturn(userTeacher);
+
+        boolean actual = accessManager.isAllowedToTeacherChat(securityUser, anyLong());
+
+        assertTrue(actual);
+
+        verify(chatRoomService, times(1)).getById(anyLong());
+        verify(userService, times(1)).readUserById(anyLong());
+    }
+
+    @Test()
+    void testIsAllowedToTeacherChatFailure() {
+        when(chatRoomService.getById(anyLong())).thenReturn(teacherChatRoom);
+        when(userService.readUserById(anyLong())).thenReturn(user);
+
+        boolean actual = accessManager.isAllowedToTeacherChat(securityUser, anyLong());
+
+        assertFalse(actual);
+
+        verify(chatRoomService, times(1)).getById(anyLong());
         verify(userService, times(1)).readUserById(anyLong());
     }
 }
