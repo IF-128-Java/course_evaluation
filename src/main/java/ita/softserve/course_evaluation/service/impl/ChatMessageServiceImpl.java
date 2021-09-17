@@ -4,11 +4,14 @@ import ita.softserve.course_evaluation.dto.ChatMessageRequest;
 import ita.softserve.course_evaluation.dto.ChatMessageResponse;
 import ita.softserve.course_evaluation.dto.dtoMapper.ChatMessageResponseMapper;
 import ita.softserve.course_evaluation.entity.ChatMessage;
+import ita.softserve.course_evaluation.entity.FeedbackRequest;
 import ita.softserve.course_evaluation.entity.MessageStatus;
 import ita.softserve.course_evaluation.repository.ChatMessageRepository;
 import ita.softserve.course_evaluation.security.SecurityUser;
 import ita.softserve.course_evaluation.service.ChatMessageService;
 import ita.softserve.course_evaluation.service.ChatRoomService;
+import ita.softserve.course_evaluation.service.CourseService;
+import ita.softserve.course_evaluation.service.GroupService;
 import ita.softserve.course_evaluation.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -26,16 +29,23 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     private final UserService userService;
     private final SimpMessagingTemplate messagingTemplate;
     private final ChatMessageResponseMapper chatMessageResponseMapper;
+    private final GroupService groupService;
+    private final CourseService courseService;
 
     public ChatMessageServiceImpl(ChatMessageRepository chatMessageRepository,
                                   ChatRoomService chatRoomService,
                                   UserService userService,
-                                  SimpMessagingTemplate messagingTemplate, ChatMessageResponseMapper chatMessageResponseMapper) {
+                                  SimpMessagingTemplate messagingTemplate,
+                                  ChatMessageResponseMapper chatMessageResponseMapper,
+                                  GroupService groupService,
+                                  CourseService courseService) {
         this.chatMessageRepository = chatMessageRepository;
         this.chatRoomService = chatRoomService;
         this.userService = userService;
         this.messagingTemplate = messagingTemplate;
         this.chatMessageResponseMapper = chatMessageResponseMapper;
+        this.groupService = groupService;
+        this.courseService = courseService;
     }
     
     @Override
@@ -70,6 +80,31 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
         save(foundMessage);
         sendMessage(chatMessageResponseMapper.toDto(foundMessage), foundMessage.getChatRoom().getId());
+    }
+
+    @Override
+    public void processCreateMessageToGroupChatAboutNewFeedbackRequest(FeedbackRequest feedbackRequest, SecurityUser user){
+        groupService.getByCourseId(feedbackRequest.getCourse().getId())
+                .forEach(group -> {
+                            ChatMessage chatMessage = ChatMessage.builder()
+                                    .createdAt(LocalDateTime.now())
+                                    .chatRoom(group.getChatRoom())
+                                    .sender(
+                                            userService.readUserById(user.getId())
+                                    )
+                                    .content("Hi all! Available new \"" + feedbackRequest.getFeedbackDescription() +
+                                            "\" feedback request for \"" + courseService.getById(feedbackRequest.getCourse().getId()).getCourseName() + "\" course!")
+                                    .status(MessageStatus.RECEIVED)
+                                    .build();
+
+                            save(chatMessage);
+
+                            sendMessage(chatMessageResponseMapper.toDto(chatMessage), group.getChatRoom().getId());
+
+                            chatMessage.setStatus(MessageStatus.DELIVERED);
+                            save(chatMessage);
+                        }
+                );
     }
 
     private void sendMessage(ChatMessageResponse response, Long chatRoomId){
