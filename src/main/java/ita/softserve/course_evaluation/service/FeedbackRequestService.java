@@ -2,14 +2,14 @@ package ita.softserve.course_evaluation.service;
 
 import ita.softserve.course_evaluation.dto.FeedbackRequestDto;
 import ita.softserve.course_evaluation.dto.StudentFeedbackRequestDto;
+import ita.softserve.course_evaluation.security.SecurityUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
 import java.util.List;
 
 
 public interface FeedbackRequestService {
-	FeedbackRequestDto create(FeedbackRequestDto dto);
+	FeedbackRequestDto create(FeedbackRequestDto dto, SecurityUser user);
 	
 	FeedbackRequestDto update(FeedbackRequestDto dto);
 	
