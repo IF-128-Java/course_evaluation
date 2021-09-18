@@ -55,7 +55,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
         ChatMessage chatMessage = ChatMessage.builder()
                 .createdAt(LocalDateTime.now())
-                .content(chatMessageRequest.getContent())
+                .content(chatMessageRequest.getContent().trim())
                 .chatRoom(chatRoomService.getById(chatId))
                 .sender(userService.readUserById(user.getId()))
                 .status(MessageStatus.RECEIVED)
@@ -75,7 +75,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
         ChatMessage foundMessage = getById(messageId);
 
-        foundMessage.setContent(chatMessageRequest.getContent());
+        foundMessage.setContent(chatMessageRequest.getContent().trim());
         foundMessage.setEdited(true);
 
         save(foundMessage);
