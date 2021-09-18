@@ -35,4 +35,9 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository.findByChatRoomId(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Group with ChatRoom id: %d not found!", id)));
     }
+
+    @Override
+    public List<Group> getByCourseId(Long courseId){
+        return groupRepository.findGroupsByCourseId(courseId);
+    }
 }

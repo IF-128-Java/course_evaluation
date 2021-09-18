@@ -2,7 +2,6 @@ package ita.softserve.course_evaluation.service;
 
 import ita.softserve.course_evaluation.dto.GroupDto;
 import ita.softserve.course_evaluation.entity.Group;
-
 import java.util.List;
 
 public interface GroupService {
@@ -12,4 +11,6 @@ public interface GroupService {
     GroupDto getById(long id);
 
     Group getByChatRoomId(Long id);
+
+    List<Group> getByCourseId(Long courseId);
 }
