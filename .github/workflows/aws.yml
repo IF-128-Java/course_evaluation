@@ -55,7 +55,7 @@ jobs:
       with:
         host: ${{ secrets.AWS_ECS_HOST }}
         username: ${{ secrets.AWS_EC2_USERNAME }}
-        key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.AWS_PORT }}
         envs: GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,AWS_ACCESS_KEY,AWS_SECRET_KEY,FACEBOOK_CLIENT_ID,FACEBOOK_CLIENT_SECRET,GIT_HUB_CLIENT_ID,GIT_HUB_CLIENT_SECRET,AWS_USERS_FOLDER,AWS_BUCKET_NAME,MAIL_USERNAME,MAIL_PASSWORD      
           
