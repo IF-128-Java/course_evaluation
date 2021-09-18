@@ -1,9 +1,9 @@
 package ita.softserve.course_evaluation.service.impl;
 
 import ita.softserve.course_evaluation.dto.AnswerDto;
+import ita.softserve.course_evaluation.dto.FeedbackCountDto;
 import ita.softserve.course_evaluation.dto.FeedbackDto;
 import ita.softserve.course_evaluation.dto.FeedbackDtoMapper;
-import ita.softserve.course_evaluation.entity.AnswerToFeedback;
 import ita.softserve.course_evaluation.entity.Feedback;
 import ita.softserve.course_evaluation.repository.FeedbackRepository;
 import ita.softserve.course_evaluation.repository.QuestionRepository;
@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -111,4 +113,22 @@ public class FeedbackServiceImpl implements FeedbackService {
 		return FeedbackDtoMapper.toDto(feedbackFromDb, answersFromDb);
 
 	}
+
+	@Override
+	public List<FeedbackCountDto> countTotalFeedbackByStudent() {
+
+		List<FeedbackCountDto> listCountDto = new ArrayList<>();
+		List<Object[]> objectsCount = feedbackRepository.countFeedbackByStudent();
+
+		objectsCount.forEach(element -> {
+			FeedbackCountDto feedbackCount = new FeedbackCountDto();
+			feedbackCount.setStudentId(((BigInteger) element[0]).longValue());
+			feedbackCount.setTotal(((BigInteger) element[1]).longValue());
+
+			listCountDto.add(feedbackCount);
+		});
+
+		return listCountDto;
+	}
+
 }
