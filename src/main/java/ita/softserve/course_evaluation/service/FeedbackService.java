@@ -1,5 +1,6 @@
 package ita.softserve.course_evaluation.service;
 
+import ita.softserve.course_evaluation.dto.FeedbackCountDto;
 import ita.softserve.course_evaluation.dto.FeedbackDto;
 import ita.softserve.course_evaluation.entity.Feedback;
 import org.springframework.data.domain.Page;
@@ -20,4 +21,6 @@ public interface FeedbackService {
     List<Feedback> getFeedbackByRequestIdAndStudentId(long requestId, long studentId);
 
     FeedbackDto addFeedback(FeedbackDto feedbackDto);
+
+    List<FeedbackCountDto> countTotalFeedbackByStudent();
 }

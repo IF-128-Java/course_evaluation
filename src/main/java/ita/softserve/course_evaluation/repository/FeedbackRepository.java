@@ -17,4 +17,7 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
 
     @Query(value = "SELECT * From course_feedback WHERE feedback_request_id = ?1 AND student_id = ?2", nativeQuery = true)
     List<Feedback> getFeedbackByRequestIdAndStudentId(long requestId, long studentId);
+
+    @Query(value = "select student_id, count(id) from course_feedback group by student_id", nativeQuery = true)
+    List<Object[]> countFeedbackByStudent();
 }

@@ -12,13 +12,14 @@ import ita.softserve.course_evaluation.entity.Feedback;
 import ita.softserve.course_evaluation.entity.FeedbackRequest;
 import ita.softserve.course_evaluation.entity.FeedbackRequestStatus;
 import ita.softserve.course_evaluation.repository.FeedbackRequestRepository;
+import ita.softserve.course_evaluation.security.SecurityUser;
+import ita.softserve.course_evaluation.service.ChatMessageService;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
 import ita.softserve.course_evaluation.service.FeedbackService;
 import ita.softserve.course_evaluation.service.QuestionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,16 +37,19 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	private final FeedbackRequestRepository feedbackRequestRepository;
 	private final FeedbackService feedbackService;
 	private final QuestionService questionService;
+	private final ChatMessageService chatMessageService;
 	
-	public FeedbackRequestServiceImpl(FeedbackRequestRepository feedbackRequestRepository, FeedbackService feedbackService, QuestionService questionService) {
+	public FeedbackRequestServiceImpl(FeedbackRequestRepository feedbackRequestRepository, FeedbackService feedbackService, QuestionService questionService, ChatMessageService chatMessageService) {
 		this.feedbackRequestRepository = feedbackRequestRepository;
 		this.feedbackService = feedbackService;
 		this.questionService = questionService;
+		this.chatMessageService = chatMessageService;
 	}
 	
 	@Override
-	public FeedbackRequestDto create(FeedbackRequestDto dto) {
+	public FeedbackRequestDto create(FeedbackRequestDto dto, SecurityUser user) {
 		FeedbackRequest feedbackRequest = FeedbackRequestDtoMapper.fromDto(dto);
+		chatMessageService.processCreateMessageToGroupChatAboutNewFeedbackRequest(feedbackRequest, user);
 		return FeedbackRequestDtoMapper.toDto(feedbackRequestRepository.save(feedbackRequest));
 	}
 	
@@ -121,7 +125,7 @@ public class FeedbackRequestServiceImpl implements FeedbackRequestService {
 	@Override
 	public void findAllByExpiredDateAndSetStatusToArchive(int status) {
 		List<FeedbackRequest> feedbackRequest = feedbackRequestRepository.findAllByStatusAndExpireDate(status);
-		feedbackRequest.forEach(fbr -> {
+		feedbackRequest.forEach(fbr->{
 			fbr.setStatus(FeedbackRequestStatus.ARCHIVE);
 			feedbackRequestRepository.save(fbr);
 		});

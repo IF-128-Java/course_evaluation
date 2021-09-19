@@ -127,14 +127,14 @@ class StudentControllerTest {
         String expected = mapper.writeValueAsString(List.of(student1));
 
         assertEquals(expected, actual);
-        verify(studentService, times(2)).getStudentsByCourseId(Mockito.anyLong());
+        verify(studentService, times(1)).getStudentsByCourseId(Mockito.anyLong());
 
         //when student not found
         reset(studentService);
         when(studentService.getStudentsByCourseId(Mockito.anyLong())).thenReturn(null);
         mockMvc.perform(get(API_STUDENT_URL + "/course/{id}", 1L)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound()).andDo(print()).andReturn().getResponse().getContentAsString();
+                .andExpect(status().isOk()).andDo(print()).andReturn().getResponse().getContentAsString();
         verify(studentService, times(1)).getStudentsByCourseId(Mockito.anyLong());
     }
 

@@ -8,6 +8,7 @@ import ita.softserve.course_evaluation.entity.FeedbackRequestStatus;
 import ita.softserve.course_evaluation.entity.Question;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.repository.FeedbackRequestRepository;
+import ita.softserve.course_evaluation.security.SecurityUser;
 import ita.softserve.course_evaluation.service.impl.FeedbackRequestServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +44,8 @@ class FeedbackRequestServiceImplTests {
 	
 	@Mock
 	private FeedbackRequestRepository feedbackRequestRepository;
+	@Mock
+	private ChatMessageService chatMessageService;
 	@InjectMocks
 	private FeedbackRequestServiceImpl feedbackRequestService;
 	
@@ -72,10 +76,13 @@ class FeedbackRequestServiceImplTests {
 	
 	@Test
 	void testAddFeedbackRequest() {
+		SecurityUser securityUser = new SecurityUser(1L, "Nick", "password", Collections.emptyList(), true);
+
 		when(feedbackRequestRepository.save(any())).thenReturn(expected);
-		FeedbackRequestDto actual = feedbackRequestService.create(expectedDto);
+		FeedbackRequestDto actual = feedbackRequestService.create(expectedDto, securityUser);
 		assertEquals(expected.getId(), actual.getId());
 		verify(feedbackRequestRepository, times(1)).save(any());
+		verify(chatMessageService, times(1)).processCreateMessageToGroupChatAboutNewFeedbackRequest(any(), any());
 	}
 	
 	@Test

@@ -1,11 +1,12 @@
 package ita.softserve.course_evaluation.controller;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import ita.softserve.course_evaluation.constants.HttpStatuses;
+import ita.softserve.course_evaluation.dto.FeedbackCountDto;
 import ita.softserve.course_evaluation.dto.FeedbackDto;
 import ita.softserve.course_evaluation.service.FeedbackService;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Objects;
 
 @Api(tags = "Feedback service REST API")
@@ -85,4 +87,16 @@ public class FeedbackController {
 				.body(feedbackService.addFeedback(dto));
 	}
 
+	@ApiOperation(value = "Get Count of Feedback for students")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
+			@ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+	})
+	@GetMapping("/count")
+	@PreAuthorize("hasAuthority('READ')")
+	public ResponseEntity<List<FeedbackCountDto>> countTotalFeedbackByStudent() {
+
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(feedbackService.countTotalFeedbackByStudent());
+	}
 }
