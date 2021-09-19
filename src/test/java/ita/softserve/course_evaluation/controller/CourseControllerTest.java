@@ -48,7 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 @AutoConfigureMockMvc
 @ContextConfiguration(classes = {CourseController.class, SpringSecurityTestConfiguration.class})
-public class CourseControllerTest {
+class CourseControllerTest {
     public static final String API_COURSES_URL = "/api/v1/courses/";
 
     private ObjectMapper mapper;

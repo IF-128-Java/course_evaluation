@@ -44,7 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 @AutoConfigureMockMvc
 @ContextConfiguration(classes = {GroupController.class, SpringSecurityTestConfiguration.class})
-public class GroupControllerTest {
+class GroupControllerTest {
     public static final String API_GROUPS_URL = "/api/v1/groups";
 
     private ObjectMapper mapper;
