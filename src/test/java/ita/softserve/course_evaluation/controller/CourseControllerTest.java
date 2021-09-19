@@ -57,7 +57,7 @@ class CourseControllerTest {
 
     private User teacher;
 
-    Group group;
+    private Group group;
 
     @MockBean
     private CourseService courseService;
