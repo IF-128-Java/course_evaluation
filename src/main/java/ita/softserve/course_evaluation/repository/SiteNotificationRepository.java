@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface SiteNotificationRepository extends JpaRepository<SiteNotification, Long> {
 
-    @Query(value = "SELECT * FROM site_notifications WHERE user_id = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM site_notifications WHERE user_id = ?1 ORDER BY created_at DESC", nativeQuery = true)
     List<SiteNotification> findSiteNotificationsByUserId(Long userId);
 }
