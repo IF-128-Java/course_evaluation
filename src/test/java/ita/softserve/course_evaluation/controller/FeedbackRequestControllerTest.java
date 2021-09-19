@@ -13,6 +13,7 @@ import ita.softserve.course_evaluation.entity.FeedbackRequestStatus;
 import ita.softserve.course_evaluation.entity.Role;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.handler.GlobalControllerExceptionHandler;
+import ita.softserve.course_evaluation.security.SecurityUser;
 import ita.softserve.course_evaluation.service.FeedbackRequestService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,7 +87,7 @@ class FeedbackRequestControllerTest {
 	@Test
 	@WithMockCustomUser(role = Role.ROLE_ADMIN)
 	void testCreateFeedbackRequestWithAdmin() throws Exception {
-		when(feedbackRequestService.create(any(FeedbackRequestDto.class))).thenReturn(feedbackRequestDto);
+		when(feedbackRequestService.create(any(FeedbackRequestDto.class), any(SecurityUser.class))).thenReturn(feedbackRequestDto);
 		
 		String actual = mockMvc.perform(post(API_FEEDBACK_REQUEST_URL)
 				                                .contentType(MediaType.APPLICATION_JSON)
@@ -101,21 +102,21 @@ class FeedbackRequestControllerTest {
 		String expected = mapper.writeValueAsString(feedbackRequestDto);
 		assertEquals(expected, actual);
 		
-		verify(feedbackRequestService, times(1)).create(any(FeedbackRequestDto.class));
+		verify(feedbackRequestService, times(1)).create(any(FeedbackRequestDto.class), any(SecurityUser.class));
 		verifyNoMoreInteractions(feedbackRequestService);
 	}
 	
 	@Test
 	@WithMockCustomUser
 	void testCreateFeedbackRequestWithStudentRole() throws Exception {
-		when(feedbackRequestService.create(any(FeedbackRequestDto.class))).thenReturn(feedbackRequestDto);
+		when(feedbackRequestService.create(any(FeedbackRequestDto.class), any(SecurityUser.class))).thenReturn(feedbackRequestDto);
 		mockMvc.perform(post(API_FEEDBACK_REQUEST_URL)
 				                .contentType(MediaType.APPLICATION_JSON)
 				                .content(mapper.writeValueAsString(feedbackRequestDto))
 				                .accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isForbidden());
 		
-		verify(feedbackRequestService, never()).create(any(FeedbackRequestDto.class));
+		verify(feedbackRequestService, never()).create(any(FeedbackRequestDto.class), any(SecurityUser.class));
 	}
 	
 	@Test
