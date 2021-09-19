@@ -48,7 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 @AutoConfigureMockMvc
 @ContextConfiguration(classes = {FeedbackRequestController.class, SpringSecurityTestConfiguration.class})
-public class FeedbackRequestControllerTest {
+class FeedbackRequestControllerTest {
     public static final String API_FEEDBACKREQUEST_URL = "/api/v1/feedback_request";
 
     private ObjectMapper mapper;
