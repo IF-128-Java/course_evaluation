@@ -114,9 +114,7 @@ public class FeedbackRequestController {
 	})
 	@GetMapping("/student/course/{id}")
 	public ResponseEntity<List<FeedbackRequestDto>> getFeedbackRequestByCourseIDOnly(@PathVariable long id) {
-		return Objects.isNull(feedbackRequestService.getFeedbackRequestByCourseIdOnly(id)) ?
-				ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null) :
-				ResponseEntity.status(HttpStatus.OK).body(feedbackRequestService.getFeedbackRequestByCourseIdOnly(id));
+		return ResponseEntity.status(HttpStatus.OK).body(feedbackRequestService.getFeedbackRequestByCourseIdOnly(id));
 	}
 
 	@ApiOperation(value = "Get all feedback requests with student id by course id")

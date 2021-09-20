@@ -7,7 +7,6 @@ import ita.softserve.course_evaluation.entity.Group;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.impl.StudentServiceImpl;
-import ita.softserve.course_evaluation.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -25,6 +23,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+
+/**
+ * @author Volodymyr Maliarchuk
+ */
 
 @ExtendWith(MockitoExtension.class)
 public class StudentServiceImplTest {
