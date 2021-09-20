@@ -3,6 +3,7 @@ package ita.softserve.course_evaluation.service;
 import ita.softserve.course_evaluation.dto.CourseDto;
 import ita.softserve.course_evaluation.dto.dtoMapper.CourseDtoMapper;
 import ita.softserve.course_evaluation.entity.Course;
+import ita.softserve.course_evaluation.entity.Group;
 import ita.softserve.course_evaluation.entity.User;
 import ita.softserve.course_evaluation.exception.CourseNotFoundException;
 import ita.softserve.course_evaluation.repository.CourseRepository;
@@ -18,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -44,9 +46,14 @@ class CourseServiceImplTests {
 
     private static Course expected;
     private static CourseDto expectedDto;
+    private static Group group;
 
     @BeforeAll
     static void beforeAll(){
+        group = new Group();
+        group.setId(1L);
+        group.setGroupName("Group_1");
+
         expected = new Course();
         expected.setId(1L);
         expected.setCourseName("Course Name");
@@ -54,6 +61,7 @@ class CourseServiceImplTests {
         expected.setStartDate(new Date());
         expected.setEndDate(new Date());
         expected.setTeacher(new User(2L, "Test", "Teacher", "teacher@test.com", "123"));
+        expected.setGroups(Set.of(group));
 
         expectedDto = CourseDtoMapper.toDto(expected);
     }
@@ -149,4 +157,59 @@ class CourseServiceImplTests {
 
         verify(courseRepository, times(1)).findAllCourses();
     }
+
+    @Test
+    void testGetFinishedCoursesByGroupId(){
+
+        Date startDate = new Date(new Date().getTime() - 864000000);
+        Date endDate = new Date(new Date().getTime() - 432000000);
+        expected.setStartDate(startDate);
+        expected.setEndDate(endDate);
+        expectedDto = CourseDtoMapper.toDto(expected);
+
+        when(courseRepository.finishedCoursesOfGroup(anyLong())).thenReturn(List.of(expected));
+
+        List<CourseDto> actual = courseService.getFinishedCoursesByGroupId(group.getId());
+
+        assertFalse(actual.isEmpty());
+        assertEquals(1, actual.size());
+        verify(courseRepository, times(1)).finishedCoursesOfGroup(anyLong());
+    }
+
+    @Test
+    void testGetCurrentCoursesByGroupId(){
+
+        Date startDate = new Date(new Date().getTime() - 864000000);
+        Date endDate = new Date(new Date().getTime() + 864000000);
+        expected.setStartDate(startDate);
+        expected.setEndDate(endDate);
+        expectedDto = CourseDtoMapper.toDto(expected);
+
+        when(courseRepository.currentCoursesOfGroup(anyLong())).thenReturn(List.of(expected));
+
+        List<CourseDto> actual = courseService.getCurrentCoursesByGroupId(group.getId());
+
+        assertEquals(1, actual.size());
+        assertFalse(actual.isEmpty());
+        verify(courseRepository, times(1)).currentCoursesOfGroup(anyLong());
+    }
+
+    @Test
+    void testGetExpectedCourses(){
+
+        Date startDate = new Date(new Date().getTime() + 432000000);
+        Date endDate = new Date(new Date().getTime()  + 864000000);
+        expected.setStartDate(startDate);
+        expected.setEndDate(endDate);
+        expectedDto = CourseDtoMapper.toDto(expected);
+
+        when(courseRepository.getAvailableCourses()).thenReturn(List.of(expected));
+
+        List<CourseDto> actual = courseService.getAvailableCourses();
+
+        assertFalse(actual.isEmpty());
+        assertEquals(1, actual.size());
+        verify(courseRepository, times(1)).getAvailableCourses();
+    }
+
 }
