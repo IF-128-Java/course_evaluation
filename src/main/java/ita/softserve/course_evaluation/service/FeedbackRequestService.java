@@ -1,5 +1,6 @@
 package ita.softserve.course_evaluation.service;
 
+import ita.softserve.course_evaluation.dto.CourseDto;
 import ita.softserve.course_evaluation.dto.FeedbackRequestDto;
 import ita.softserve.course_evaluation.dto.StudentFeedbackRequestDto;
 import ita.softserve.course_evaluation.security.SecurityUser;
@@ -28,4 +29,6 @@ public interface FeedbackRequestService {
 	void changeStatusAndLastNotification(FeedbackRequestDto dto, int status);
 	
 	void findAllByExpiredDateAndSetStatusToArchive(int status);
+	
+	void createDefaultFeedbackRequestByCourse(CourseDto course);
 }

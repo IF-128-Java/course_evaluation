@@ -35,4 +35,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             "LEFT JOIN users u ON c.teacher_id = u.id WHERE c.start_date >NOW() ORDER BY start_date ASC", nativeQuery = true)
     List<Course> getAvailableCourses();
 
+    @Query(value = "SELECT c.* FROM course c LEFT JOIN course_feedback_request cfr on c.id = cfr.course_id WHERE c.end_date > NOW() AND cfr.course_id IS NULL",nativeQuery = true)
+    List<Course> getExpiredCoursesWithoutFeedbackRequest();
 }
