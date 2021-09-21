@@ -10,5 +10,7 @@ public interface SiteNotificationService {
 
     void setReviewedSiteNotification(Long id);
 
+    void deleteSiteNotification(Long id);
+
     List<SiteNotificationResponseDto> getSiteNotificationsByUserId(Long userId);
 }
