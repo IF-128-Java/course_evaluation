@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,13 @@ public class SiteNotificationController {
     @PreAuthorize("@accessManager.isAllowedToSiteNotification(authentication.principal, #id)")
     public void setReviewedSiteNotification(@PathVariable Long id){
         siteNotificationService.setReviewedSiteNotification(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("@accessManager.isAllowedToSiteNotification(authentication.principal, #id)")
+    public void deleteSiteNotification(@PathVariable Long id){
+        siteNotificationService.deleteSiteNotification(id);
     }
 
     @GetMapping
