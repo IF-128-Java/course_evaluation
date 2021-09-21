@@ -59,4 +59,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "UPDATE users " +
             "SET active_2fa = :status WHERE email = :email", nativeQuery = true)
     void updateStatus2FA(@Param("email") String email, @Param("status") boolean status);
+
+    @Query(value = "select ur.user_id, u.email, count(*) from users u inner join" +
+            " user_roles ur on u.id = ur.user_id inner join " +
+            " course c on c.teacher_id = u.id where ur.role_id = 1  group by ur.user_id, u.email", nativeQuery = true)
+    List<Object[]> getCountCoursesOfTeachers();
+
 }
