@@ -1,10 +1,8 @@
 package ita.softserve.course_evaluation.service.impl;
 
-import ita.softserve.course_evaluation.dto.FeedbackCountDto;
 import ita.softserve.course_evaluation.dto.TeacherStatDto;
 import ita.softserve.course_evaluation.dto.TeacherToCourseDto;
 import ita.softserve.course_evaluation.dto.dtoMapper.TeacherToCourseDtoMapper;
-import ita.softserve.course_evaluation.entity.Role;
 import ita.softserve.course_evaluation.repository.UserRepository;
 import ita.softserve.course_evaluation.service.TeacherService;
 import org.springframework.stereotype.Service;

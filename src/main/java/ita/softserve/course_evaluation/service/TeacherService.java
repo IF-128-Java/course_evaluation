@@ -1,6 +1,5 @@
 package ita.softserve.course_evaluation.service;
 
-import ita.softserve.course_evaluation.dto.FeedbackCountDto;
 import ita.softserve.course_evaluation.dto.TeacherStatDto;
 import ita.softserve.course_evaluation.dto.TeacherToCourseDto;
 
