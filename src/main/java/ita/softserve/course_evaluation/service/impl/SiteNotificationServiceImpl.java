@@ -32,6 +32,11 @@ public class SiteNotificationServiceImpl implements SiteNotificationService {
     }
 
     @Override
+    public void deleteSiteNotification(Long id) {
+        siteNotificationRepository.delete(getById(id));
+    }
+
+    @Override
     public List<SiteNotificationResponseDto> getSiteNotificationsByUserId(Long userId) {
         return SiteNotificationResponseDtoMapper.toDto(siteNotificationRepository.findSiteNotificationsByUserId(userId));
     }

@@ -49,7 +49,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                            "INNER JOIN course_feedback_request cfr ON cg.course_id = cfr.course_id " +
                            "LEFT JOIN course_feedback cf ON u.id = cf.student_id " +
                            "WHERE cfr.id = :id " +
-                           "AND (cfr.id <> cf.feedback_request_id OR cf.id IS NULL)" +
+                           "AND (cf.id IS NULL)" +
                            "AND (cfr.status=1 OR cfr.status=2)" +
                            "AND (CURRENT_DATE >= CAST(cfr.start_date AS DATE) AND CURRENT_DATE <= CAST(cfr.end_date AS DATE))", nativeQuery = true)
     Page<User> findAllUserByFeedbackRequestIdWithoutFeedback(Pageable pageable, long id);
