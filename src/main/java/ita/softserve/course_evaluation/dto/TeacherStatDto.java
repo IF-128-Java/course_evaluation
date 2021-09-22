@@ -13,4 +13,5 @@ public class TeacherStatDto {
     private Long id;
     private Long totalCourses;
     private String email;
+    private Long totalGroups;
 }

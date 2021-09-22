@@ -40,10 +40,18 @@ public class TeacherServiceImpl implements TeacherService {
         List<Object[]> objectsCount = userRepository.getCountCoursesOfTeachers();
 
         objectsCount.forEach(element -> {
+
             TeacherStatDto teacherStatDto = new TeacherStatDto();
             teacherStatDto.setId(((BigInteger) element[0]).longValue());
             teacherStatDto.setTotalCourses(((BigInteger) element[2]).longValue());
             teacherStatDto.setEmail(element[1].toString());
+
+            List<Object[]> list = userRepository.getCountGroupsOfTeachers(teacherStatDto.getId());
+            if (!list.isEmpty()) {
+                teacherStatDto.setTotalGroups((long)list.size());
+            } else {
+                teacherStatDto.setTotalGroups(0L);
+            }
 
             listCountDto.add(teacherStatDto);
         });

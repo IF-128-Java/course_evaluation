@@ -65,4 +65,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
             " course c on c.teacher_id = u.id where ur.role_id = 1  group by ur.user_id, u.email", nativeQuery = true)
     List<Object[]> getCountCoursesOfTeachers();
 
+    @Query(value = "select c.teacher_id, cg.group_id from" +
+            " course c inner join course_group cg on c.id = cg.course_id " +
+            "where c.teacher_id = ?1 group by c.teacher_id, cg.group_id", nativeQuery = true)
+    List<Object[]> getCountGroupsOfTeachers(long id);
 }

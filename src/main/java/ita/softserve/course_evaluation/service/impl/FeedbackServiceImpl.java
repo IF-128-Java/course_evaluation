@@ -5,6 +5,8 @@ import ita.softserve.course_evaluation.dto.FeedbackCountDto;
 import ita.softserve.course_evaluation.dto.FeedbackDto;
 import ita.softserve.course_evaluation.dto.FeedbackDtoMapper;
 import ita.softserve.course_evaluation.entity.Feedback;
+import ita.softserve.course_evaluation.exception.CourseAlreadyExistException;
+import ita.softserve.course_evaluation.exception.FeedbackAlreadyExistsException;
 import ita.softserve.course_evaluation.repository.FeedbackRepository;
 import ita.softserve.course_evaluation.repository.QuestionRepository;
 import ita.softserve.course_evaluation.service.AnswerToFeedbackService;
@@ -99,6 +101,10 @@ public class FeedbackServiceImpl implements FeedbackService {
 	@Override
 	@Transactional
 	public FeedbackDto addFeedback(FeedbackDto feedbackDto) {
+
+		List<Feedback> listfeedback = getFeedbackByRequestIdAndStudentId(feedbackDto.getFeedbackRequestId(), feedbackDto.getStudentId());
+
+		if (!listfeedback.isEmpty()) throw new FeedbackAlreadyExistsException("Feedback already saved !!!");
 
 		feedbackDto.setDate(LocalDateTime.now());
 		List<AnswerDto> answers = feedbackDto.getAnswers();
