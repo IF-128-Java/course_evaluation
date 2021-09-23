@@ -86,6 +86,11 @@ public class CourseServiceImpl implements CourseService {
         List<CourseDto> courses = CourseDtoMapper.toDto(courseRepository.getExpiredCoursesWithoutFeedbackRequest());
         return Objects.isNull(courses) ? Collections.emptyList() : courses;
     }
-    
-    
+
+    @Override
+    public List<CourseDto> getCoursesByTeacherId(long id) {
+        return CourseDtoMapper.toDto(courseRepository.findCourseByTeacherId(id));
+    }
+
+
 }

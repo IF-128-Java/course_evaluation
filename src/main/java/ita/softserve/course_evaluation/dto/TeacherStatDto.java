@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FeedbackCountDto {
-    private long studentId;
-    private long total;
+public class TeacherStatDto {
+    private Long id;
+    private Long totalCourses;
+    private String email;
+    private Long totalGroups;
 }

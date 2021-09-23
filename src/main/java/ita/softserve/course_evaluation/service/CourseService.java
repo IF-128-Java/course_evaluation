@@ -26,4 +26,6 @@ public interface CourseService {
     List <CourseDto> getAvailableCourses();
 	
 	List<CourseDto> getAllExpiredCoursesWithoutFeedbackRequest();
+
+    List<CourseDto> getCoursesByTeacherId(long id);
 }

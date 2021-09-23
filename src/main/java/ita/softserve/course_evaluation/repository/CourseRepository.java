@@ -37,4 +37,10 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     @Query(value = "SELECT c.* FROM course c LEFT JOIN course_feedback_request cfr on c.id = cfr.course_id WHERE c.end_date > NOW() AND cfr.course_id IS NULL",nativeQuery = true)
     List<Course> getExpiredCoursesWithoutFeedbackRequest();
+
+    @Query(value = "SELECT id, course_name, description, start_date, end_date, teacher_id FROM course WHERE teacher_id = ?1", nativeQuery = true)
+    List<Course> findCourseByTeacherId(long id);
+
+
+
 }
