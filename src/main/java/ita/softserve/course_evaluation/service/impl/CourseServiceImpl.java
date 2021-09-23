@@ -89,8 +89,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<CourseDto> getCoursesByTeacherId(long id) {
-        List<CourseDto> courseDto = CourseDtoMapper.toDto(courseRepository.findCourseByTeacherId(id));
-        return courseDto;
+        return CourseDtoMapper.toDto(courseRepository.findCourseByTeacherId(id));
     }
 
 
