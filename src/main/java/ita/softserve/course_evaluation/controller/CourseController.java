@@ -139,4 +139,14 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(courseService.getAvailableCourses());
     }
+
+    @ApiOperation(value = "Get courses by teacher Id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
+    @GetMapping("/teacher/{id}")
+    public ResponseEntity<List<CourseDto>> getCourseByTeacherId(@PathVariable long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(courseService.getCoursesByTeacherId(id));
+    }
 }

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import ita.softserve.course_evaluation.constants.HttpStatuses;
+import ita.softserve.course_evaluation.dto.TeacherStatDto;
 import ita.softserve.course_evaluation.dto.TeacherToCourseDto;
 import ita.softserve.course_evaluation.service.TeacherService;
 import org.springframework.http.HttpStatus;
@@ -52,4 +53,15 @@ public class TeacherController {
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) :
                 ResponseEntity.status(HttpStatus.OK).body(teacherService.getTeacherById(id));
     }
+
+    @ApiOperation(value = "Get lis count of courses for all Teachers ")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = HttpStatuses.OK, response = List.class),
+            @ApiResponse(code = 403, message = HttpStatuses.FORBIDDEN)
+    })
+    @GetMapping("/count")
+    public ResponseEntity<List<TeacherStatDto>> getCountCoursesOfTeachers() {
+        return ResponseEntity.status(HttpStatus.OK).body(teacherService.countTotalCoursesOfTeacher());
+    }
+
 }
