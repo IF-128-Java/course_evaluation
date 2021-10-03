@@ -23,7 +23,56 @@
       "dnsServers": null,
       "mountPoints": [],
       "workingDirectory": null,
-      "secrets": null,
+      "secrets": [
+                 {
+                    "name": "GOOGLE_CLIENT_ID",
+                    "value": "arn:aws:ssm:eu-central-1:270427679828:parameter/GOOGLE_CLIENT_ID"
+                },
+                {
+                    "name": "GOOGLE_CLIENT_SECRET",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/GOOGLE_CLIENT_SECRET"
+                },
+                {
+                    "name": "AWS_ACCESS_KEY",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/ACCESS_KEY_AWS"
+                },
+                {
+                    "name": "AWS_SECRET_KEY",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/SECRET_KEY_AWS"
+                },
+                {
+                    "name": "FACEBOOK_CLIENT_ID",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/FACEBOOK_CLIENT_ID"
+                },
+                {
+                    "name": "FACEBOOK_CLIENT_SECRET",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/FACEBOOK_CLIENT_SECRET"
+                },
+                {
+                    "name": "GIT_HUB_CLIENT_ID",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/GIT_HUB_CLIENT_ID"
+                },
+                {
+                    "name": "GIT_HUB_CLIENT_SECRET",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/GIT_HUB_CLIENT_SECRET"
+                },
+                {
+                    "name": "AWS_USERS_FOLDER",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/USERS_FOLDER_AWS"
+                },
+                {
+                    "name": "AWS_BUCKET_NAME",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/BUCKET_NAME_AWS"
+                },
+                {
+                    "name": "MAIL_USERNAME",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/MAIL_USERNAME"
+                },
+                {
+                    "name": "MAIL_PASSWORD",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/MAIL_PASSWORD"
+                }
+            ],
       "dockerSecurityOptions": null,
       "memory": null,
       "memoryReservation": 128,
