@@ -71,6 +71,14 @@
                 {
                     "name": "MAIL_PASSWORD",
                     "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/MAIL_PASSWORD"
+                },
+                {
+                    "name": "AWS_RDS_USERNAME",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/RDS_USERNAME_AWS"
+                },
+                {
+                    "name": "AWS_RDS_PASSWORD",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/RDS_PASSWORD_AWS"
                 }
             ],
       "dockerSecurityOptions": null,
