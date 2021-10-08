@@ -59,9 +59,6 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
       
-    - name: Finish Dockerfile
-      run: echo ENTRYPOINT ["java","-Dspring.security.oauth2.client.registration.google.clientId=${{ secrets.GOOGLE_CLIENT_ID }}", "-Dspring.security.oauth2.client.registration.google.clientSecret=${{ secrets.GOOGLE_CLIENT_SECRET }}", "-DAWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}", "-DAWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}", "-Dspring.security.oauth2.client.registration.facebook.clientId=${{ secrets.FACEBOOK_CLIENT_ID }}", "-Dspring.security.oauth2.client.registration.facebook.clientSecret=${{ secrets.FACEBOOK_CLIENT_SECRET }}", "-Dspring.security.oauth2.client.registration.github.clientId=${{ secrets.GIT_HUB_CLIENT_ID }}", "-Dspring.security.oauth2.client.registration.github.clientSecret=${{ secrets.GIT_HUB_CLIENT_SECRET }}", "-Daws.users-folder=user-profile-picture", "-Daws.bucket-name=course-evaluation-storage", "-Dspring.mail.username=noreply.courseevaluation@gmail.com", "-Dspring.mail.password=java128if", "-DAWS_RDS_USERNAME=${{secrets.AWS_RDS_PASSWORD}}", "-DAWS_RDS_PASSWORD=${{secrets.AWS_RDS_PASSWORD}}", "-Dspring.profiles.active=prod", "-jar","course_evaluation.jar"] >> Dockerfile
-      
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:

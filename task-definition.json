@@ -1,6 +1,6 @@
 {
   "ipcMode": null,
-  "executionRoleArn": null,
+  "executionRoleArn": "arn:aws:iam::270427679828:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
       "dnsSearchDomains": null,
@@ -26,7 +26,7 @@
       "secrets": [
                  {
                     "name": "GOOGLE_CLIENT_ID",
-                    "value": "arn:aws:ssm:eu-central-1:270427679828:parameter/GOOGLE_CLIENT_ID"
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/GOOGLE_CLIENT_ID"
                 },
                 {
                     "name": "GOOGLE_CLIENT_SECRET",
@@ -71,6 +71,14 @@
                 {
                     "name": "MAIL_PASSWORD",
                     "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/MAIL_PASSWORD"
+                },
+                {
+                    "name": "AWS_RDS_USERNAME",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/RDS_USERNAME_AWS"
+                },
+                {
+                    "name": "AWS_RDS_PASSWORD",
+                    "valueFrom": "arn:aws:ssm:eu-central-1:270427679828:parameter/RDS_PASSWORD_AWS"
                 }
             ],
       "dockerSecurityOptions": null,
