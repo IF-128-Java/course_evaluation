@@ -60,7 +60,7 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
     
     - name: Finish Dockerfile
-      run: echo ENTRYPOINT ["java","-jar","/course_evaluation.jar"] >> Dockerfile
+      run: echo ENTRYPOINT [ ""java"", ""-jar"", ""/course_evaluation.jar"" ] >> Dockerfile
             
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
